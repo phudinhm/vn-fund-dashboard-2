@@ -36,14 +36,46 @@ LANG = {
         "metric_ret": "Lợi nhuận", "metric_vol": "Biến động (Năm)", 
         "metric_sharpe": "Sharpe Ratio", "metric_alpha": "Alpha", "metric_beta": "Beta",
         "interp_title": "💡 Phân tích chuyên sâu:",
-        "interp_perf": "So sánh giá trị khoản đầu tư nếu bắt đầu với số vốn bằng nhau. Đường nằm trên cùng là quỹ có hiệu suất tốt nhất.",
-        "interp_risk": "Mức lỗ tối đa tạm tính (Paper loss) bạn phải chịu đựng trong quá khứ. Càng gần 0 càng an toàn.",
-        "interp_rr": "Góc trên bên trái là tốt nhất (Lợi nhuận cao, Rủi ro thấp). Sharpe > 1 là tốt.",
-        "interp_trend": "Golden Cross: Khi đường Vàng (MA50) cắt lên đường Đỏ (MA200) là tín hiệu Mua dài hạn.",
-        "interp_corr": "Hệ số = 1: Giống hệt nhau. Hệ số < 0.5: Ít liên quan (Tốt để đa dạng hóa danh mục).",
-        "interp_struct": "Tracking Error thấp chứng tỏ quỹ mô phỏng sát chỉ số. Volume cao giúp dễ dàng mua bán.",
-        "interp_cycle": "So sánh sức mạnh của quỹ khi thị trường chung Tăng (Bull) hoặc Giảm (Bear).",
-        "interp_forecast": "Mô phỏng Monte Carlo 1000 kịch bản. Fan chart hiển thị vùng giá có xác suất xảy ra cao nhất.",
+        "interp_perf": """
+        - **Ý nghĩa:** Biểu đồ giả định khoản đầu tư 100 đơn vị tiền tệ vào đầu kỳ. Đường nằm trên cùng là quỹ có hiệu suất tốt nhất.
+        - **So sánh:** Nếu đường của quỹ (Line) nằm dưới đường VNINDEX/VN30, quỹ đó đang hoạt động kém hơn thị trường (Underperform).
+        - **Lãi kép:** Độ dốc của đường biểu diễn sức mạnh của lãi kép. Dốc càng đứng, đà tăng trưởng càng mạnh.
+        """,
+        "interp_risk": """
+        - **Drawdown là gì?** Là mức sụt giảm tính từ đỉnh cao nhất gần đó. Nó đo lường "nỗi đau" tối đa nhà đầu tư phải chịu đựng.
+        - **Toán học về lỗ:** Nếu tài khoản lỗ **-20%**, bạn cần lãi **+25%** để hòa vốn. Nếu lỗ **-50%**, bạn cần lãi **+100%**.
+        - **Đánh giá:** Quỹ tốt là quỹ có mức sụt giảm (đáy của vùng màu) nông hơn so với thị trường chung trong các đợt khủng hoảng.
+        """,
+        "interp_rr": """
+        - **Vùng lý tưởng:** Góc trên bên trái (Lợi nhuận cao - Rủi ro thấp). Các quỹ nằm ở đây là "hàng tuyển".
+        - **Sharpe Ratio:** Đo lường hiệu quả. Sharpe > 1 là Tốt, > 2 là Xuất sắc. Nó trả lời: "Chấp nhận thêm 1 đơn vị rủi ro thì thu về bao nhiêu đơn vị lợi nhuận?".
+        - **Alpha & Beta:** * **Alpha > 0:** Quỹ có khả năng "chiến thắng" thị trường nhờ kỹ năng quản lý.
+            * **Beta < 1:** Quỹ biến động ít hơn thị trường (Phòng thủ). **Beta > 1:** Quỹ biến động mạnh hơn (Tấn công).
+        """,
+        "interp_trend": """
+        - **Golden Cross (Giao cắt vàng):** Khi đường Vàng (MA50 - Trung hạn) cắt lên trên đường Đỏ (MA200 - Dài hạn) → Tín hiệu xác nhận xu hướng Tăng dài hạn.
+        - **Death Cross (Giao cắt tử thần):** Khi đường Vàng cắt xuống dưới đường Đỏ → Tín hiệu cảnh báo xu hướng Giảm dài hạn.
+        - **Hỗ trợ/Kháng cự:** Các đường MA thường đóng vai trò là ngưỡng hỗ trợ động trong xu hướng tăng.
+        """,
+        "interp_corr": """
+        - **Đa dạng hóa danh mục:** Mục tiêu là tìm các tài sản có tương quan thấp để giảm rủi ro tổng thể.
+        - **Hệ số = 1:** Hai quỹ biến động y hệt nhau. Nắm giữ cả 2 không có tác dụng phân tán rủi ro.
+        - **Hệ số < 0.5:** Hai quỹ ít liên quan. Khi quỹ này giảm, quỹ kia có thể không giảm hoặc giảm ít hơn, giúp tài khoản ổn định.
+        """,
+        "interp_struct": """
+        - **Tracking Error (TE):** Rất quan trọng với ETF. TE càng thấp chứng tỏ quỹ mô phỏng càng sát chỉ số tham chiếu. TE cao bất thường là dấu hiệu quỹ quản trị kém hoặc chi phí ẩn cao.
+        - **Thanh khoản:** Khối lượng giao dịch (Volume) cao và ổn định giúp nhà đầu tư dễ dàng mua/bán mà không bị trượt giá (Slippage).
+        """,
+        "interp_cycle": """
+        - **Capture Ratio:** Đánh giá năng lực của quỹ trong 2 trạng thái thị trường.
+        - **Bull Market (Cột Xanh):** Khi thị trường tăng, quỹ có tăng mạnh hơn không? (Cần > Benchmark).
+        - **Bear Market (Cột Đỏ):** Khi thị trường sập, quỹ có giữ giá tốt hơn không? (Cần < Benchmark, tức là cột đỏ ngắn hơn).
+        """,
+        "interp_forecast": """
+        - **Mô hình:** Sử dụng Monte Carlo Simulation (1000 kịch bản ngẫu nhiên dựa trên biến động quá khứ) và ETS (Dự báo chuỗi thời gian).
+        - **Fan Chart:** Vùng màu hiển thị khoảng dao động giá có xác suất xảy ra cao nhất (Confidence Interval).
+        - **Lưu ý:** Dự báo chỉ mang tính tham khảo dựa trên dữ liệu lịch sử. Thị trường luôn có những biến số vĩ mô bất ngờ (Black Swan) không thể dự báo bằng toán học.
+        """,
         "prob_up": "Xác suất Tăng", "scenario": "Kịch bản", "worst": "Xấu nhất", "best": "Tốt nhất"
     },
     "EN": {
@@ -71,14 +103,46 @@ LANG = {
         "metric_ret": "Return", "metric_vol": "Volatility (Ann.)",
         "metric_sharpe": "Sharpe Ratio", "metric_alpha": "Alpha", "metric_beta": "Beta",
         "interp_title": "💡 Analytical Insight:",
-        "interp_perf": "Comparison of investment value over time. The highest line indicates the best performing fund.",
-        "interp_risk": "The maximum percentage loss observed from a peak to a trough. Closer to 0 is safer.",
-        "interp_rr": "Top-left corner is ideal (High Return, Low Risk). Sharpe Ratio > 1 is considered good.",
-        "interp_trend": "Golden Cross: When MA50 (Yellow) crosses above MA200 (Red), it indicates a long-term Buy signal.",
-        "interp_corr": "Coeff = 1: Identical movement. Coeff < 0.5: Low correlation (Good for diversification).",
-        "interp_struct": "Low Tracking Error means accurate index replication. High Volume ensures liquidity.",
-        "interp_cycle": "Fund performance relative to the benchmark during Bull (Up) and Bear (Down) markets.",
-        "interp_forecast": "Monte Carlo simulation of 1000 scenarios. Fan chart shows the most probable price range.",
+        "interp_perf": """
+        - **Meaning:** Shows the growth of a hypothetical 100 currency units investment. The top line represents the best performer.
+        - **Comparison:** If a fund's line is below VNINDEX, it is underperforming the broader market.
+        - **Compounding:** The steepness of the curve indicates the power of compounding. Steeper slopes mean stronger momentum.
+        """,
+        "interp_risk": """
+        - **Drawdown:** The percentage drop from the nearest peak. It measures the maximum 'pain' an investor must endure.
+        - **Loss Math:** A **-20%** loss requires a **+25%** gain to break even. A **-50%** loss requires a **+100%** gain.
+        - **Evaluation:** Superior funds have shallower drawdowns compared to the market during crises.
+        """,
+        "interp_rr": """
+        - **Sweet Spot:** Top-left corner (High Return - Low Risk). Funds here are considered 'efficient'.
+        - **Sharpe Ratio:** Measures risk-adjusted return. >1 is Good, >2 is Excellent. It asks: "For every unit of risk, how much return do I get?".
+        - **Alpha & Beta:** * **Alpha > 0:** The fund beats the market benchmark.
+            * **Beta < 1:** Defensive (Less volatile than market). **Beta > 1:** Aggressive (More volatile).
+        """,
+        "interp_trend": """
+        - **Golden Cross:** When MA50 (Yellow) crosses above MA200 (Red) → Confirmed long-term BULLISH signal.
+        - **Death Cross:** When MA50 crosses below MA200 → Long-term BEARISH warning.
+        - **Support/Resistance:** Moving Averages often act as dynamic support levels in an uptrend.
+        """,
+        "interp_corr": """
+        - **Diversification:** The goal is to find assets with low correlation to reduce overall portfolio risk.
+        - **Coeff = 1:** Identical movement. Holding both adds no diversification benefit.
+        - **Coeff < 0.5:** Low correlation. When one asset falls, the other might hold steady, smoothing the equity curve.
+        """,
+        "interp_struct": """
+        - **Tracking Error (TE):** Crucial for ETFs. Low TE indicates precise index replication. High TE suggests poor management or hidden costs.
+        - **Liquidity:** High and consistent volume ensures you can enter/exit positions without significant slippage.
+        """,
+        "interp_cycle": """
+        - **Capture Ratio:** Evaluates fund behavior in different market regimes.
+        - **Bull Market (Green Bar):** Does the fund rise more than the market? (Upside Capture).
+        - **Bear Market (Red Bar):** Does the fund fall less than the market? (Downside Protection).
+        """,
+        "interp_forecast": """
+        - **Models:** Uses Monte Carlo (1000 scenarios based on historical volatility) and ETS (Time-series forecasting).
+        - **Fan Chart:** The shaded area shows the most probable price range (Confidence Interval).
+        - **Disclaimer:** Forecasts are probabilistic and based on history. Markets are subject to unpredictable macro events (Black Swans).
+        """,
         "prob_up": "Prob. of Increase", "scenario": "Scenario", "worst": "Worst case", "best": "Best case"
     },
     "DE": {
@@ -106,14 +170,46 @@ LANG = {
         "metric_ret": "Rendite", "metric_vol": "Volatilität (p.a.)",
         "metric_sharpe": "Sharpe-Quotient", "metric_alpha": "Alpha", "metric_beta": "Beta",
         "interp_title": "💡 Erklärung:",
-        "interp_perf": "Vergleich der Wertentwicklung. Die oberste Linie zeigt den Fonds mit der besten Performance.",
-        "interp_risk": "Maximaler historischer Verlust von einem Hochpunkt. Näher an 0 ist sicherer.",
-        "interp_rr": "Oben links ist ideal (Hohe Rendite, geringes Risiko). Sharpe > 1 gilt als gut.",
-        "interp_trend": "Golden Cross: Wenn MA50 (Gelb) MA200 (Rot) nach oben kreuzt → Langfristiges Kaufsignal.",
-        "interp_corr": "Koeff = 1: Identische Bewegung. Koeff < 0.5: Geringe Korrelation (Gut zur Diversifikation).",
-        "interp_struct": "Niedriger Tracking Error bedeutet genaue Indexabbildung. Hohes Volumen sichert Liquidität.",
-        "interp_cycle": "Fondsperformance im Vergleich zur Benchmark in Bullen- (Auf) und Bärenmärkten (Ab).",
-        "interp_forecast": "Monte-Carlo-Simulation von 1000 Szenarien. Fan-Chart zeigt den wahrscheinlichsten Preisbereich.",
+        "interp_perf": """
+        - **Bedeutung:** Zeigt das Wachstum einer hypothetischen Investition von 100 Währungseinheiten. Die oberste Linie zeigt den besten Fonds.
+        - **Vergleich:** Liegt die Linie unter dem VNINDEX, schneidet der Fonds schlechter ab als der Gesamtmarkt.
+        - **Zinseszins:** Die Steilheit der Kurve zeigt die Kraft des Zinseszinses. Steilere Anstiege bedeuten stärkeres Momentum.
+        """,
+        "interp_risk": """
+        - **Drawdown:** Der prozentuale Verlust vom letzten Höchststand. Er misst den "Schmerz", den ein Anleger ertragen muss.
+        - **Verlust-Mathematik:** Ein Verlust von **-20%** erfordert einen Gewinn von **-25%** zum Ausgleich. **-50%** Verlust benötigt **+100%** Gewinn.
+        - **Bewertung:** Gute Fonds haben in Krisenzeiten geringere Drawdowns als der Markt.
+        """,
+        "interp_rr": """
+        - **Idealzone:** Oben links (Hohe Rendite - Geringes Risiko). Fonds in diesem Bereich gelten als effizient.
+        - **Sharpe-Ratio:** Risikobereinigte Rendite. >1 ist gut, >2 ist exzellent. Frage: "Wie viel Rendite erhalte ich pro Risikoeinheit?".
+        - **Alpha & Beta:** * **Alpha > 0:** Der Fonds schlägt die Benchmark durch Managementleistung.
+            * **Beta < 1:** Defensiv (Weniger volatil als der Markt). **Beta > 1:** Offensiv (Volatiler).
+        """,
+        "interp_trend": """
+        - **Golden Cross:** Wenn der MA50 (Gelb) den MA200 (Rot) nach oben kreuzt → Bestätigtes langfristiges Kaufsignal (Bullish).
+        - **Death Cross:** Wenn der MA50 den MA200 nach unten kreuzt → Warnsignal für Abwärtstrend (Bearish).
+        - **Support:** Gleitende Durchschnitte fungieren oft als dynamische Unterstützungslinien.
+        """,
+        "interp_corr": """
+        - **Diversifikation:** Ziel ist es, Vermögenswerte mit geringer Korrelation zu finden, um das Gesamtrisiko zu senken.
+        - **Koeff = 1:** Identische Bewegung. Der Besitz beider Fonds bietet keinen Diversifikationsvorteil.
+        - **Koeff < 0.5:** Geringe Korrelation. Wenn ein Fonds fällt, bleibt der andere stabil, was die Portfoliokurve glättet.
+        """,
+        "interp_struct": """
+        - **Tracking Error (TE):** Entscheidend für ETFs. Ein niedriger TE zeigt eine präzise Indexabbildung an. Hoher TE deutet auf schlechtes Management oder versteckte Kosten hin.
+        - **Liquidität:** Hohes und konstantes Volumen sichert den Ein- und Ausstieg ohne große Preisschwankungen (Slippage).
+        """,
+        "interp_cycle": """
+        - **Capture Ratio:** Bewertet das Verhalten des Fonds in verschiedenen Marktphasen.
+        - **Bullenmarkt (Grün):** Steigt der Fonds stärker als der Markt? (Upside Capture).
+        - **Bärenmarkt (Rot):** Fällt der Fonds weniger als der Markt? (Downside Protection).
+        """,
+        "interp_forecast": """
+        - **Modelle:** Nutzt Monte-Carlo-Simulation (1000 Szenarien basierend auf historischer Volatilität) und ETS (Zeitreihenprognose).
+        - **Fan-Chart:** Der farbige Bereich zeigt die Preisspanne mit der höchsten Wahrscheinlichkeit (Konfidenzintervall).
+        - **Disclaimer:** Prognosen sind probabilistisch und basieren auf der Vergangenheit. Märkte unterliegen unvorhersehbaren Makroereignissen (Black Swans).
+        """,
         "prob_up": "Aufstiegs-WSK", "scenario": "Szenario", "worst": "Worst Case", "best": "Best Case"
     }
 }
