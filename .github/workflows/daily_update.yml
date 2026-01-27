@@ -1,0 +1,38 @@
+name: Daily Data Update
+
+# Chạy tự động vào 18:00 mỗi ngày (UTC+7 -> 11:00 UTC)
+on:
+  schedule:
+    - cron: '0 11 * * *' 
+  workflow_dispatch: # Cho phép bấm chạy thủ công để test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Cấp quyền ghi file để lưu csv
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install libraries
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run update script
+        run: python update_data.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add funds_data.csv
+          git commit -m "Auto-update data from API" || echo "No changes to commit"
+          git push
+          
