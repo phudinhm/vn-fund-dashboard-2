@@ -1,40 +1,38 @@
-name: Auto Update Data
+name: Daily Data Update
 
-# Cấu hình lịch chạy (Trigger)
+# Chạy tự động vào 10:15 UTC (Tức 17:15 giờ Việt Nam) hàng ngày
 on:
   schedule:
-    # Chạy vào 10:15 UTC hàng ngày (tức 17:15 giờ Việt Nam)
     - cron: '15 10 * * *'
-  # Cho phép bấm nút chạy thủ công để test bất cứ lúc nào
+  # Cho phép bấm nút chạy thủ công trên web GitHub nếu cần test gấp
   workflow_dispatch:
 
 jobs:
-  build:
+  update_data:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Cấp quyền cho robot được ghi/sửa file trong kho
+      contents: write # Cấp quyền ghi đè file CSV
 
     steps:
-      - name: 1. Checkout code (Lấy code về)
-        uses: actions/checkout@v4
+      - name: 1. Checkout code
+        uses: actions/checkout@v3
 
-      - name: 2. Setup Python (Cài môi trường)
+      - name: 2. Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: 3. Install libraries (Cài thư viện)
+      - name: 3. Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install pandas requests
 
-      - name: 4. Run Update Script (Chạy file lấy dữ liệu)
+      - name: 4. Run Update Script
         run: python update_data.py
 
-      - name: 5. Commit & Push (Lưu dữ liệu mới)
+      - name: 5. Commit & Push Data
         run: |
-          git config --global user.name "GitHub Action"
+          git config --global user.name "GitHub Action Bot"
           git config --global user.email "action@github.com"
-          git add funds_data.csv
-          # Chỉ commit nếu có sự thay đổi dữ liệu
-          git commit -m "Auto-update data: $(date)" || echo "No changes to commit"
+          git add funds_data.csv funds_volume.csv funds_profile.csv
+          git commit -m "Auto-update: Daily market data" || echo "No changes to commit"
           git push

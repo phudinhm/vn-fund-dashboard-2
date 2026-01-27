@@ -2,4 +2,6 @@ streamlit
 pandas
 plotly
 yfinance
-vnstock3
+requests
+statsmodels
+scipy
