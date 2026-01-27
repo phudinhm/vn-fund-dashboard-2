@@ -1,95 +1,95 @@
 import pandas as pd
-import requests
+import yfinance as yf
 from vnstock3 import Vnstock
 from datetime import datetime
-import time
 
-# 1. Cấu hình ID các quỹ trên Fmarket (Bạn có thể thêm quỹ khác nếu biết ID)
-# Cách tìm ID: Vào Fmarket, bấm F12 -> Network -> tìm request "get-nav-history"
-FUND_IDS = {
-    'DCDS': 20,
-    'DCIP': 21,
-    'VESAF': 18,
-    'VIBF': 24,
-    'E1VFVN30': 11 # ETF cũng lấy được
+# 1. Danh sách ETF lấy từ Yahoo Finance (Hoạt động tốt)
+YAHOO_ETFS = {
+    'E1VFVN30': 'E1VFVN30.VN',   # Dragon Capital VN30
+    'FUEVFVND': 'FUEVFVND.VN',   # Dragon Capital Diamond
+    'FUEVN100': 'FUEVN100.VN',   # VinaCapital VN100
+    'FUESSV30': 'FUESSV30.VN',   # SSIAM VN30
+    'FUESSVFL': 'FUESSVFL.VN',   # SSIAM FinLead
+    'FUESSV50': 'FUESSV50.VN',   # SSIAM VNX50
+    'FUEDCMID': 'FUEDCMID.VN'    # Dragon Capital Midcap
 }
 
-def get_fund_data(fund_code, fund_id):
-    """Hàm lấy dữ liệu NAV từ API Fmarket"""
-    url = "https://api.fmarket.vn/res/product/get-nav-history"
-    payload = {
-        "isAllData": 1,
-        "productId": fund_id
-    }
-    headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0'
-    }
-    
+def get_yahoo_data():
+    print("1️⃣ Đang tải ETF từ Yahoo Finance...")
+    tickers = list(YAHOO_ETFS.values())
     try:
-        response = requests.post(url, json=payload, headers=headers)
-        if response.status_code == 200:
-            data = response.json()['data']
-            df = pd.DataFrame(data)
-            # Fmarket trả về field: 'navDate' (YYYYMMDD) và 'nav'
-            df['Date'] = pd.to_datetime(df['navDate'], format='%Y%m%d')
-            df[fund_code] = df['nav']
-            return df[['Date', fund_code]].set_index('Date')
+        # Tải dữ liệu từ 2020
+        data = yf.download(tickers, start="2020-01-01", group_by='ticker', progress=False)
+        
+        df_etf = pd.DataFrame()
+        for display_name, yahoo_symbol in YAHOO_ETFS.items():
+            try:
+                # Lấy cột Close
+                if yahoo_symbol in data.columns.levels[0]:
+                    series = data[yahoo_symbol]['Close']
+                else:
+                    series = data['Close'][yahoo_symbol]
+                df_etf[display_name] = series
+            except KeyError:
+                print(f"   ⚠️ Thiếu dữ liệu Yahoo: {display_name}")
+        
+        # Xử lý Index của Yahoo (Thường có múi giờ UTC) -> chuyển về naive
+        df_etf.index = df_etf.index.tz_localize(None)
+        return df_etf
     except Exception as e:
-        print(f"Lỗi lấy dữ liệu {fund_code}: {e}")
+        print(f"❌ Lỗi Yahoo: {e}")
         return pd.DataFrame()
 
-def get_vnindex():
-    """Hàm lấy dữ liệu VNINDEX từ vnstock"""
+def get_vnindex_data():
+    print("2️⃣ Đang tải VNINDEX từ TCBS (vnstock)...")
     try:
-        # Lấy dữ liệu từ năm 2020 đến nay
-        stock = Vnstock().stock(symbol='VNINDEX', source='VCI')
+        # Sử dụng nguồn TCBS (ổn định, ít bị chặn hơn nguồn mặc định)
+        stock = Vnstock().stock(symbol='VNINDEX', source='TCBS')
         df = stock.quote.history(start='2020-01-01', end=datetime.today().strftime('%Y-%m-%d'))
         
-        # vnstock trả về cột 'time' và 'close'
-        df['Date'] = pd.to_datetime(df['time'])
-        df['VNINDEX'] = df['close']
-        return df[['Date', 'VNINDEX']].set_index('Date')
+        # Chuẩn hóa tên cột
+        if 'time' in df.columns:
+            df['Date'] = pd.to_datetime(df['time'])
+        elif 'tradingDate' in df.columns:
+            df['Date'] = pd.to_datetime(df['tradingDate'])
+            
+        df = df.set_index('Date')
+        df = df[['close']].rename(columns={'close': 'VNINDEX'})
+        return df
     except Exception as e:
-        print(f"Lỗi lấy VNINDEX: {e}")
+        print(f"❌ Lỗi tải VNINDEX: {e}")
         return pd.DataFrame()
 
 def update_csv():
-    print("⏳ Đang tải dữ liệu thực tế...")
+    # Bước 1: Lấy ETF từ Yahoo
+    df_yahoo = get_yahoo_data()
     
-    # 1. Lấy VNINDEX
-    final_df = get_vnindex()
+    # Bước 2: Lấy VNINDEX từ Vnstock
+    df_vnindex = get_vnindex_data()
     
-    # 2. Lấy dữ liệu từng quỹ và gộp vào (Merge)
-    for fund_code, fund_id in FUND_IDS.items():
-        print(f"   -> Đang lấy {fund_code}...")
-        fund_df = get_fund_data(fund_code, fund_id)
+    # Bước 3: Gộp 2 nguồn lại (Merge)
+    print("3️⃣ Đang gộp dữ liệu...")
+    if not df_yahoo.empty and not df_vnindex.empty:
+        # Gộp theo Index (Date), dùng outer join để giữ đủ ngày
+        final_df = df_vnindex.join(df_yahoo, how='outer')
         
-        if not fund_df.empty:
-            # Merge vào bảng chính theo ngày (Outer join để giữ đủ ngày)
-            if final_df.empty:
-                final_df = fund_df
-            else:
-                final_df = final_df.join(fund_df, how='outer')
+        # Sắp xếp và làm sạch
+        final_df.sort_index(inplace=True)
+        final_df.index.name = 'Date'
         
-        # Nghỉ 1 xíu để không bị chặn IP
-        time.sleep(0.5)
+        # Forward Fill (Lấp đầy ngày nghỉ bằng giá trước đó)
+        final_df.ffill(inplace=True)
+        final_df.dropna(how='all', inplace=True)
+        
+        # Lọc từ năm 2020 trở đi
+        final_df = final_df[final_df.index >= '2020-01-01']
 
-    # 3. Xử lý dữ liệu
-    final_df.sort_index(inplace=True)
-    
-    # Fill các ngày nghỉ lễ/cuối tuần bằng giá ngày trước đó (Forward Fill)
-    # Vì quỹ không giao dịch cuối tuần, nhưng biểu đồ cần liền mạch
-    final_df.ffill(inplace=True)
-    
-    # Chỉ lấy dữ liệu từ 2021 trở lại đây cho nhẹ
-    final_df = final_df[final_df.index >= '2021-01-01']
-
-    # 4. Lưu file
-    final_df.reset_index().to_csv('funds_data.csv', index=False)
-    print("✅ Cập nhật dữ liệu thành công!")
-    print(final_df.tail(3))
+        # Lưu file
+        final_df.reset_index().to_csv('funds_data.csv', index=False)
+        print("✅ THÀNH CÔNG! Đã cập nhật đầy đủ VNINDEX và ETF.")
+        print(final_df.tail(3))
+    else:
+        print("❌ Thất bại: Một trong hai nguồn dữ liệu bị lỗi hoàn toàn.")
 
 if __name__ == "__main__":
     update_csv()
-    
