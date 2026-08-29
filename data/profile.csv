@@ -2,10 +2,14 @@ ticker,source,symbol,name,kind,asset_class,region,country,currency,issuer,ter,be
 VNINDEX,vndirect,VNINDEX,VN-Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Broad Market,2000-07-28,2017-08-24,2026-08-28,2250,1
 VN30,vndirect,VN30,VN30 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Large Cap,2012-02-06,2017-08-24,2026-08-28,2250,1
 VN100,vndirect,VN100,VN100 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Broad Market,2014-01-24,2017-08-24,2026-08-28,2250,1
+VNMIDCAP,vndirect,VNMIDCAP,VN Midcap Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Mid Cap,2017-10-23,2017-08-24,2026-08-28,2250,1
+VNSMALLCAP,vndirect,VNSMALLCAP,VN Smallcap Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Small Cap,2017-10-23,2017-08-24,2026-08-28,2250,1
 VNX50,vndirect,VNX50,VNX50 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Large Cap,2017-10-23,2017-08-24,2026-08-28,2250,1
 VNFINLEAD,vndirect,VNFINLEAD,VN Financials Leading,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Sector: Financials,2019-11-18,2019-11-18,2026-08-28,1693,1
 VNFINSELECT,vndirect,VNFINSELECT,VN Financials Select,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Sector: Financials,2019-11-18,2019-11-18,2026-08-28,1693,1
 VNDIAMOND,vndirect,VNDIAMOND,VN Diamond Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Thematic,2019-11-18,2019-11-18,2026-08-28,1693,1
+HNXINDEX,vndirect,HNXINDEX,HNX-Index,Index,Equity,Vietnam,Vietnam,VND,HNX,0.0,,Broad Market,2005-07-14,2017-08-24,2026-08-28,2252,1
+UPCOMINDEX,vndirect,UPCOMINDEX,UPCoM-Index,Index,Equity,Vietnam,Vietnam,VND,UPCOM,0.0,,Broad Market,2009-06-24,2017-08-24,2026-08-28,2252,1
 E1VFVN30,vndirect,E1VFVN30,DCVFM VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.65,VN30,Large Cap,2014-10-06,2014-10-06,2026-08-28,2971,1
 FUEVFVND,vndirect,FUEVFVND,DCVFM VN Diamond ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.8,VNDIAMOND,Thematic,2020-05-12,2020-05-12,2026-08-28,1576,1
 FUEDCMID,vndirect,FUEDCMID,DCVFM VN Midcap ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.8,VNMIDCAP,Mid Cap,2022-09-29,2022-09-29,2026-08-28,977,1
@@ -80,7 +84,6 @@ VMEEF,fmarket,68,QUỸ ĐẦU TƯ CỔ PHIẾU KINH TẾ HIỆN ĐẠI VINACAPIT
 DCDE,fmarket,25,QUỸ ĐẦU TƯ CỔ PHIẾU TẬP TRUNG CỔ TỨC DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2008-02-29,2008-02-29,2026-08-28,3582,1
 AEIF,fmarket,115,QUỸ ĐẦU TƯ CỔ PHIẾU AMBER,Mutual Fund,Equity,Vietnam,Vietnam,VND,AMBER CAPITAL,,VNINDEX,Equity Fund,2026-07-06,2026-07-06,2026-08-28,40,1
 KSIF,fmarket,114,QUỸ ĐẦU TƯ TRÁI PHIẾU CHIẾN LƯỢC KIM,Mutual Fund,Equity,Vietnam,Vietnam,VND,KIM,,VNINDEX,Equity Fund,2026-07-13,2026-07-13,2026-08-28,33,1
-VBIF,fmarket,113,QUỸ ĐẦU TƯ CÂN BẰNG VIETINBANK,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETINBANK CAPITAL,,VNINDEX,Equity Fund,2026-06-22,2026-06-22,2026-08-27,20,2
 LPLF,fmarket,97,QUỸ ĐẦU TƯ DOANH NGHIỆP DẪN ĐẦU LP,Mutual Fund,Equity,Vietnam,Vietnam,VND,LPBA,,VNINDEX,Equity Fund,2026-05-12,2026-05-12,2026-08-28,78,1
 ABEF,fmarket,96,QUỸ ĐẦU TƯ CỔ PHIẾU AN BÌNH THỊNH VƯỢNG,Mutual Fund,Equity,Vietnam,Vietnam,VND,ABF,,VNINDEX,Equity Fund,2026-04-01,2026-04-01,2026-08-28,99,1
 USIF,fmarket,91,QUỸ ĐẦU TƯ TRÁI PHIẾU UNITED THU NHẬP ỔN ĐỊNH,Mutual Fund,Equity,Vietnam,Vietnam,VND,UOBAM VIETNAM,,VNINDEX,Equity Fund,2026-04-06,2026-04-06,2026-08-27,39,2
@@ -108,10 +111,10 @@ TAIEX,yahoo,^TWII,TAIEX,Index,Equity,Asia-Pacific,Taiwan,TWD,-,0.0,,Broad Market
 NIFTY50,yahoo,^NSEI,NIFTY 50,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-08-28,4091,1
 SENSEX,yahoo,^BSESN,BSE SENSEX,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-08-28,4096,1
 STI,yahoo,^STI,Straits Times Index,Index,Equity,Asia-Pacific,Singapore,SGD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-08-28,4165,1
-SET,yahoo,^SET.BK,SET Index,Index,Equity,Asia-Pacific,Thailand,THB,-,0.0,,Broad Market,2026-08-28,2026-08-28,2026-08-28,1,1
+SET,yahoo,^SET.BK,SET Index,Index,Equity,Asia-Pacific,Thailand,THB,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-08-28,4017,1
 KLCI,yahoo,^KLSE,FTSE Bursa Malaysia KLCI,Index,Equity,Asia-Pacific,Malaysia,MYR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-08-28,4080,1
 JKSE,yahoo,^JKSE,IDX Composite,Index,Equity,Asia-Pacific,Indonesia,IDR,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-08-28,4038,1
-PSEI,yahoo,PSEI.PS,PSEi Composite,Index,Equity,Asia-Pacific,Philippines,PHP,-,0.0,,Broad Market,2026-08-28,2026-08-28,2026-08-28,1,1
+PSEI,yahoo,PSEI.PS,PSEi Composite,Index,Equity,Asia-Pacific,Philippines,PHP,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-08-28,4032,1
 ASX200,yahoo,^AXJO,S&P/ASX 200,Index,Equity,Asia-Pacific,Australia,AUD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-08-28,4204,1
 TSX,yahoo,^GSPTSE,S&P/TSX Composite,Index,Equity,Americas,Canada,CAD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-08-28,4180,1
 BOVESPA,yahoo,^BVSP,Ibovespa,Index,Equity,Americas,Brazil,BRL,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-08-28,4130,1

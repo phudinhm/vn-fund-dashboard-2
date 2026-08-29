@@ -2,10 +2,14 @@ Ticker,Name,Issuer,Type,Benchmark,Launch,Fee
 VNINDEX,VN-Index,HOSE,Broad Market,,2000-07-28,0.0
 VN30,VN30 Index,HOSE,Large Cap,,2012-02-06,0.0
 VN100,VN100 Index,HOSE,Broad Market,,2014-01-24,0.0
+VNMIDCAP,VN Midcap Index,HOSE,Mid Cap,,2017-10-23,0.0
+VNSMALLCAP,VN Smallcap Index,HOSE,Small Cap,,2017-10-23,0.0
 VNX50,VNX50 Index,HOSE,Large Cap,,2017-10-23,0.0
 VNFINLEAD,VN Financials Leading,HOSE,Sector: Financials,,2019-11-18,0.0
 VNFINSELECT,VN Financials Select,HOSE,Sector: Financials,,2019-11-18,0.0
 VNDIAMOND,VN Diamond Index,HOSE,Thematic,,2019-11-18,0.0
+HNXINDEX,HNX-Index,HNX,Broad Market,,2005-07-14,0.0
+UPCOMINDEX,UPCoM-Index,UPCOM,Broad Market,,2009-06-24,0.0
 E1VFVN30,DCVFM VN30 ETF,Dragon Capital,Equity ETF,VN30,2014-10-06,0.65
 FUEVFVND,DCVFM VN Diamond ETF,Dragon Capital,Equity ETF,VNDIAMOND,2020-05-12,0.8
 FUEDCMID,DCVFM VN Midcap ETF,Dragon Capital,Equity ETF,VNMIDCAP,2022-09-29,0.8
