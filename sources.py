@@ -65,11 +65,13 @@ def _vndirect_window(symbol: str, start: int, end: int, retries: int = 3) -> pd.
 
 
 def fetch_vndirect(symbol: str, retries: int = 3,
-                   window_days: int = 700) -> pd.DataFrame:
+                   window_days: int = 1500) -> pd.DataFrame:
     """Daily history of a Vietnamese listed symbol (ETF or index).
 
-    The dchart endpoint caps how many bars one request may return, so the
-    history is walked in windows and stitched back together.
+    The range is walked in windows and stitched together so a per-request bar
+    limit on the endpoint cannot silently shorten the history. How far back the
+    data actually goes is decided by VNDIRECT: the ETFs reach their listing
+    date, the indices currently start in August 2017.
     """
     now = int(time.time())
     step = window_days * 86400

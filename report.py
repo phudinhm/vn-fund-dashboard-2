@@ -284,7 +284,10 @@ def main() -> int:
     tickers = (args.tickers.split(",") if args.tickers
                else default_selection(ds.profile, ds.prices))
     tickers = [t for t in tickers if t in ds.prices.columns]
-    benchmark = args.benchmark or ("SP500" if "SP500" in tickers else tickers[0])
+    # a broad global index is the most informative default benchmark; fall back
+    # to the Vietnamese market and finally to the first selected instrument
+    benchmark = args.benchmark or next(
+        (b for b in ("SP500", "VNINDEX") if b in ds.prices.columns), tickers[0])
     if benchmark not in tickers:
         tickers = [benchmark] + tickers
     text = markdown_report(args.lang, ds, tickers, args.period, benchmark, args.currency)

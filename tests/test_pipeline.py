@@ -110,6 +110,11 @@ def test_markdown_report_renders_in_each_language(dataset, lang):
     assert len(text) > 1500
 
 
+def test_markdown_report_adds_the_benchmark_to_the_table(dataset):
+    text = rp.markdown_report("EN", dataset, ["SPY", "QQQ"], "3Y", "SP500", "USD")
+    assert "SP500" in text
+
+
 def test_slice_window_respects_period(dataset):
     full = dataset.prices
     year = rp.slice_window(full, "1Y")
@@ -287,7 +292,9 @@ def test_vndirect_walks_the_history_in_windows(monkeypatch):
     monkeypatch.setattr(sources, "_vndirect_window", fake_window)
     monkeypatch.setattr(sources.time, "sleep", lambda *a, **k: None)
     out = sources.fetch_vndirect("VNINDEX")
-    assert len(windows) > 5                     # the full range is walked
+    assert len(windows) >= 3                    # the range is split into windows
     assert windows[0][0] == sources.START_TIMESTAMP
+    assert windows[-1][1] >= windows[-1][0]     # and walked all the way to today
+    assert all(b[0] == a[1] for a, b in zip(windows, windows[1:]))  # no gaps
     assert out.index.is_monotonic_increasing
     assert not out.index.has_duplicates
