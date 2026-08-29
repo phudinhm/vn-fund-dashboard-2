@@ -209,3 +209,85 @@ def test_skip_flags_are_honoured(monkeypatch):
     status = {"failed": [], "warnings": []}
     assert update_data.collect_world(status) == ({}, {}, [])
     assert update_data.collect_mutual_funds(status) == ({}, [])
+
+
+def test_merge_keeps_history_that_the_source_no_longer_serves(tmp_path):
+    import update_data
+    old = pd.DataFrame(
+        {"VNINDEX": [1000.0, 1010.0, 1020.0], "OLDFUND": [10.0, 11.0, 12.0]},
+        index=pd.to_datetime(["2026-01-02", "2026-01-05", "2026-01-06"]))
+    old.index.name = "Date"
+    path = tmp_path / "prices.csv"
+    old.to_csv(path)
+
+    new = pd.DataFrame(
+        {"VNINDEX": [1030.0, 1040.0]},
+        index=pd.to_datetime(["2026-01-06", "2026-01-07"]))
+    new.index.name = "Date"
+
+    merged = update_data.merge_with_existing(new, str(path))
+    # older dates survive, the new value wins where they overlap
+    assert merged.loc["2026-01-02", "VNINDEX"] == 1000.0
+    assert merged.loc["2026-01-06", "VNINDEX"] == 1030.0
+    assert merged.loc["2026-01-07", "VNINDEX"] == 1040.0
+    # a ticker missing from today's download keeps its recent history
+    assert "OLDFUND" in merged.columns
+
+
+def test_merge_retires_columns_that_went_quiet(tmp_path):
+    import update_data
+    idx = pd.date_range("2024-01-01", periods=800, freq="D")
+    old = pd.DataFrame({"DEAD": 1.0, "ALIVE": 2.0}, index=idx)
+    old.loc[idx[300]:, "DEAD"] = None
+    old.index.name = "Date"
+    path = tmp_path / "prices.csv"
+    old.to_csv(path)
+
+    new = pd.DataFrame({"ALIVE": [3.0]}, index=pd.DatetimeIndex([idx[-1]]))
+    new.index.name = "Date"
+    merged = update_data.merge_with_existing(new, str(path), keep_days=400)
+    assert "DEAD" not in merged.columns
+    assert "ALIVE" in merged.columns
+
+
+def test_thin_series_are_dropped():
+    import update_data
+    idx = pd.date_range("2026-01-01", periods=50, freq="D")
+    frame = pd.DataFrame({"GOOD": range(50), "THIN": [1.0] * 5 + [None] * 45},
+                         index=idx)
+    kept, thin = update_data.drop_thin_series(frame, minimum=30)
+    assert thin == ["THIN"]
+    assert list(kept.columns) == ["GOOD"]
+
+
+def test_vn_symbol_aliases_are_tried_in_order(monkeypatch):
+    calls = []
+
+    def fake(symbol, retries=3, window_days=700):
+        calls.append(symbol)
+        if symbol == "HNXINDEX":
+            return pd.DataFrame({"Close": [1.0], "Volume": [1]},
+                                index=pd.DatetimeIndex(["2026-01-02"]))
+        return pd.DataFrame(columns=["Close", "Volume"])
+
+    monkeypatch.setattr(sources, "fetch_vndirect", fake)
+    out = sources.fetch_vndirect_multi(uni.vn_symbol_candidates("HNXINDEX"))
+    assert not out.empty
+    assert calls == ["HNX", "HNXINDEX"]
+
+
+def test_vndirect_walks_the_history_in_windows(monkeypatch):
+    windows = []
+
+    def fake_window(symbol, start, end, retries=3):
+        windows.append((start, end))
+        idx = pd.to_datetime([start, end], unit="s").normalize()
+        return pd.DataFrame({"Close": [1.0, 2.0], "Volume": [10, 20]}, index=idx)
+
+    monkeypatch.setattr(sources, "_vndirect_window", fake_window)
+    monkeypatch.setattr(sources.time, "sleep", lambda *a, **k: None)
+    out = sources.fetch_vndirect("VNINDEX")
+    assert len(windows) > 5                     # the full range is walked
+    assert windows[0][0] == sources.START_TIMESTAMP
+    assert out.index.is_monotonic_increasing
+    assert not out.index.has_duplicates

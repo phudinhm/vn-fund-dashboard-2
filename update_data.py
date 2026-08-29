@@ -61,7 +61,7 @@ def collect_vietnam(status: dict) -> tuple[dict, dict, list[dict]]:
     vn = static[static.source == "vndirect"]
     log(f"Vietnam: fetching {len(vn)} listed symbols from VNDIRECT ...")
     for _, meta in vn.iterrows():
-        df = sources.fetch_vndirect(meta.symbol)
+        df = sources.fetch_vndirect_multi(uni.vn_symbol_candidates(meta.ticker))
         if df.empty:
             status["failed"].append({"ticker": meta.ticker, "source": "vndirect"})
             log(f"  ! {meta.ticker}: no data")
@@ -184,6 +184,36 @@ def collect_fx(status: dict, needed: list[str]) -> pd.DataFrame:
 # assembly
 # ---------------------------------------------------------------------------
 
+def merge_with_existing(new: pd.DataFrame, path: str,
+                        keep_days: int = 400) -> pd.DataFrame:
+    """Union today's download with the history already committed to the repo.
+
+    Sources have their own limits (VNDIRECT only serves a window at a time, a
+    provider can drop a ticker for a day), so the committed file is the memory
+    of the dataset: new values win on overlapping dates, older history is kept,
+    and a column nobody has priced for ``keep_days`` is retired.
+    """
+    if not os.path.exists(path) or new.empty:
+        return new
+    try:
+        old = pd.read_csv(path, parse_dates=["Date"], index_col="Date")
+    except Exception:
+        return new
+    if old.empty:
+        return new
+    merged = new.combine_first(old).sort_index()
+    cutoff = merged.index.max() - pd.Timedelta(days=keep_days)
+    keep = [c for c in merged.columns
+            if c in new.columns or merged[c].loc[cutoff:].notna().any()]
+    return merged[keep]
+
+
+def drop_thin_series(prices: pd.DataFrame, minimum: int = 30) -> tuple[pd.DataFrame, list[str]]:
+    """Remove series with too few observations to compute anything meaningful."""
+    thin = [c for c in prices.columns if prices[c].notna().sum() < minimum]
+    return prices.drop(columns=thin), thin
+
+
 def build_frame(series_map: dict) -> pd.DataFrame:
     if not series_map:
         return pd.DataFrame()
@@ -261,6 +291,19 @@ def main(root: str | None = None, data_dir: str | None = None) -> int:
     prices = build_frame(price_map)
     volume = build_frame(vol_map)
     profile = pd.DataFrame(rows).drop_duplicates(subset="ticker").reset_index(drop=True)
+
+    # keep the history that previous runs already collected
+    prices = merge_with_existing(prices, os.path.join(data_dir, "prices.csv"))
+    if not volume.empty:
+        volume = merge_with_existing(volume, os.path.join(data_dir, "volume.csv"))
+
+    prices, thin = drop_thin_series(prices)
+    if thin:
+        status["warnings"].append("dropped, too few observations: " + ", ".join(thin))
+        volume = volume.drop(columns=[c for c in thin if c in volume.columns],
+                             errors="ignore")
+        profile = profile[~profile.ticker.isin(thin)]
+    profile = profile[profile.ticker.isin(prices.columns)].reset_index(drop=True)
 
     currencies = sorted(set(profile.currency.dropna()) | {"USD", "EUR", "VND"})
     fx = collect_fx(status, currencies)

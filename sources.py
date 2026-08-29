@@ -40,15 +40,9 @@ def _empty() -> pd.DataFrame:
 
 # ---------------------------------------------------------------- VNDIRECT --
 
-def fetch_vndirect(symbol: str, retries: int = 3) -> pd.DataFrame:
-    """Full daily history of a Vietnamese listed symbol (ETF or index)."""
+def _vndirect_window(symbol: str, start: int, end: int, retries: int = 3) -> pd.DataFrame:
     url = "https://dchart-api.vndirect.com.vn/dchart/history"
-    params = {
-        "resolution": "D",
-        "symbol": symbol,
-        "from": START_TIMESTAMP,
-        "to": int(time.time()),
-    }
+    params = {"resolution": "D", "symbol": symbol, "from": start, "to": end}
     for attempt in range(retries):
         try:
             r = _SESSION.get(url, params=params, timeout=30,
@@ -62,12 +56,47 @@ def fetch_vndirect(symbol: str, retries: int = 3) -> pd.DataFrame:
                 "Volume": data.get("v", [0] * len(data["t"])),
             }, index=pd.to_datetime(data["t"], unit="s").normalize())
             df.index.name = "Date"
-            df = df[df["Close"] > 0]
-            return df[~df.index.duplicated(keep="last")].sort_index()
+            return df[df["Close"] > 0]
         except Exception:
             if attempt == retries - 1:
                 return _empty()
             time.sleep(2 ** attempt)
+    return _empty()
+
+
+def fetch_vndirect(symbol: str, retries: int = 3,
+                   window_days: int = 700) -> pd.DataFrame:
+    """Daily history of a Vietnamese listed symbol (ETF or index).
+
+    The dchart endpoint caps how many bars one request may return, so the
+    history is walked in windows and stitched back together.
+    """
+    now = int(time.time())
+    step = window_days * 86400
+    frames, cursor = [], START_TIMESTAMP
+    while cursor < now:
+        chunk = _vndirect_window(symbol, cursor, min(cursor + step, now), retries)
+        if not chunk.empty:
+            frames.append(chunk)
+        cursor += step
+        time.sleep(0.2)
+    if not frames:
+        return _empty()
+    df = pd.concat(frames).sort_index()
+    return df[~df.index.duplicated(keep="last")]
+
+
+def fetch_vndirect_multi(symbols: list[str], retries: int = 3) -> pd.DataFrame:
+    """Try several spellings of the same instrument, return the first that works.
+
+    VNDIRECT names some indices differently from the exchange (``VNMID`` for the
+    midcap index, ``HNX`` for the HNX-Index...), so the universe lists the
+    plausible aliases and the first one that answers wins.
+    """
+    for symbol in symbols:
+        df = fetch_vndirect(symbol, retries=retries)
+        if not df.empty:
+            return df
     return _empty()
 
 

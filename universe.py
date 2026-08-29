@@ -36,6 +36,17 @@ import pandas as pd
 # 1. VIETNAM — indices and exchange traded funds (source: VNDIRECT dchart API)
 # --------------------------------------------------------------------------
 
+# Aliases the VNDIRECT chart API uses for some indices; the loader tries the
+# canonical ticker first and falls back through this list.
+VN_SYMBOL_ALIASES = {
+    "VNMIDCAP":   ["VNMID", "VNMIDCAP"],
+    "VNSMALLCAP": ["VNSML", "VNSMALLCAP"],
+    "HNXINDEX":   ["HNX", "HNXINDEX", "HNX-INDEX"],
+    "UPCOMINDEX": ["UPCOM", "UPCOMINDEX", "UPCOM-INDEX"],
+    "VNFINSELECT": ["VNFINSELECT", "VNFINSEL"],
+    "VNFINLEAD":  ["VNFINLEAD", "VNFIN LEAD"],
+}
+
 VN_ASSETS = [
     # ticker, name, issuer, kind, asset_class, category, benchmark, ter, inception
     ("VNINDEX",   "VN-Index",                  "HOSE", "Index", "Equity", "Broad Market",        "",           0.0,  "2000-07-28"),
@@ -168,7 +179,6 @@ WORLD_ETFS = [
     ("EEM",  "iShares MSCI Emerging Markets ETF",     "BlackRock",    "Equity", "Emerging", "Emerging",       "USD", "Broad Market", "", 0.72),
     ("VWO",  "Vanguard FTSE Emerging Markets ETF",    "Vanguard",     "Equity", "Emerging", "Emerging",       "USD", "Broad Market", "", 0.07),
     ("IEMG", "iShares Core MSCI Emerging Markets",    "BlackRock",    "Equity", "Emerging", "Emerging",       "USD", "Broad Market", "", 0.09),
-    ("FM",   "iShares Frontier & Select EM ETF",      "BlackRock",    "Equity", "Emerging", "Frontier",       "USD", "Broad Market", "", 0.79),
     # ---------------- Single-country ETFs (US listed) ----------------
     ("VNM",  "VanEck Vietnam ETF",                    "VanEck",       "Equity", "Emerging",     "Vietnam",       "USD", "Country", "VNINDEX",  0.66),
     ("EWG",  "iShares MSCI Germany ETF",              "BlackRock",    "Equity", "Europe",       "Germany",       "USD", "Country", "DAX",      0.50),
@@ -269,6 +279,11 @@ DISPLAY_CURRENCIES = ["USD", "EUR", "VND"]
 
 # Regions in a stable display order.
 REGION_ORDER = ["Vietnam", "US", "Europe", "Asia-Pacific", "Americas", "Emerging", "Global"]
+
+
+def vn_symbol_candidates(ticker: str) -> list[str]:
+    """Every spelling worth trying for a Vietnamese ticker, best guess first."""
+    return VN_SYMBOL_ALIASES.get(ticker, [ticker])
 
 
 def _vn_rows():
