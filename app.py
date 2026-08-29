@@ -1,583 +1,892 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import plotly.express as px
-import plotly.graph_objects as go
-from datetime import datetime, timedelta
+# -*- coding: utf-8 -*-
+"""
+Global ETF & Fund Report — Streamlit front end.
+
+Everything shown here is computed from the automatically updated dataset
+(``data/prices.csv`` and friends). The UI is fully trilingual (VI / EN / DE)
+and every price is converted into the chosen reporting currency so funds from
+different markets can be compared on the same axis.
+
+Run locally:  streamlit run app.py
+"""
+
+from __future__ import annotations
+
 import subprocess
 import sys
 
-# ==========================================
-# 1. TỪ ĐIỂN NGÔN NGỮ CHUYÊN SÂU
-# ==========================================
-LANG = {
-    "VN": {
-        "page_title": "Trung tâm Phân tích ETF Việt Nam",
-        "sidebar_settings": "Cấu hình",
-        "data_updated": "Dữ liệu cập nhật đến",
-        "manager": "Nhà quản lý",
-        "select_ticker": "Chọn Mã Quỹ",
-        "time_range": "Khung thời gian",
-        "update_btn": "Cập nhật Dữ liệu",
-        "loading": "Đang tải dữ liệu...",
-        "success_update": "Đã cập nhật xong! Nhấn 'R' để tải lại.",
-        "tab_perf": "Hiệu Suất", "tab_risk": "Rủi Ro", "tab_rr": "Risk-Return",
-        "tab_trend": "Xu Hướng", "tab_corr": "Tương Quan", "tab_struct": "Cấu Trúc",
-        "tab_cycle": "Chu Kỳ", "tab_forecast": "Dự Báo",
-        "chart_cum_ret": "Tăng trưởng tài sản lũy kế",
-        "chart_dd": "Mức sụt giảm từ đỉnh (Drawdown)",
-        "chart_rr": "Vị thế Rủi ro vs Lợi nhuận",
-        "chart_trend": "Phân tích Xu hướng Giá",
-        "chart_corr": "Ma trận Tương quan Biến động",
-        "chart_te": "Tracking Error (Độ lệch chuẩn)",
-        "chart_vol": "Thanh khoản (Volume)",
-        "chart_bb": "Hiệu suất Bull vs Bear",
-        "chart_forecast": "Dự báo Xu hướng (ETS)",
-        "metric_ret": "Lợi nhuận", "metric_vol": "Biến động (Năm)", 
-        "metric_sharpe": "Sharpe Ratio", "metric_alpha": "Alpha", "metric_beta": "Beta",
-        "interp_title": "💡 Phân tích chuyên sâu:",
-        "interp_perf": """
-        - **Ý nghĩa:** Biểu đồ giả định khoản đầu tư 100 đơn vị tiền tệ vào đầu kỳ. Đường nằm trên cùng là quỹ có hiệu suất tốt nhất.
-        - **So sánh:** Nếu đường của quỹ (Line) nằm dưới đường VNINDEX/VN30, quỹ đó đang hoạt động kém hơn thị trường (Underperform).
-        - **Lãi kép:** Độ dốc của đường biểu diễn sức mạnh của lãi kép. Dốc càng đứng, đà tăng trưởng càng mạnh.
-        """,
-        "interp_risk": """
-        - **Drawdown là gì?** Là mức sụt giảm tính từ đỉnh cao nhất gần đó. Nó đo lường "nỗi đau" tối đa nhà đầu tư phải chịu đựng.
-        - **Toán học về lỗ:** Nếu tài khoản lỗ **-20%**, bạn cần lãi **+25%** để hòa vốn. Nếu lỗ **-50%**, bạn cần lãi **+100%**.
-        - **Đánh giá:** Quỹ tốt là quỹ có mức sụt giảm (đáy của vùng màu) nông hơn so với thị trường chung trong các đợt khủng hoảng.
-        """,
-        "interp_rr": """
-        - **Vùng lý tưởng:** Góc trên bên trái (Lợi nhuận cao - Rủi ro thấp). Các quỹ nằm ở đây là "hàng tuyển".
-        - **Sharpe Ratio:** Đo lường hiệu quả. Sharpe > 1 là Tốt, > 2 là Xuất sắc. Nó trả lời: "Chấp nhận thêm 1 đơn vị rủi ro thì thu về bao nhiêu đơn vị lợi nhuận?".
-        - **Alpha & Beta:** * **Alpha > 0:** Quỹ có khả năng "chiến thắng" thị trường nhờ kỹ năng quản lý.
-            * **Beta < 1:** Quỹ biến động ít hơn thị trường (Phòng thủ). **Beta > 1:** Quỹ biến động mạnh hơn (Tấn công).
-        """,
-        "interp_trend": """
-        - **Golden Cross (Giao cắt vàng):** Khi đường Vàng (MA50 - Trung hạn) cắt lên trên đường Đỏ (MA200 - Dài hạn) → Tín hiệu xác nhận xu hướng Tăng dài hạn.
-        - **Death Cross (Giao cắt tử thần):** Khi đường Vàng cắt xuống dưới đường Đỏ → Tín hiệu cảnh báo xu hướng Giảm dài hạn.
-        - **Hỗ trợ/Kháng cự:** Các đường MA thường đóng vai trò là ngưỡng hỗ trợ động trong xu hướng tăng.
-        """,
-        "interp_corr": """
-        - **Đa dạng hóa danh mục:** Mục tiêu là tìm các tài sản có tương quan thấp để giảm rủi ro tổng thể.
-        - **Hệ số = 1:** Hai quỹ biến động y hệt nhau. Nắm giữ cả 2 không có tác dụng phân tán rủi ro.
-        - **Hệ số < 0.5:** Hai quỹ ít liên quan. Khi quỹ này giảm, quỹ kia có thể không giảm hoặc giảm ít hơn, giúp tài khoản ổn định.
-        """,
-        "interp_struct": """
-        - **Tracking Error (TE):** Rất quan trọng với ETF. TE càng thấp chứng tỏ quỹ mô phỏng càng sát chỉ số tham chiếu. TE cao bất thường là dấu hiệu quỹ quản trị kém hoặc chi phí ẩn cao.
-        - **Thanh khoản:** Khối lượng giao dịch (Volume) cao và ổn định giúp nhà đầu tư dễ dàng mua/bán mà không bị trượt giá (Slippage).
-        """,
-        "interp_cycle": """
-        - **Capture Ratio:** Đánh giá năng lực của quỹ trong 2 trạng thái thị trường.
-        - **Bull Market (Cột Xanh):** Khi thị trường tăng, quỹ có tăng mạnh hơn không? (Cần > Benchmark).
-        - **Bear Market (Cột Đỏ):** Khi thị trường sập, quỹ có giữ giá tốt hơn không? (Cần < Benchmark, tức là cột đỏ ngắn hơn).
-        """,
-        "interp_forecast": """
-        - **Mô hình:** Sử dụng Monte Carlo Simulation (1000 kịch bản ngẫu nhiên dựa trên biến động quá khứ) và ETS (Dự báo chuỗi thời gian).
-        - **Fan Chart:** Vùng màu hiển thị khoảng dao động giá có xác suất xảy ra cao nhất (Confidence Interval).
-        - **Lưu ý:** Dự báo chỉ mang tính tham khảo dựa trên dữ liệu lịch sử. Thị trường luôn có những biến số vĩ mô bất ngờ (Black Swan) không thể dự báo bằng toán học.
-        """,
-        "prob_up": "Xác suất Tăng", "scenario": "Kịch bản", "worst": "Xấu nhất", "best": "Tốt nhất"
-    },
-    "EN": {
-        "page_title": "Vietnam ETF Analytics Hub",
-        "sidebar_settings": "Settings",
-        "data_updated": "Data updated to",
-        "manager": "Fund Manager",
-        "select_ticker": "Select Ticker",
-        "time_range": "Time Range",
-        "update_btn": "Update Data",
-        "loading": "Loading data...",
-        "success_update": "Update complete! Press 'R' to reload.",
-        "tab_perf": "Performance", "tab_risk": "Risk", "tab_rr": "Risk-Return",
-        "tab_trend": "Trend", "tab_corr": "Correlation", "tab_struct": "Structure",
-        "tab_cycle": "Cycles", "tab_forecast": "Forecast",
-        "chart_cum_ret": "Cumulative Wealth Growth",
-        "chart_dd": "Drawdown from Peak",
-        "chart_rr": "Risk vs Return Positioning",
-        "chart_trend": "Price Trend Analysis",
-        "chart_corr": "Correlation Matrix",
-        "chart_te": "Tracking Error",
-        "chart_vol": "Liquidity (Volume)",
-        "chart_bb": "Bull vs Bear Performance",
-        "chart_forecast": "Trend Forecast (ETS)",
-        "metric_ret": "Return", "metric_vol": "Volatility (Ann.)",
-        "metric_sharpe": "Sharpe Ratio", "metric_alpha": "Alpha", "metric_beta": "Beta",
-        "interp_title": "💡 Analytical Insight:",
-        "interp_perf": """
-        - **Meaning:** Shows the growth of a hypothetical 100 currency units investment. The top line represents the best performer.
-        - **Comparison:** If a fund's line is below VNINDEX, it is underperforming the broader market.
-        - **Compounding:** The steepness of the curve indicates the power of compounding. Steeper slopes mean stronger momentum.
-        """,
-        "interp_risk": """
-        - **Drawdown:** The percentage drop from the nearest peak. It measures the maximum 'pain' an investor must endure.
-        - **Loss Math:** A **-20%** loss requires a **+25%** gain to break even. A **-50%** loss requires a **+100%** gain.
-        - **Evaluation:** Superior funds have shallower drawdowns compared to the market during crises.
-        """,
-        "interp_rr": """
-        - **Sweet Spot:** Top-left corner (High Return - Low Risk). Funds here are considered 'efficient'.
-        - **Sharpe Ratio:** Measures risk-adjusted return. >1 is Good, >2 is Excellent. It asks: "For every unit of risk, how much return do I get?".
-        - **Alpha & Beta:** * **Alpha > 0:** The fund beats the market benchmark.
-            * **Beta < 1:** Defensive (Less volatile than market). **Beta > 1:** Aggressive (More volatile).
-        """,
-        "interp_trend": """
-        - **Golden Cross:** When MA50 (Yellow) crosses above MA200 (Red) → Confirmed long-term BULLISH signal.
-        - **Death Cross:** When MA50 crosses below MA200 → Long-term BEARISH warning.
-        - **Support/Resistance:** Moving Averages often act as dynamic support levels in an uptrend.
-        """,
-        "interp_corr": """
-        - **Diversification:** The goal is to find assets with low correlation to reduce overall portfolio risk.
-        - **Coeff = 1:** Identical movement. Holding both adds no diversification benefit.
-        - **Coeff < 0.5:** Low correlation. When one asset falls, the other might hold steady, smoothing the equity curve.
-        """,
-        "interp_struct": """
-        - **Tracking Error (TE):** Crucial for ETFs. Low TE indicates precise index replication. High TE suggests poor management or hidden costs.
-        - **Liquidity:** High and consistent volume ensures you can enter/exit positions without significant slippage.
-        """,
-        "interp_cycle": """
-        - **Capture Ratio:** Evaluates fund behavior in different market regimes.
-        - **Bull Market (Green Bar):** Does the fund rise more than the market? (Upside Capture).
-        - **Bear Market (Red Bar):** Does the fund fall less than the market? (Downside Protection).
-        """,
-        "interp_forecast": """
-        - **Models:** Uses Monte Carlo (1000 scenarios based on historical volatility) and ETS (Time-series forecasting).
-        - **Fan Chart:** The shaded area shows the most probable price range (Confidence Interval).
-        - **Disclaimer:** Forecasts are probabilistic and based on history. Markets are subject to unpredictable macro events (Black Swans).
-        """,
-        "prob_up": "Prob. of Increase", "scenario": "Scenario", "worst": "Worst case", "best": "Best case"
-    },
-    "DE": {
-        "page_title": "Vietnam ETF Analysezentrum",
-        "sidebar_settings": "Einstellungen",
-        "data_updated": "Daten aktualisiert bis",
-        "manager": "Fondsmanager",
-        "select_ticker": "Ticker auswählen",
-        "time_range": "Zeitraum",
-        "update_btn": "Daten aktualisieren",
-        "loading": "Daten werden geladen...",
-        "success_update": "Update fertig! Drücken Sie 'R' zum Neuladen.",
-        "tab_perf": "Performance", "tab_risk": "Risiko", "tab_rr": "Risiko-Rendite",
-        "tab_trend": "Trend", "tab_corr": "Korrelation", "tab_struct": "Struktur",
-        "tab_cycle": "Zyklen", "tab_forecast": "Prognose",
-        "chart_cum_ret": "Kumuliertes Vermögenswachstum",
-        "chart_dd": "Wertverlust vom Höchststand (Drawdown)",
-        "chart_rr": "Risiko-Rendite-Positionierung",
-        "chart_trend": "Preistrend-Analyse",
-        "chart_corr": "Korrelationsmatrix",
-        "chart_te": "Tracking Error (Nachbildungsfehler)",
-        "chart_vol": "Liquidität (Volumen)",
-        "chart_bb": "Bull vs Bear Performance",
-        "chart_forecast": "Trendprognose (ETS)",
-        "metric_ret": "Rendite", "metric_vol": "Volatilität (p.a.)",
-        "metric_sharpe": "Sharpe-Quotient", "metric_alpha": "Alpha", "metric_beta": "Beta",
-        "interp_title": "💡 Erklärung:",
-        "interp_perf": """
-        - **Bedeutung:** Zeigt das Wachstum einer hypothetischen Investition von 100 Währungseinheiten. Die oberste Linie zeigt den besten Fonds.
-        - **Vergleich:** Liegt die Linie unter dem VNINDEX, schneidet der Fonds schlechter ab als der Gesamtmarkt.
-        - **Zinseszins:** Die Steilheit der Kurve zeigt die Kraft des Zinseszinses. Steilere Anstiege bedeuten stärkeres Momentum.
-        """,
-        "interp_risk": """
-        - **Drawdown:** Der prozentuale Verlust vom letzten Höchststand. Er misst den "Schmerz", den ein Anleger ertragen muss.
-        - **Verlust-Mathematik:** Ein Verlust von **-20%** erfordert einen Gewinn von **-25%** zum Ausgleich. **-50%** Verlust benötigt **+100%** Gewinn.
-        - **Bewertung:** Gute Fonds haben in Krisenzeiten geringere Drawdowns als der Markt.
-        """,
-        "interp_rr": """
-        - **Idealzone:** Oben links (Hohe Rendite - Geringes Risiko). Fonds in diesem Bereich gelten als effizient.
-        - **Sharpe-Ratio:** Risikobereinigte Rendite. >1 ist gut, >2 ist exzellent. Frage: "Wie viel Rendite erhalte ich pro Risikoeinheit?".
-        - **Alpha & Beta:** * **Alpha > 0:** Der Fonds schlägt die Benchmark durch Managementleistung.
-            * **Beta < 1:** Defensiv (Weniger volatil als der Markt). **Beta > 1:** Offensiv (Volatiler).
-        """,
-        "interp_trend": """
-        - **Golden Cross:** Wenn der MA50 (Gelb) den MA200 (Rot) nach oben kreuzt → Bestätigtes langfristiges Kaufsignal (Bullish).
-        - **Death Cross:** Wenn der MA50 den MA200 nach unten kreuzt → Warnsignal für Abwärtstrend (Bearish).
-        - **Support:** Gleitende Durchschnitte fungieren oft als dynamische Unterstützungslinien.
-        """,
-        "interp_corr": """
-        - **Diversifikation:** Ziel ist es, Vermögenswerte mit geringer Korrelation zu finden, um das Gesamtrisiko zu senken.
-        - **Koeff = 1:** Identische Bewegung. Der Besitz beider Fonds bietet keinen Diversifikationsvorteil.
-        - **Koeff < 0.5:** Geringe Korrelation. Wenn ein Fonds fällt, bleibt der andere stabil, was die Portfoliokurve glättet.
-        """,
-        "interp_struct": """
-        - **Tracking Error (TE):** Entscheidend für ETFs. Ein niedriger TE zeigt eine präzise Indexabbildung an. Hoher TE deutet auf schlechtes Management oder versteckte Kosten hin.
-        - **Liquidität:** Hohes und konstantes Volumen sichert den Ein- und Ausstieg ohne große Preisschwankungen (Slippage).
-        """,
-        "interp_cycle": """
-        - **Capture Ratio:** Bewertet das Verhalten des Fonds in verschiedenen Marktphasen.
-        - **Bullenmarkt (Grün):** Steigt der Fonds stärker als der Markt? (Upside Capture).
-        - **Bärenmarkt (Rot):** Fällt der Fonds weniger als der Markt? (Downside Protection).
-        """,
-        "interp_forecast": """
-        - **Modelle:** Nutzt Monte-Carlo-Simulation (1000 Szenarien basierend auf historischer Volatilität) und ETS (Zeitreihenprognose).
-        - **Fan-Chart:** Der farbige Bereich zeigt die Preisspanne mit der höchsten Wahrscheinlichkeit (Konfidenzintervall).
-        - **Disclaimer:** Prognosen sind probabilistisch und basieren auf der Vergangenheit. Märkte unterliegen unvorhersehbaren Makroereignissen (Black Swans).
-        """,
-        "prob_up": "Aufstiegs-WSK", "scenario": "Szenario", "worst": "Worst Case", "best": "Best Case"
-    }
-}
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
 
-# ==========================================
-# 2. CONFIG & CSS
-# ==========================================
-st.set_page_config(layout="wide", page_title="Vietnam ETF Hub", page_icon="📈", initial_sidebar_state="expanded")
+import analytics as an
+import i18n
+import report as rp
+
+# ===========================================================================
+# page setup
+# ===========================================================================
+
+st.set_page_config(page_title="Global ETF Report", page_icon="🌍",
+                   layout="wide", initial_sidebar_state="expanded")
+
+PALETTE = ["#0F766E", "#B45309", "#1D4ED8", "#BE123C", "#4D7C0F", "#7C3AED",
+           "#0891B2", "#C2410C", "#4338CA", "#9D174D", "#15803D", "#A16207"]
 
 st.markdown("""
 <style>
-    .stApp { background-color: #F0F2F6; color: #31333F; }
-    h1, h2, h3 { font-family: 'Segoe UI', sans-serif; color: #004D40 !important; font-weight: 700; }
-    
+    .stApp { background-color: #F7F7F4; }
+    h1, h2, h3 { color: #14322E; font-weight: 700; }
     div[data-testid="stMetric"] {
-        background-color: #FFFFFF; padding: 15px; border-radius: 8px;
-        border: 1px solid #E0E0E0; border-left: 5px solid #004D40; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        background: #FFFFFF; padding: 14px 16px; border-radius: 10px;
+        border: 1px solid #E6E4DC; border-left: 4px solid #0F766E;
     }
-    div[data-testid="stMetric"] label { font-size: 0.9rem; color: #616161 !important; }
-    div[data-testid="stMetric"] div[data-testid="stMetricValue"] { color: #212121 !important; font-weight: 700; }
-    
-    /* WIDER & COMFORTABLE TABS */
-    .stTabs [data-baseweb="tab-list"] { 
-        gap: 10px; 
-        display: flex;
-        flex-wrap: wrap; 
-    }
+    div[data-testid="stMetric"] label { color: #5E5D59 !important; font-size: .85rem; }
+    .stTabs [data-baseweb="tab-list"] { gap: 6px; flex-wrap: wrap; }
     .stTabs [data-baseweb="tab"] {
-        background-color: #FFFFFF; 
-        border-radius: 8px; 
-        color: #424242; 
-        border: 1px solid #E0E0E0; 
-        font-weight: 600;
-        padding: 12px 30px; /* Tăng khoảng cách đệm */
-        flex-grow: 1; /* Tự động giãn đều */
-        text-align: center;
-        min-width: 120px;
-        transition: all 0.2s ease;
+        background: #FFFFFF; border: 1px solid #E6E4DC; border-radius: 8px;
+        padding: 10px 18px; font-weight: 600; color: #3F3F3A;
     }
-    .stTabs [data-baseweb="tab"]:hover {
-        background-color: #F5F5F5;
-        border-color: #BDBDBD;
+    .stTabs [aria-selected="true"] { background: #0F766E !important; color: #FFF !important; }
+    .insight {
+        background: #EEF6F4; border-left: 4px solid #0F766E; padding: 12px 16px;
+        border-radius: 6px; margin-top: 8px; color: #14322E; font-size: .93rem;
     }
-    .stTabs [aria-selected="true"] {
-        background-color: #004D40 !important; 
-        color: #FFFFFF !important; 
-        border: none;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    .commentary {
+        background: #FDF6EC; border-left: 4px solid #B45309; padding: 14px 18px;
+        border-radius: 6px; color: #4A2E09; font-size: .97rem; line-height: 1.55;
     }
-    
-    .interpret-box {
-        background-color: #E8F5E9; border-left: 5px solid #4CAF50; padding: 15px;
-        border-radius: 5px; margin-top: 10px; font-size: 0.95rem; color: #1B5E20;
-    }
-    .interpret-title { font-weight: bold; color: #2E7D32; display: block; margin-bottom: 5px;}
-    .stButton button { background-color: #004D40; color: white; width: 100%; }
+    .insight-title { font-weight: 700; display: block; margin-bottom: 4px; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- FLAG LANGUAGE SELECTOR ---
-if 'language' not in st.session_state:
-    st.session_state['language'] = 'VN'
+if "lang" not in st.session_state:
+    st.session_state["lang"] = "VI"
 
-with st.sidebar:
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("🇻🇳"): st.session_state['language'] = 'VN'
-    with col2:
-        if st.button("🇺🇸"): st.session_state['language'] = 'EN'
-    with col3:
-        if st.button("🇩🇪"): st.session_state['language'] = 'DE'
-    
-    L_CODE = st.session_state['language']
-    st.caption(f"Language: **{L_CODE}**")
 
-def t(key):
-    return LANG[L_CODE].get(key, key)
+def T(key: str) -> str:
+    return i18n.t(st.session_state["lang"], key)
 
-st.title(f"📈 {t('page_title')}")
 
-# ==========================================
-# 3. CORE LOGIC
-# ==========================================
-TRADING_DAYS = 252
+def insight(text: str) -> None:
+    st.markdown(f"<div class='insight'><span class='insight-title'>{T('insight')}</span>"
+                f"{text}</div>", unsafe_allow_html=True)
 
-def calculate_returns(df): return df.pct_change()
-def calculate_cumulative_returns(df): return (1 + df.pct_change()).cumprod() - 1
-def calculate_drawdown(df):
-    roll_max = df.cummax()
-    return (df - roll_max) / roll_max
 
-def calculate_risk_metrics(daily_ret, risk_free_rate=0.0):
-    if daily_ret.empty: return pd.Series()
-    ann_ret = daily_ret.mean() * TRADING_DAYS
-    ann_vol = daily_ret.std() * np.sqrt(TRADING_DAYS)
-    neg_ret = daily_ret[daily_ret < 0]
-    downside_dev = neg_ret.std() * np.sqrt(TRADING_DAYS)
-    sharpe = (ann_ret - risk_free_rate) / ann_vol if ann_vol != 0 else 0
-    sortino = (ann_ret - risk_free_rate) / downside_dev if downside_dev != 0 else 0
-    cum_ret = (1 + daily_ret).cumprod()
-    max_dd = ((cum_ret - cum_ret.cummax()) / cum_ret.cummax()).min()
-    calmar = ann_ret / abs(max_dd) if max_dd != 0 else 0
-    return pd.Series({"Ann. Return": ann_ret, "Volatility": ann_vol, "Max Drawdown": max_dd, "Sharpe Ratio": sharpe, "Sortino Ratio": sortino, "Calmar Ratio": calmar})
+def commentary(text: str) -> None:
+    st.markdown(f"<div class='commentary'><b>{T('auto_commentary')}</b><br>{text}</div>",
+                unsafe_allow_html=True)
 
-def calculate_beta_alpha(asset_ret, bench_ret):
-    asset_ret = asset_ret.rename("Asset")
-    bench_ret = bench_ret.rename("Benchmark")
-    df = pd.concat([asset_ret, bench_ret], axis=1).dropna()
-    if df.empty: return 0, 0
-    cov = np.cov(df["Asset"], df["Benchmark"])[0][1]
-    var = np.var(df["Benchmark"])
-    beta = cov / var if var != 0 else 0
-    alpha = (df["Asset"].mean() - beta * df["Benchmark"].mean()) * TRADING_DAYS
-    return beta, alpha
 
-def calculate_tracking_error(asset_ret, bench_ret, window=63):
-    diff = asset_ret - bench_ret
-    return diff.rolling(window).std() * np.sqrt(TRADING_DAYS) * 100
-
-def calculate_bull_bear_stats(asset_ret, bench_ret):
-    a_name, b_name = "Asset", "Bench"
-    df = pd.concat([asset_ret.rename(a_name), bench_ret.rename(b_name)], axis=1).dropna()
-    if df.empty: return 0, 0
-    bull = df[df[b_name] > 0][a_name].mean() * 252
-    bear = df[df[b_name] < 0][a_name].mean() * 252
-    return (bull if not pd.isna(bull) else 0) * 100, (bear if not pd.isna(bear) else 0) * 100
-
-def run_monte_carlo(price_series, days=30, simulations=1000):
-    returns = price_series.pct_change().dropna()
-    last_price = price_series.iloc[-1]
-    mu = returns.mean()
-    sigma = returns.std()
-    daily_returns = np.random.normal(mu, sigma, (days, simulations))
-    price_paths = np.zeros_like(daily_returns)
-    price_paths[0] = last_price
-    for t in range(1, days):
-        price_paths[t] = price_paths[t-1] * (1 + daily_returns[t])
-    final_prices = price_paths[-1]
-    prob_up = np.mean(final_prices > last_price) * 100
-    expected_price = np.median(final_prices)
-    worst_case = np.percentile(final_prices, 5)
-    best_case = np.percentile(final_prices, 95)
-    return price_paths, prob_up, expected_price, worst_case, best_case
-
-# Mock ETS
-try:
-    from statsmodels.tsa.holtwinters import ExponentialSmoothing
-    def run_ets_forecast(price_series, days=30):
-        ts = price_series.asfreq('B').fillna(method='ffill')
-        try:
-            model = ExponentialSmoothing(ts, trend='add', damped_trend=True, seasonal=None).fit()
-            return model.forecast(days)
-        except: return ExponentialSmoothing(ts).fit().forecast(days)
+try:  # optional: pandas Styler gradients need matplotlib
+    import matplotlib  # noqa: F401
+    HAS_MPL = True
 except ImportError:
-    def run_ets_forecast(price_series, days=30): return pd.Series([price_series.iloc[-1]]*days)
+    HAS_MPL = False
 
-# ==========================================
-# 4. LOAD DATA
-# ==========================================
-@st.cache_data
-def load_all_data():
-    try:
-        df_p = pd.read_csv('funds_data.csv', parse_dates=['Date'], index_col='Date')
-        df_v = pd.read_csv('funds_volume.csv', parse_dates=['Date'], index_col='Date')
-        df_meta = pd.read_csv('funds_profile.csv', index_col='Ticker')
-        return df_p, df_v, df_meta
-    except FileNotFoundError: return None, None, None
 
-df, df_vol, df_profile = load_all_data()
+def gradient(styler, **kwargs):
+    """Apply a background gradient only when matplotlib is available."""
+    return styler.background_gradient(**kwargs) if HAS_MPL else styler
 
-if df is None:
-    st.warning(t("loading"))
-    st.stop()
 
-# --- SIDEBAR FILTERS ---
-with st.sidebar:
-    st.header(f"⚙️ {t('sidebar_settings')}")
-    
-    # Update Button
-    if st.button(t("update_btn")):
-        with st.spinner(t("loading")):
-            try:
-                result = subprocess.run([sys.executable, "update_data.py"], capture_output=True, text=True)
-                if result.returncode == 0:
-                    st.success(t("success_update"))
-                    st.cache_data.clear()
-                else: st.error(f"Error: {result.stderr}")
-            except Exception as e: st.error(f"Error: {e}")
-    
-    last_update = df.index.max().strftime('%d/%m/%Y')
-    st.info(f"📅 {t('data_updated')}: **{last_update}**")
-    
-    all_issuers = df_profile['Issuer'].dropna().unique().tolist()
-    sel_issuers = st.multiselect(f"{t('manager')}:", all_issuers, default=all_issuers[:3])
-    
-    filtered_profile = df_profile[df_profile['Issuer'].isin(sel_issuers)]
-    avail_funds = filtered_profile.index.tolist()
-    display_list = [c for c in df.columns if c in (['VNINDEX', 'VN30'] + avail_funds)]
-    
-    default_f = [f for f in ['VNINDEX', 'E1VFVN30', 'FUEVFVND'] if f in display_list]
-    if not default_f and display_list: default_f = [display_list[0]]
-    
-    sel_funds = st.multiselect(f"{t('select_ticker')}:", display_list, default=default_f)
-    if not sel_funds: st.stop()
-
-    t_range = st.select_slider(f"{t('time_range')}:", options=["3M", "6M", "YTD", "1Y", "3Y", "5Y", "Max"], value="1Y")
-    end_d = df.index.max()
-    start_d = {
-        "3M": end_d - timedelta(days=90), "6M": end_d - timedelta(days=180),
-        "1Y": end_d - timedelta(days=365), "3Y": end_d - timedelta(days=365*3),
-        "5Y": end_d - timedelta(days=365*5), "YTD": datetime(end_d.year, 1, 1),
-        "Max": df.index.min()
-    }[t_range]
-    
-    st.markdown("---")
-    st.caption("© 2026 | Developed by Minh Phu Dinh")
-
-df_view = df.loc[start_d:end_d, sel_funds]
-daily_ret = calculate_returns(df_view)
-bench_ticker = 'VNINDEX' if 'VNINDEX' in df.columns else sel_funds[0]
-bench_ret = calculate_returns(df.loc[start_d:end_d, bench_ticker])
-
-# ==========================================
-# 5. DASHBOARD TABS
-# ==========================================
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
-    t("tab_perf"), t("tab_risk"), t("tab_rr"), 
-    t("tab_trend"), t("tab_corr"), t("tab_struct"), t("tab_cycle"), t("tab_forecast")
-])
-
-def chart_layout(fig, title="", x_title="", y_title=""):
+def style_fig(fig, title="", x_title="", y_title="", height=None):
     fig.update_layout(
-        template="plotly_white", 
-        title=dict(text=title, font=dict(color="#004D40", size=18)),
-        xaxis=dict(title=x_title, showgrid=True, gridcolor='#F0F2F6'),
-        yaxis=dict(title=y_title, showgrid=True, gridcolor='#F0F2F6'),
-        legend=dict(orientation="h", y=1.1), hovermode="x unified", margin=dict(t=50, b=40)
+        template="plotly_white",
+        colorway=PALETTE,
+        title=dict(text=title, font=dict(size=17, color="#14322E")),
+        xaxis_title=x_title, yaxis_title=y_title,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
+        hovermode="x unified", margin=dict(t=60, b=40, l=10, r=10),
     )
+    if height:
+        fig.update_layout(height=height)
     return fig
 
-def interpret(text):
-    st.markdown(f"""<div class="interpret-box"><span class="interpret-title">{t('interp_title')}</span> {text}</div>""", unsafe_allow_html=True)
 
-# --- TAB 1 ---
-with tab1:
-    st.markdown(f"### 🚀 {t('chart_cum_ret')}")
-    cols = st.columns(len(sel_funds))
-    norm_df = (df_view / df_view.iloc[0] - 1) * 100
-    latest = norm_df.iloc[-1]
-    for i, f in enumerate(sel_funds):
-        cols[i].metric(label=f, value=f"{latest[f]:.2f}%")
-    fig = chart_layout(px.line(norm_df, height=500), y_title=f"{t('metric_ret')} (%)")
+# ===========================================================================
+# data
+# ===========================================================================
+
+@st.cache_data(show_spinner=False)
+def load():
+    return rp.load_dataset()
+
+
+ds = load()
+
+# --------------------------------------------------------------- sidebar ---
+with st.sidebar:
+    cols = st.columns(3)
+    for col, code in zip(cols, ["VI", "EN", "DE"]):
+        if col.button(f"{i18n.FLAGS[code]} {code}", use_container_width=True):
+            st.session_state["lang"] = code
+    st.caption(f"{T('language')}: **{i18n.LANGUAGES[st.session_state['lang']]}**")
+    st.markdown("---")
+
+if ds is None:
+    st.title("🌍 " + T("app_title"))
+    st.warning(T("no_data"))
+    st.stop()
+
+profile = ds.profile
+prices_all = ds.prices
+
+with st.sidebar:
+    st.header("⚙️ " + T("settings"))
+
+    if st.button("🔄 " + T("update_btn"), use_container_width=True):
+        with st.spinner(T("updating")):
+            res = subprocess.run([sys.executable, "update_data.py"],
+                                 capture_output=True, text=True)
+        if res.returncode == 0:
+            st.cache_data.clear()
+            st.success(T("update_done"))
+        else:
+            st.error(f"{T('update_failed')}: {res.stderr[-500:]}")
+
+    st.info(f"📅 {T('data_updated')}: **{ds.last_date:%d.%m.%Y}**")
+    st.caption("🤖 " + T("auto_note"))
+
+    st.subheader("🔎 " + T("filters"))
+    avail = profile[profile.ticker.isin(prices_all.columns)]
+
+    regions = sorted(avail.region.dropna().unique())
+    sel_regions = st.multiselect(T("region"), regions, default=regions)
+    kinds = sorted(avail.kind.dropna().unique())
+    sel_kinds = st.multiselect(T("kind"), kinds, default=kinds)
+    classes = sorted(avail.asset_class.dropna().unique())
+    sel_classes = st.multiselect(T("asset_class"), classes, default=classes)
+
+    pool = avail[avail.region.isin(sel_regions)
+                 & avail.kind.isin(sel_kinds)
+                 & avail.asset_class.isin(sel_classes)]
+
+    issuers = sorted(pool.issuer.dropna().unique())
+    sel_issuers = st.multiselect(T("issuer"), issuers, default=[])
+    if sel_issuers:
+        pool = pool[pool.issuer.isin(sel_issuers)]
+
+    options = pool.ticker.tolist()
+    label_map = pool.set_index("ticker")["name"].to_dict()
+
+    preset_map = rp.presets(profile, prices_all)
+    preset_labels = {T(k): v for k, v in preset_map.items() if v}
+    chosen_preset = st.selectbox(T("quick_pick"), ["—"] + list(preset_labels))
+    if chosen_preset != "—":
+        st.session_state["selection"] = [t for t in preset_labels[chosen_preset]
+                                         if t in options]
+
+    default_sel = st.session_state.get("selection") or rp.default_selection(profile, prices_all)
+    default_sel = [t for t in default_sel if t in options][:8]
+    selection = st.multiselect(
+        T("select_funds"), options, default=default_sel,
+        format_func=lambda t: f"{t} · {str(label_map.get(t, ''))[:34]}")
+    st.session_state["selection"] = selection
+
+    bench_options = sorted(set(avail[avail.kind == "Index"].ticker) | set(selection))
+    default_bench = next((b for b in ["VNINDEX", "SP500"] if b in bench_options),
+                         bench_options[0] if bench_options else None)
+    benchmark = st.selectbox(T("benchmark"), bench_options,
+                             index=bench_options.index(default_bench) if default_bench else 0)
+
+    ccy_options = [c for c in ["USD", "EUR", "VND"] if ds.fx.empty is False and c in ds.fx.columns] \
+        or sorted(avail.currency.dropna().unique())
+    currency = st.selectbox(T("currency"), ccy_options, help=T("currency_help"))
+
+    period = st.select_slider(T("time_range"), options=rp.RANGES, value="3Y")
+    rf = st.slider(T("risk_free"), 0.0, 10.0, 3.0, 0.25) / 100
+
+    st.markdown("---")
+    st.caption("© 2026 Minh Phu Dinh · " + T("footer"))
+
+st.title("🌍 " + T("app_title"))
+st.caption(T("app_subtitle"))
+
+if not selection:
+    st.info(T("no_selection"))
+    st.stop()
+
+tickers = list(dict.fromkeys(selection + ([benchmark] if benchmark else [])))
+tickers = [t for t in tickers if t in prices_all.columns]
+
+prices = an.convert_prices(prices_all[tickers], profile, ds.fx, currency)
+window = rp.slice_window(prices, period)
+window = window.dropna(axis=1, how="all")
+if window.shape[0] < 5 or window.shape[1] == 0:
+    st.warning(T("not_enough_data"))
+    st.stop()
+
+returns = an.daily_returns(window)
+bench_series = window[benchmark] if benchmark in window.columns else None
+bench_ret = an.daily_returns(bench_series) if bench_series is not None else None
+
+metrics = an.metrics_table(window, benchmark=benchmark, rf=rf, profile=profile)
+scored = an.composite_score(metrics)
+facts = rp.build_facts(window, metrics, benchmark, currency)
+
+missing_fx = an.unconverted_tickers(prices_all[tickers], profile, ds.fx, currency)
+if missing_fx and not ds.fx.empty:
+    st.warning(f"{T('fx_warning')}: {', '.join(sorted(set(missing_fx)))}")
+
+fmt_pct = lambda v, d=2: "n/a" if pd.isna(v) else f"{v * 100:.{d}f}%"
+fmt_num = lambda v, d=2: "n/a" if pd.isna(v) else f"{v:.{d}f}"
+
+tabs = st.tabs([
+    "📋 " + T("tab_summary"), "🚀 " + T("tab_performance"), "📉 " + T("tab_risk"),
+    "⚖️ " + T("tab_riskreturn"), "🎯 " + T("tab_benchmark"), "🌐 " + T("tab_markets"),
+    "🔗 " + T("tab_correlation"), "💰 " + T("tab_costs"), "🔄 " + T("tab_cycles"),
+    "🧪 " + T("tab_strategy"), "🔮 " + T("tab_forecast"), "🗂️ " + T("tab_data"),
+])
+
+# ===========================================================================
+# 1. summary
+# ===========================================================================
+with tabs[0]:
+    if facts:
+        commentary(i18n.summary_narrative(st.session_state["lang"], facts))
+
+    st.markdown("### " + T("h_kpi"))
+    k = st.columns(5)
+    k[0].metric(T("n_instruments"), f"{len(window.columns)}")
+    k[1].metric(T("best"), f"{facts.get('best', 'n/a')}",
+                fmt_pct(facts.get("best_cagr", np.nan), 1))
+    k[2].metric(T("m_sharpe"), f"{facts.get('best_sharpe', 'n/a')}",
+                fmt_num(facts.get("best_sharpe_value", np.nan)))
+    k[3].metric(T("m_maxdd"), f"{facts.get('deepest_dd', 'n/a')}",
+                fmt_pct(facts.get("deepest_dd_value", np.nan), 1))
+    k[4].metric(T("h_corr"), fmt_num(facts.get("avg_corr", np.nan)))
+
+    st.markdown("### " + T("h_leaderboard"))
+    show = scored.copy()
+    board_cols = {
+        "rank": T("m_rank"), "name": T("m_name"), "region": T("region"),
+        "currency": T("currency"), "cagr": T("m_cagr"), "volatility": T("m_volatility"),
+        "max_drawdown": T("m_maxdd"), "sharpe": T("m_sharpe"), "sortino": T("m_sortino"),
+        "calmar": T("m_calmar"), "beta": T("m_beta"), "alpha": T("m_alpha"),
+        "tracking_error": T("m_te"), "ter": T("m_ter"), "score": T("m_score"),
+    }
+    have = [c for c in board_cols if c in show.columns]
+    board = show[have].rename(columns=board_cols)
+    pct_cols = [board_cols[c] for c in ["cagr", "volatility", "max_drawdown", "alpha",
+                                        "tracking_error"] if c in have]
+    st.dataframe(
+        board.style.format({**{c: "{:.2%}" for c in pct_cols},
+                            **{board_cols[c]: "{:.2f}" for c in
+                               ["sharpe", "sortino", "calmar", "beta", "score", "ter"]
+                               if c in have},
+                            **({board_cols["rank"]: "{:.0f}"} if "rank" in have else {})},
+                           na_rep="n/a"),
+        use_container_width=True, height=min(80 + 36 * len(board), 520))
+
+    st.markdown("### " + T("h_growth"))
+    growth = an.cumulative_growth(window)
+    fig = px.line(growth, height=430)
+    st.plotly_chart(style_fig(fig, "", T("x_date"), f"{T('y_value')} ({currency})"),
+                    use_container_width=True)
+
+    st.markdown("### " + T("h_export"))
+    c1, c2, c3 = st.columns(3)
+    c1.download_button("⬇️ " + T("c_download_csv"),
+                       scored.to_csv().encode("utf-8"),
+                       file_name=f"etf_metrics_{period}_{currency}.csv", mime="text/csv")
+    md = rp.markdown_report(st.session_state["lang"], ds, tickers, period,
+                            benchmark, currency, rf)
+    c2.download_button("⬇️ " + T("c_download_report"), md.encode("utf-8"),
+                       file_name=f"etf_report_{st.session_state['lang']}_{period}.md",
+                       mime="text/markdown")
+    c3.download_button("⬇️ " + T("y_value") + " (CSV)",
+                       window.to_csv().encode("utf-8"),
+                       file_name=f"prices_{currency}_{period}.csv", mime="text/csv")
+
+# ===========================================================================
+# 2. performance
+# ===========================================================================
+with tabs[1]:
+    st.markdown("### " + T("h_growth"))
+    growth = an.cumulative_growth(window)
+    fig = px.line(growth, height=470)
     fig.update_xaxes(rangeslider_visible=True)
-    st.plotly_chart(fig, use_container_width=True)
-    interpret(t("interp_perf"))
+    st.plotly_chart(style_fig(fig, "", T("x_date"), f"{T('y_value')} ({currency})"),
+                    use_container_width=True)
+    insight(T("x_growth"))
 
-# --- TAB 2 ---
-with tab2:
-    st.markdown(f"### 📉 {t('chart_dd')}")
-    dd = calculate_drawdown(df_view) * 100
-    fig = chart_layout(px.area(dd, height=450), y_title="Drawdown (%)")
-    st.plotly_chart(fig, use_container_width=True)
-    interpret(t("interp_risk"))
+    st.markdown("### " + T("h_period_returns"))
+    per = an.period_returns(prices)
+    st.dataframe(gradient(per.style.format("{:.2%}", na_rep="n/a"),
+                          cmap="RdYlGn", axis=None), use_container_width=True)
+    insight(T("x_periods"))
 
-# --- TAB 3 ---
-with tab3:
-    st.markdown(f"### ⚖️ {t('chart_rr')}")
-    r_data = []
-    for f in sel_funds:
-        m = calculate_risk_metrics(daily_ret[f])
-        b, a = calculate_beta_alpha(daily_ret[f], bench_ret)
-        if not m.empty: r_data.append({"Ticker": f, "Return": m["Ann. Return"]*100, "Vol": m["Volatility"]*100, "Sharpe": m["Sharpe Ratio"], "Beta": b, "Alpha": a*100})
-    
-    if r_data:
-        df_r = pd.DataFrame(r_data).set_index("Ticker")
-        c1, c2 = st.columns([2, 1])
-        with c1:
-            fig = chart_layout(px.scatter(df_r, x="Vol", y="Return", color=df_r.index, size=[25]*len(df_r), text=df_r.index), title="Positioning", x_title=f"{t('metric_vol')} (%)", y_title=f"{t('metric_ret')} (%)")
-            st.plotly_chart(fig, use_container_width=True)
-        with c2:
-            st.markdown("##### 🏆 Ranking")
-            # Removed styling to fix import error
-            st.dataframe(df_r[["Sharpe", "Alpha", "Beta"]], use_container_width=True)
-    interpret(t("interp_rr"))
+    st.markdown("### " + T("h_calendar"))
+    cal = an.calendar_year_returns(prices)
+    if not cal.empty:
+        cal_long = cal.tail(12).reset_index().melt(id_vars="year", var_name="ticker",
+                                                   value_name="ret").dropna()
+        cal_long["ret"] *= 100
+        fig = px.bar(cal_long, x="year", y="ret", color="ticker", barmode="group",
+                     height=420)
+        st.plotly_chart(style_fig(fig, "", T("x_date"), T("y_return")),
+                        use_container_width=True)
 
-# --- TAB 4 ---
-with tab4:
-    tf = st.selectbox(f"{t('select_ticker')}:", sel_funds, key="trend")
-    td = df_view[[tf]].copy()
-    td['MA50'], td['MA200'] = td[tf].rolling(50).mean(), td[tf].rolling(200).mean()
+    st.markdown("### " + T("h_rolling"))
+    c1, c2 = st.columns([1, 3])
+    years = c1.slider(T("c_window_years"), 0.5, 5.0, 1.0, 0.5)
+    roll = {}
+    for ticker in window.columns:
+        r = an.rolling_returns(prices[ticker], years)
+        if not r.empty:
+            roll[ticker] = r * 100
+    if roll:
+        fig = px.line(pd.DataFrame(roll), height=400)
+        fig.add_hline(y=0, line_dash="dot", line_color="#B45309")
+        c2.plotly_chart(style_fig(fig, "", T("x_date"), T("y_cagr")),
+                        use_container_width=True)
+        stats = pd.DataFrame({tk: an.rolling_return_stats(prices[tk], years)
+                              for tk in window.columns}).T
+        stats = stats.rename(columns={
+            "windows": T("windows"), "mean": T("average"), "median": T("median"),
+            "min": T("worst"), "max": T("best"), "win_rate": T("win_rate"),
+            "p05": "P05", "p95": "P95"})
+        st.dataframe(stats.style.format({
+            T("average"): "{:.2%}", T("median"): "{:.2%}", T("worst"): "{:.2%}",
+            T("best"): "{:.2%}", "P05": "{:.2%}", "P95": "{:.2%}",
+            T("win_rate"): "{:.1f}%", T("windows"): "{:.0f}"}, na_rep="n/a"),
+            use_container_width=True)
+
+# ===========================================================================
+# 3. risk
+# ===========================================================================
+with tabs[2]:
+    st.markdown("### " + T("h_drawdown"))
+    dd = an.drawdown(window) * 100
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=td.index, y=td[tf], name="Price", line=dict(color='#263238', width=1.5)))
-    fig.add_trace(go.Scatter(x=td.index, y=td['MA50'], name="MA50", line=dict(color='#FBC02D')))
-    fig.add_trace(go.Scatter(x=td.index, y=td['MA200'], name="MA200", line=dict(color='#D32F2F')))
-    st.plotly_chart(chart_layout(fig, title=f"{t('chart_trend')}: {tf}"), use_container_width=True)
-    interpret(t("interp_trend"))
+    for i, ticker in enumerate(dd.columns):
+        fig.add_trace(go.Scatter(x=dd.index, y=dd[ticker], name=ticker, fill="tozeroy",
+                                 line=dict(width=1, color=PALETTE[i % len(PALETTE)]),
+                                 opacity=0.55))
+    st.plotly_chart(style_fig(fig, "", T("x_date"), T("y_dd"), height=430),
+                    use_container_width=True)
+    insight(T("x_drawdown"))
 
-# --- TAB 5 ---
-with tab5:
-    st.markdown(f"### 🔗 {t('chart_corr')}")
-    st.plotly_chart(chart_layout(px.imshow(daily_ret.corr(), text_auto=".2f", color_continuous_scale='RdBu', zmin=-1, zmax=1)), use_container_width=True)
-    interpret(t("interp_corr"))
+    focus = st.selectbox(T("c_pick_one"), list(window.columns), key="dd_focus")
+    episodes = an.drawdown_episodes(window[focus], top=5)
+    if not episodes.empty:
+        current_dd = float(an.drawdown(window[focus].dropna()).iloc[-1])
+        commentary(i18n.drawdown_narrative(
+            st.session_state["lang"], focus, current_dd,
+            float(episodes["depth"].min()), episodes["recovery_days"].iloc[0]))
+        st.markdown("#### " + T("h_dd_table"))
+        show_ep = episodes.rename(columns={
+            "peak": T("m_first"), "trough": T("worst"), "recovery": T("m_last"),
+            "depth": T("m_maxdd"), "length_days": T("windows"),
+            "recovery_days": T("c_hold_years")})
+        st.dataframe(show_ep.style.format({T("m_maxdd"): "{:.2%}"}, na_rep="n/a"),
+                     use_container_width=True)
 
-# --- TAB 6 ---
-with tab6:
-    c_a, c_b = st.columns(2)
-    with c_a:
-        st.markdown(f"##### 🎯 {t('chart_te')}")
-        te_df = pd.DataFrame({f: calculate_tracking_error(daily_ret[f], bench_ret) for f in sel_funds if f != bench_ticker})
-        if not te_df.empty: st.plotly_chart(chart_layout(px.line(te_df), y_title="TE (%)"), use_container_width=True)
-    with c_b:
-        st.markdown(f"##### 💰 {t('chart_vol')}")
-        if df_vol is not None:
-            v_cols = [c for c in sel_funds if c in df_vol.columns]
-            if v_cols:
-                vf = st.selectbox(f"{t('select_ticker')}:", v_cols, key="v")
-                st.plotly_chart(chart_layout(go.Figure(go.Bar(x=df_vol.index, y=df_vol.loc[start_d:end_d, vf], marker_color='#00897B')), title=f"Volume: {vf}"), use_container_width=True)
-    interpret(t("interp_struct"))
+    st.markdown("### " + T("h_riskmetrics"))
+    risk_cols = {
+        "volatility": T("m_volatility"), "downside_dev": T("m_downside"),
+        "max_drawdown": T("m_maxdd"), "var95": T("m_var"), "cvar95": T("m_cvar"),
+        "ulcer": T("m_ulcer"), "martin": T("m_martin"), "skew": T("m_skew"),
+        "kurtosis": T("m_kurtosis"), "tail_ratio": T("m_tail"),
+        "hit_rate": T("m_hit"), "stability": T("m_stability"),
+        "best_day": T("m_best_day"), "worst_day": T("m_worst_day"),
+    }
+    have = [c for c in risk_cols if c in metrics.columns]
+    risk_tbl = metrics[have].rename(columns=risk_cols)
+    st.dataframe(risk_tbl.style.format({
+        **{risk_cols[c]: "{:.2%}" for c in
+           ["volatility", "downside_dev", "max_drawdown", "var95", "cvar95",
+            "best_day", "worst_day"] if c in have},
+        **{risk_cols[c]: "{:.2f}" for c in
+           ["ulcer", "martin", "skew", "kurtosis", "tail_ratio", "stability"] if c in have},
+        **({risk_cols["hit_rate"]: "{:.1f}%"} if "hit_rate" in have else {})},
+        na_rep="n/a"), use_container_width=True)
 
-# --- TAB 7 ---
-with tab7:
-    st.markdown(f"### 🔄 {t('chart_bb')}")
-    bb_list = []
-    for f in sel_funds:
-        bu, be = calculate_bull_bear_stats(daily_ret[f], bench_ret)
-        bb_list.append({"Asset": f, "Bull": bu, "Bear": be})
-    bb = pd.DataFrame(bb_list).set_index("Asset")
-    fig = go.Figure()
-    fig.add_trace(go.Bar(x=bb.index, y=bb['Bull'], name="Bull (Up)", marker_color='#4CAF50'))
-    fig.add_trace(go.Bar(x=bb.index, y=bb['Bear'], name="Bear (Down)", marker_color='#EF5350'))
-    st.plotly_chart(chart_layout(fig, title=f"vs {bench_ticker}"), use_container_width=True)
-    interpret(t("interp_cycle"))
+    st.markdown("#### " + T("m_volatility"))
+    vol = pd.DataFrame({tk: an.rolling_volatility(returns[tk]) for tk in window.columns})
+    st.plotly_chart(style_fig(px.line(vol.dropna(how="all"), height=360), "",
+                              T("x_date"), T("x_vol")), use_container_width=True)
 
-# --- TAB 8 ---
-with tab8:
-    st.markdown(f"### 🔮 {t('chart_forecast')}")
-    f_fund = st.selectbox(f"{t('select_ticker')}:", sel_funds, key="forecast")
-    train_data = df[f_fund].last('2Y')
-    
-    c1, c2 = st.columns([2, 1])
+# ===========================================================================
+# 4. risk-return
+# ===========================================================================
+with tabs[3]:
+    st.markdown("### " + T("h_scatter"))
+    scat = metrics.reset_index()
+    scat["vol_pct"] = scat["volatility"] * 100
+    scat["cagr_pct"] = scat["cagr"] * 100
+    scat["size"] = scat["sharpe"].fillna(0).clip(lower=0.1) * 10 + 8
+    fig = px.scatter(scat, x="vol_pct", y="cagr_pct", text="ticker", size="size",
+                     color="region" if "region" in scat.columns else None,
+                     hover_data=["name"] if "name" in scat.columns else None, height=520)
+    fig.update_traces(textposition="top center")
+    if benchmark in metrics.index:
+        fig.add_hline(y=float(metrics.loc[benchmark, "cagr"]) * 100,
+                      line_dash="dot", line_color="#B45309")
+        fig.add_vline(x=float(metrics.loc[benchmark, "volatility"]) * 100,
+                      line_dash="dot", line_color="#B45309")
+    fig.update_layout(hovermode="closest")
+    st.plotly_chart(style_fig(fig, "", T("x_vol"), T("y_cagr")), use_container_width=True)
+    insight(T("x_riskreturn"))
+
+    c1, c2 = st.columns(2)
     with c1:
-        st.markdown("#### ETS Forecast (30 Days/Tage/Ngày)")
-        days = 30
-        try:
-            fc = run_ets_forecast(train_data, days)
-            last_date = train_data.index[-1]
-            dates = [last_date + timedelta(days=i) for i in range(1, days+1)]
-            vol = train_data.pct_change().std() * np.sqrt(days)
-            upper, lower = fc * (1 + vol), fc * (1 - vol)
-            
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=train_data.last('3M').index, y=train_data.last('3M'), name="History", line=dict(color='black')))
-            fig.add_trace(go.Scatter(x=dates, y=fc, name="Forecast", line=dict(color='#00897B', dash='dash')))
-            fig.add_trace(go.Scatter(x=dates+dates[::-1], y=pd.concat([upper, lower[::-1]]), fill='toself', fillcolor='rgba(0,137,123,0.2)', line=dict(color='rgba(0,0,0,0)'), name="Confidence"))
-            st.plotly_chart(chart_layout(fig, title=f"Forecast: {f_fund}"), use_container_width=True)
-        except Exception as e: st.error(f"Error: {e}")
-        
+        st.markdown("#### " + T("h_leaderboard"))
+        rank_cols = {"cagr": T("m_cagr"), "sharpe": T("m_sharpe"),
+                     "sortino": T("m_sortino"), "calmar": T("m_calmar"),
+                     "omega": T("m_omega"), "score": T("m_score")}
+        have = [c for c in rank_cols if c in scored.columns]
+        rank_styler = scored[have].rename(columns=rank_cols).style.format(
+            {**{rank_cols["cagr"]: "{:.2%}"},
+             **{rank_cols[c]: "{:.2f}" for c in have if c != "cagr"}}, na_rep="n/a")
+        if "score" in have:
+            rank_styler = gradient(rank_styler, cmap="Greens",
+                                   subset=[rank_cols["score"]])
+        st.dataframe(rank_styler, use_container_width=True)
     with c2:
-        st.markdown("#### Monte Carlo Prob.")
-        paths, prob, exp, worst, best = run_monte_carlo(train_data)
-        st.metric(t("prob_up"), f"{prob:.1f}%", delta=f"{prob-50:.1f}%")
-        st.write(f"**Median:** {exp:,.0f}")
-        st.write(f"**{t('worst')} (5%):** :red[{worst:,.0f}]")
-        st.write(f"**{t('best')} (5%):** :green[{best:,.0f}]")
-        
+        st.markdown("#### " + T("h_frontier"))
+        frontier = an.efficient_frontier(window.drop(columns=[benchmark], errors="ignore"),
+                                         simulations=2500, rf=rf)
+        if frontier.empty:
+            st.info(T("not_enough_data"))
+        else:
+            fig = px.scatter(frontier, x="volatility", y="return", color="sharpe",
+                             color_continuous_scale="Viridis", height=420, opacity=0.55)
+            fig.add_trace(go.Scatter(
+                x=metrics["volatility"], y=metrics["cagr"], mode="markers+text",
+                text=metrics.index, textposition="top center", name="Funds",
+                marker=dict(size=11, color="#BE123C", symbol="diamond")))
+            fig.update_layout(hovermode="closest")
+            st.plotly_chart(style_fig(fig, "", T("x_vol"), T("y_cagr")),
+                            use_container_width=True)
+
+# ===========================================================================
+# 5. benchmark
+# ===========================================================================
+with tabs[4]:
+    if bench_ret is None:
+        st.info(T("not_enough_data"))
+    else:
+        st.markdown(f"### {T('h_alpha')} — {benchmark}")
+        rel_cols = {"beta": T("m_beta"), "alpha": T("m_alpha"), "r_squared": T("m_r2"),
+                    "tracking_error": T("m_te"), "information_ratio": T("m_ir"),
+                    "up_capture": T("m_up"), "down_capture": T("m_down"),
+                    "capture_spread": T("m_capture_spread"),
+                    "batting_average": T("m_batting")}
+        have = [c for c in rel_cols if c in metrics.columns]
+        rel = metrics.loc[[t for t in metrics.index if t != benchmark], have]
+        st.dataframe(rel.rename(columns=rel_cols).style.format({
+            **{rel_cols[c]: "{:.2%}" for c in ["alpha", "tracking_error"] if c in have},
+            **{rel_cols[c]: "{:.2f}" for c in ["beta", "r_squared", "information_ratio"]
+               if c in have},
+            **{rel_cols[c]: "{:.1f}%" for c in
+               ["up_capture", "down_capture", "capture_spread", "batting_average"]
+               if c in have}}, na_rep="n/a"), use_container_width=True)
+
+        if not rel.empty:
+            focus_b = st.selectbox(T("c_pick_one"), list(rel.index), key="bench_focus")
+            row = metrics.loc[focus_b]
+            commentary(i18n.tracking_narrative(
+                st.session_state["lang"], focus_b, row.get("tracking_error", np.nan),
+                row.get("information_ratio", np.nan), row.get("beta", np.nan),
+                row.get("alpha", np.nan), benchmark))
+
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("#### " + T("h_te"))
+            te = pd.DataFrame({
+                tk: an.rolling_tracking_error(returns[tk], bench_ret)
+                for tk in window.columns if tk != benchmark}).dropna(how="all")
+            if not te.empty:
+                st.plotly_chart(style_fig(px.line(te, height=380), "", T("x_date"),
+                                          T("y_te")), use_container_width=True)
+        with c2:
+            st.markdown("#### " + T("m_beta"))
+            rb = pd.DataFrame({
+                tk: an.rolling_beta(returns[tk], bench_ret)
+                for tk in window.columns if tk != benchmark}).dropna(how="all")
+            if not rb.empty:
+                fig = px.line(rb, height=380)
+                fig.add_hline(y=1.0, line_dash="dot", line_color="#B45309")
+                st.plotly_chart(style_fig(fig, "", T("x_date"), T("m_beta")),
+                                use_container_width=True)
+
+        st.markdown("#### " + T("h_capture"))
+        cap = metrics.loc[[t for t in metrics.index if t != benchmark],
+                          ["up_capture", "down_capture"]].dropna(how="all")
+        if not cap.empty:
+            fig = go.Figure()
+            fig.add_trace(go.Bar(x=cap.index, y=cap["up_capture"], name=T("m_up"),
+                                 marker_color="#0F766E"))
+            fig.add_trace(go.Bar(x=cap.index, y=cap["down_capture"], name=T("m_down"),
+                                 marker_color="#BE123C"))
+            fig.add_hline(y=100, line_dash="dot", line_color="#5E5D59")
+            fig.update_layout(barmode="group", hovermode="closest")
+            st.plotly_chart(style_fig(fig, "", "", "%", height=380),
+                            use_container_width=True)
+        insight(T("x_benchmark"))
+
+# ===========================================================================
+# 6. global markets
+# ===========================================================================
+with tabs[5]:
+    st.markdown("### " + T("h_region"))
+    scope = st.radio(T("scope"), [T("select_funds"), T("h_universe")],
+                     horizontal=True, key="market_scope")
+    if scope == T("h_universe"):
+        wide = an.convert_prices(prices_all, profile, ds.fx, currency)
+        wide_window = rp.slice_window(wide, period)
+    else:
+        wide_window = window
+    perf = rp.region_performance(wide_window, profile)
+
+    if perf.empty:
+        st.info(T("not_enough_data"))
+    else:
+        by_region = perf.groupby("region").agg(
+            cagr=("cagr", "mean"), volatility=("volatility", "mean"),
+            max_drawdown=("max_drawdown", "mean"), n=("ticker", "count")
+        ).sort_values("cagr", ascending=False)
+        best_r, worst_r = by_region.index[0], by_region.index[-1]
+        commentary(i18n.market_narrative(
+            st.session_state["lang"], best_r, float(by_region.cagr.iloc[0]),
+            worst_r, float(by_region.cagr.iloc[-1]), currency))
+
+        c1, c2 = st.columns([3, 2])
+        with c1:
+            fig = px.bar(by_region.reset_index(), x="region", y="cagr", color="region",
+                         height=400)
+            fig.update_layout(hovermode="closest")
+            st.plotly_chart(style_fig(fig, "", T("region"), T("y_cagr")),
+                            use_container_width=True)
+        with c2:
+            st.dataframe(by_region.rename(columns={
+                "cagr": T("m_cagr"), "volatility": T("m_volatility"),
+                "max_drawdown": T("m_maxdd"), "n": T("n_funds")}).style.format({
+                    T("m_cagr"): "{:.2%}", T("m_volatility"): "{:.2%}",
+                    T("m_maxdd"): "{:.2%}", T("n_funds"): "{:.0f}"}, na_rep="n/a"),
+                use_container_width=True)
+
+        st.markdown("### " + T("h_market_matrix"))
+        by_country = perf.groupby("country").agg(
+            cagr=("cagr", "mean"), volatility=("volatility", "mean"),
+            max_drawdown=("max_drawdown", "mean"), n=("ticker", "count")
+        ).sort_values("cagr", ascending=False)
+        fig = px.scatter(by_country.reset_index(), x="volatility", y="cagr",
+                         text="country", size="n", color="cagr",
+                         color_continuous_scale="RdYlGn", height=480)
+        fig.update_traces(textposition="top center")
+        fig.update_layout(hovermode="closest")
+        st.plotly_chart(style_fig(fig, "", T("x_vol"), T("y_cagr")),
+                        use_container_width=True)
+
+        st.markdown("### " + T("h_currency_effect"))
+        if ds.fx.empty:
+            st.info(T("not_enough_data"))
+        else:
+            local = rp.slice_window(prices_all[tickers], period)
+            conv = window
+            eff = []
+            for tk in conv.columns:
+                if tk not in local.columns:
+                    continue
+                l, c = local[tk].dropna(), conv[tk].dropna()
+                if len(l) < 30 or len(c) < 30:
+                    continue
+                eff.append({"ticker": tk, "local": an.cagr(l), currency: an.cagr(c)})
+            if eff:
+                eff_df = pd.DataFrame(eff).set_index("ticker")
+                eff_df["fx_effect"] = eff_df[currency] - eff_df["local"]
+                fig = go.Figure()
+                fig.add_trace(go.Bar(x=eff_df.index, y=eff_df["local"] * 100,
+                                     name=T("currency") + " (local)", marker_color="#5E5D59"))
+                fig.add_trace(go.Bar(x=eff_df.index, y=eff_df[currency] * 100,
+                                     name=currency, marker_color="#0F766E"))
+                fig.update_layout(barmode="group", hovermode="closest")
+                st.plotly_chart(style_fig(fig, "", "", T("y_cagr"), height=380),
+                                use_container_width=True)
+        insight(T("x_markets"))
+
+# ===========================================================================
+# 7. correlation
+# ===========================================================================
+with tabs[6]:
+    st.markdown("### " + T("h_corr"))
+    corr = an.correlation_matrix(window)
+    fig = px.imshow(corr, text_auto=".2f", color_continuous_scale="RdBu_r",
+                    zmin=-1, zmax=1, height=max(420, 42 * len(corr)))
+    fig.update_layout(hovermode="closest")
+    st.plotly_chart(style_fig(fig), use_container_width=True)
+    st.metric(T("h_corr"), fmt_num(an.diversification_score(corr)))
+    insight(T("x_correlation"))
+
+    if bench_ret is not None:
+        st.markdown("### " + T("h_corr_rolling"))
+        rc = pd.DataFrame({tk: an.rolling_correlation(returns[tk], bench_ret)
+                           for tk in window.columns if tk != benchmark}).dropna(how="all")
+        if not rc.empty:
+            st.plotly_chart(style_fig(px.line(rc, height=380), "", T("x_date"),
+                                      T("h_corr")), use_container_width=True)
+
+# ===========================================================================
+# 8. costs & structure
+# ===========================================================================
+with tabs[7]:
+    st.markdown("### " + T("h_ter_vs_perf"))
+    if "ter" in metrics.columns and metrics["ter"].notna().any():
+        cost = metrics.reset_index().dropna(subset=["ter"])
+        fig = px.scatter(cost, x="ter", y="cagr", text="ticker",
+                         color="issuer" if "issuer" in cost.columns else None,
+                         size=[12] * len(cost), height=430)
+        fig.update_traces(textposition="top center")
+        fig.update_layout(hovermode="closest")
+        st.plotly_chart(style_fig(fig, "", T("m_ter") + " (%)", T("y_cagr")),
+                        use_container_width=True)
+
+    st.markdown("### " + T("h_fees"))
+    c1, c2, c3, c4 = st.columns(4)
+    fee_fund = c1.selectbox(T("c_pick_one"), list(window.columns), key="fee_fund")
+    ter_default = float(metrics.loc[fee_fund, "ter"]) if (
+        "ter" in metrics.columns and fee_fund in metrics.index
+        and pd.notna(metrics.loc[fee_fund, "ter"])) else 0.5
+    ter = c2.number_input(T("m_ter") + " (%)", 0.0, 5.0, ter_default, 0.05) / 100
+    gross = c3.number_input(T("c_gross_return"), 0.0, 30.0, 10.0, 0.5) / 100
+    years = c4.slider(T("c_years"), 5, 40, 20)
+    ero = an.fee_erosion(100.0, gross, ter, years)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=ero.year, y=ero.gross, name=T("gross"),
+                             line=dict(color="#0F766E")))
+    fig.add_trace(go.Scatter(x=ero.year, y=ero.net, name=T("net"),
+                             line=dict(color="#B45309"), fill="tonexty",
+                             fillcolor="rgba(180,83,9,.15)"))
+    st.plotly_chart(style_fig(fig, "", T("c_years"), T("y_value"), height=380),
+                    use_container_width=True)
+    lost_pct = float(ero.lost.iloc[-1] / ero.gross.iloc[-1]) if ero.gross.iloc[-1] else np.nan
+    commentary(i18n.cost_narrative(st.session_state["lang"], fee_fund, ter * 100,
+                                   lost_pct, years))
+
+    st.markdown("### " + T("h_liquidity"))
+    if not ds.volume.empty:
+        vcols = [c for c in window.columns if c in ds.volume.columns]
+        if vcols:
+            vol_window = ds.volume.loc[window.index.min():window.index.max(), vcols]
+            avg_vol = (vol_window.mean().sort_values(ascending=False)
+                       .rename("volume").rename_axis("ticker").reset_index())
+            fig = px.bar(avg_vol, x="ticker", y="volume", height=360)
+            fig.update_layout(hovermode="closest")
+            st.plotly_chart(style_fig(fig, "", "", T("y_volume")), use_container_width=True)
+    insight(T("x_costs"))
+
+# ===========================================================================
+# 9. cycles & seasonality
+# ===========================================================================
+with tabs[8]:
+    if bench_ret is not None:
+        st.markdown("### " + T("h_bullbear"))
+        bb = []
+        for tk in window.columns:
+            if tk == benchmark:
+                continue
+            split = an.bull_bear_split(returns[tk], bench_ret)
+            bb.append({"ticker": tk, "bull": split["bull"], "bear": split["bear"]})
+        if bb:
+            bb_df = pd.DataFrame(bb).set_index("ticker")
+            fig = go.Figure()
+            fig.add_trace(go.Bar(x=bb_df.index, y=bb_df["bull"] * 100, name=T("bull"),
+                                 marker_color="#0F766E"))
+            fig.add_trace(go.Bar(x=bb_df.index, y=bb_df["bear"] * 100, name=T("bear"),
+                                 marker_color="#BE123C"))
+            fig.update_layout(barmode="group", hovermode="closest")
+            st.plotly_chart(style_fig(fig, f"vs {benchmark}", "", T("y_return"), height=400),
+                            use_container_width=True)
+
+    st.markdown("### " + T("h_monthly"))
+    m_fund = st.selectbox(T("c_pick_one"), list(window.columns), key="month_fund")
+    heat = an.monthly_returns(prices[m_fund])
+    if not heat.empty:
+        fig = px.imshow(heat, text_auto=".1f", color_continuous_scale="RdYlGn",
+                        aspect="auto", height=max(320, 30 * len(heat)),
+                        labels=dict(color="%"))
+        fig.update_layout(hovermode="closest")
+        st.plotly_chart(style_fig(fig, m_fund), use_container_width=True)
+
+        st.markdown("#### " + T("h_seasonality"))
+        season = heat.mean().reset_index()
+        season.columns = ["month", "avg"]
+        fig = px.bar(season, x="month", y="avg", height=320,
+                     color="avg", color_continuous_scale="RdYlGn")
+        fig.update_layout(hovermode="closest")
+        st.plotly_chart(style_fig(fig, "", "", T("y_return")), use_container_width=True)
+    insight(T("x_cycles"))
+
+# ===========================================================================
+# 10. strategy lab
+# ===========================================================================
+with tabs[9]:
+    st.markdown("### " + T("h_dca"))
+    c1, c2, c3 = st.columns(3)
+    dca_fund = c1.selectbox(T("c_pick_one"), list(window.columns), key="dca_fund")
+    amount = c2.number_input(T("c_contribution"), 100.0, 1e9, 1000.0, 100.0)
+    freq_label = c3.selectbox(T("c_frequency"), [T("c_monthly"), T("c_weekly")])
+    freq = "ME" if freq_label == T("c_monthly") else "W"
+
+    dca = an.simulate_dca(window[dca_fund], amount, freq)
+    if not dca.empty:
         fig = go.Figure()
-        for i in range(50): fig.add_trace(go.Scatter(y=paths[:, i], line=dict(color='gray', width=0.5), opacity=0.3, showlegend=False))
-        fig.add_trace(go.Scatter(y=np.median(paths, axis=1), line=dict(color='red', width=2), name="Median"))
-        fig.update_layout(template="plotly_white", height=200, margin=dict(l=0,r=0,t=0,b=0), xaxis=dict(visible=False), yaxis=dict(visible=False))
-        st.plotly_chart(fig, use_container_width=True)
-    interpret(t("interp_forecast"))
+        fig.add_trace(go.Scatter(x=dca.index, y=dca["invested"], name=T("invested"),
+                                 line=dict(color="#5E5D59", dash="dash")))
+        fig.add_trace(go.Scatter(x=dca.index, y=dca["value"], name=T("value"),
+                                 line=dict(color="#0F766E")))
+        st.plotly_chart(style_fig(fig, dca_fund, T("x_date"), f"{T('y_value')} ({currency})",
+                                  height=400), use_container_width=True)
+        m = st.columns(3)
+        m[0].metric(T("invested"), f"{dca['invested'].iloc[-1]:,.0f}")
+        m[1].metric(T("value"), f"{dca['value'].iloc[-1]:,.0f}")
+        m[2].metric(T("profit"), f"{dca['profit'].iloc[-1]:,.0f}",
+                    f"{dca['return'].iloc[-1] * 100:.1f}%")
+
+    st.markdown("### " + T("h_lsdca"))
+    c1, c2 = st.columns(2)
+    hold = c1.slider(T("c_hold_years"), 1, 15, 5)
+    spread = c2.slider(T("c_spread_months"), 3, 36, 12)
+    ls = an.rolling_dca_vs_lumpsum(prices[dca_fund], hold, spread)
+    if ls.get("windows"):
+        commentary(i18n.strategy_narrative(
+            st.session_state["lang"], ls["lump_sum_win_rate"], ls["median_lump"],
+            ls["median_dca"], hold))
+        m = st.columns(4)
+        m[0].metric(T("windows"), f"{ls['windows']}")
+        m[1].metric(T("win_rate") + " · " + T("lump_sum"), f"{ls['lump_sum_win_rate']:.1f}%")
+        m[2].metric(T("median") + " · " + T("lump_sum"), fmt_pct(ls["median_lump"], 1))
+        m[3].metric(T("median") + " · " + T("dca"), fmt_pct(ls["median_dca"], 1))
+    else:
+        st.info(T("not_enough_data"))
+
+    st.markdown("### " + T("h_portfolio"))
+    port_tickers = [t for t in window.columns if t != benchmark]
+    if len(port_tickers) >= 2:
+        weights, cols = {}, st.columns(min(len(port_tickers), 6))
+        for i, tk in enumerate(port_tickers):
+            weights[tk] = cols[i % len(cols)].number_input(
+                tk, 0.0, 100.0, round(100 / len(port_tickers), 1), 5.0, key=f"w_{tk}")
+        rb_label = st.radio(T("c_rebalance"), [T("c_quarterly"), T("c_annually")],
+                            horizontal=True)
+        rb_freq = "QE" if rb_label == T("c_quarterly") else "YE"
+        if sum(weights.values()) > 0:
+            curve = an.rebalanced_portfolio(window, weights, rb_freq)
+            if not curve.empty:
+                compare = pd.DataFrame({T("h_portfolio"): curve})
+                if benchmark in window.columns:
+                    compare[benchmark] = an.cumulative_growth(window[[benchmark]])[benchmark]
+                st.plotly_chart(style_fig(px.line(compare.dropna(), height=400), "",
+                                          T("x_date"), T("y_value")),
+                                use_container_width=True)
+                p_ret = an.daily_returns(curve)
+                m = st.columns(4)
+                m[0].metric(T("m_cagr"), fmt_pct(an.cagr(curve), 1))
+                m[1].metric(T("m_volatility"), fmt_pct(an.annual_volatility(p_ret), 1))
+                m[2].metric(T("m_maxdd"), fmt_pct(an.max_drawdown(curve), 1))
+                m[3].metric(T("m_sharpe"), fmt_num(an.sharpe(curve, rf)))
+    insight(T("x_strategy"))
+
+# ===========================================================================
+# 11. forecast
+# ===========================================================================
+with tabs[10]:
+    c1, c2 = st.columns([1, 1])
+    f_fund = c1.selectbox(T("c_pick_one"), list(window.columns), key="fc_fund")
+    horizon = c2.slider(T("c_horizon"), 10, 180, 60, 10)
+    series = prices[f_fund].dropna()
+
+    left, right = st.columns([3, 2])
+    with left:
+        st.markdown("### " + T("h_forecast"))
+        fc = an.ets_forecast(series, horizon)
+        if fc.empty:
+            st.info(T("not_enough_data"))
+        else:
+            hist = series.iloc[-min(len(series), 250):]
+            vol = float(an.daily_returns(series).std() * np.sqrt(horizon))
+            upper, lower = fc * (1 + vol), fc * (1 - vol)
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=hist.index, y=hist, name=T("y_value"),
+                                     line=dict(color="#14322E")))
+            fig.add_trace(go.Scatter(x=fc.index, y=fc, name="ETS",
+                                     line=dict(color="#0F766E", dash="dash")))
+            fig.add_trace(go.Scatter(
+                x=list(fc.index) + list(fc.index[::-1]),
+                y=list(upper) + list(lower[::-1]), fill="toself",
+                fillcolor="rgba(15,118,110,.18)", line=dict(color="rgba(0,0,0,0)"),
+                name="90%"))
+            st.plotly_chart(style_fig(fig, f_fund, T("x_date"),
+                                      f"{T('y_value')} ({currency})", height=430),
+                            use_container_width=True)
+    with right:
+        st.markdown("### " + T("h_montecarlo"))
+        mc = an.monte_carlo(series, days=horizon)
+        if not mc:
+            st.info(T("not_enough_data"))
+        else:
+            st.metric(T("prob_up"), f"{mc['prob_up']:.1f}%", f"{mc['prob_up'] - 50:+.1f}")
+            st.write(f"**{T('median')}:** {mc['median']:,.2f}")
+            st.write(f"**{T('worst')} (P05):** :red[{mc['p05']:,.2f}]")
+            st.write(f"**{T('best')} (P95):** :green[{mc['p95']:,.2f}]")
+            paths = mc["paths"]
+            fig = go.Figure()
+            for i in range(min(60, paths.shape[1])):
+                fig.add_trace(go.Scatter(y=paths[:, i], line=dict(color="#9CA3AF", width=.5),
+                                         opacity=.35, showlegend=False))
+            fig.add_trace(go.Scatter(y=np.median(paths, axis=1),
+                                     line=dict(color="#BE123C", width=2), name=T("median")))
+            fig.update_layout(template="plotly_white", height=280,
+                              margin=dict(l=0, r=0, t=10, b=0),
+                              xaxis=dict(visible=False), yaxis=dict(visible=False))
+            st.plotly_chart(fig, use_container_width=True)
+            commentary(i18n.forecast_narrative(
+                st.session_state["lang"], f_fund, mc["prob_up"], mc["expected_return"],
+                mc["p05"], mc["p95"], horizon))
+    insight(T("x_forecast"))
+
+# ===========================================================================
+# 12. data & method
+# ===========================================================================
+with tabs[11]:
+    st.markdown("### " + T("h_quality"))
+    stale = ds.status.get("stale", []) if ds.status else []
+    commentary(i18n.quality_narrative(
+        st.session_state["lang"], int(prices_all.shape[1]), ds.markets, ds.currencies,
+        f"{ds.last_date:%d.%m.%Y}", len(stale)))
+
+    m = st.columns(4)
+    m[0].metric(T("n_instruments"), f"{prices_all.shape[1]}")
+    m[1].metric(T("n_markets"), f"{ds.markets}")
+    m[2].metric(T("n_currencies"), f"{ds.currencies}")
+    m[3].metric(T("data_updated"), f"{ds.last_date:%d.%m.%Y}")
+
+    if stale:
+        st.warning(T("stale_warning"))
+        st.dataframe(pd.DataFrame(stale), use_container_width=True)
+
+    st.markdown("### " + T("h_universe"))
+    uni_view = profile[profile.ticker.isin(prices_all.columns)][
+        [c for c in ["ticker", "name", "kind", "asset_class", "region", "country",
+                     "currency", "issuer", "ter", "benchmark", "category",
+                     "first_date", "last_date", "observations"]
+         if c in profile.columns]]
+    search = st.text_input("🔎 " + T("search_ticker"), "")
+    if search:
+        mask = uni_view.apply(lambda r: search.lower() in " ".join(
+            str(v).lower() for v in r.values), axis=1)
+        uni_view = uni_view[mask]
+    st.dataframe(uni_view, use_container_width=True, height=440)
+
+    st.markdown("### " + T("h_method"))
+    insight(T("x_data"))
+    if ds.status:
+        with st.expander("status.json"):
+            st.json(ds.status)
+    if ds.legacy:
+        st.info(T("no_data"))
