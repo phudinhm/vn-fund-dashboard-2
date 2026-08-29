@@ -1,137 +1,307 @@
-import pandas as pd
-import requests
+"""
+Fully automatic daily data update for the global ETF report.
+
+Run ``python update_data.py`` (the GitHub Action does this every day). The
+script needs no API key and no manual input:
+
+1. Vietnamese ETFs + indices           -> VNDIRECT
+2. Vietnamese open-ended funds         -> fmarket.vn catalogue (auto-discovered)
+3. World ETFs + world indices          -> Yahoo Finance, Stooq as fallback
+4. FX rates for every trading currency -> Yahoo, Frankfurter, er-api fallbacks
+
+Outputs (all committed by the workflow):
+
+    data/prices.csv        wide close prices in local currency, Date x ticker
+    data/volume.csv        traded volume where available
+    data/profile.csv       one metadata row per instrument + coverage stats
+    data/fx.csv            USD value of one unit of each currency, per day
+    data/status.json       machine readable health report of the run
+    funds_data.csv         legacy Vietnam-only price file (kept for compatibility)
+    funds_volume.csv       legacy Vietnam-only volume file
+    funds_profile.csv      legacy Vietnam-only profile file
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
-# --- 1. MASTER DATA CHUẨN HÓA (ETFs & Indices) ---
-# Đã cập nhật theo danh sách bạn cung cấp
-MASTER_DATA = [
-    # --- INDICES (Chỉ số thị trường) ---
-    {'Ticker': 'VNINDEX',  'Name': 'Vietnam Index',       'Issuer': 'HOSE',           'Type': 'Market Index', 'Benchmark': None,       'Launch': '2000-07-28', 'Fee': 0.00},
-    {'Ticker': 'VN30',     'Name': 'VN30 Index',          'Issuer': 'HOSE',           'Type': 'Market Index', 'Benchmark': None,       'Launch': '2012-02-06', 'Fee': 0.00},
-    {'Ticker': 'VN100',    'Name': 'VN100 Index',         'Issuer': 'HOSE',           'Type': 'Market Index', 'Benchmark': None,       'Launch': '2014-01-24', 'Fee': 0.00},
-    {'Ticker': 'VNFINLEAD','Name': 'Vietnam FinLead',     'Issuer': 'HOSE',           'Type': 'Sector Index', 'Benchmark': None,       'Launch': '2019-11-18', 'Fee': 0.00},
-    {'Ticker': 'VNX50',    'Name': 'VNX50 Index',         'Issuer': 'HOSE',           'Type': 'Market Index', 'Benchmark': None,       'Launch': '2017-10-23', 'Fee': 0.00},
-    {'Ticker': 'VNDIAMOND','Name': 'Vietnam Diamond',     'Issuer': 'HOSE',           'Type': 'Thematic',     'Benchmark': None,       'Launch': '2019-11-18', 'Fee': 0.00},
+import pandas as pd
 
-    # --- DRAGON CAPITAL (DCVFM) ---
-    {'Ticker': 'E1VFVN30', 'Name': 'VFM VN30 ETF',        'Issuer': 'Dragon Capital', 'Type': 'Equity ETF',   'Benchmark': 'VN30',     'Launch': '2014-10-06', 'Fee': 0.65},
-    {'Ticker': 'FUEVFVND', 'Name': 'VFM VN Diamond ETF',  'Issuer': 'Dragon Capital', 'Type': 'Thematic ETF', 'Benchmark': 'VNDIAMOND','Launch': '2020-05-12', 'Fee': 0.80},
-    {'Ticker': 'FUEDCMID', 'Name': 'DCVFM Midcap ETF',    'Issuer': 'Dragon Capital', 'Type': 'Equity ETF',   'Benchmark': 'VN70',     'Launch': '2022-09-29', 'Fee': 0.80},
-    {'Ticker': 'FUEIP100', 'Name': 'DCVFM VN100 ETF',     'Issuer': 'Dragon Capital', 'Type': 'Equity ETF',   'Benchmark': 'VN100',    'Launch': '2021-09-14', 'Fee': 0.70},
+import sources
+import universe as uni
 
-    # --- SSIAM ---
-    {'Ticker': 'FUESSV30', 'Name': 'SSIAM VN30 ETF',      'Issuer': 'SSIAM',          'Type': 'Equity ETF',   'Benchmark': 'VN30',     'Launch': '2020-08-18', 'Fee': 0.55},
-    {'Ticker': 'FUESSVFL', 'Name': 'SSIAM FinLead ETF',   'Issuer': 'SSIAM',          'Type': 'Sector ETF',   'Benchmark': 'VNFINLEAD','Launch': '2020-01-14', 'Fee': 0.65},
-    {'Ticker': 'FUESSV50', 'Name': 'SSIAM VNX50 ETF',     'Issuer': 'SSIAM',          'Type': 'Equity ETF',   'Benchmark': 'VNX50',    'Launch': '2014-11-17', 'Fee': 0.50},
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+def skip_world() -> bool:
+    return os.environ.get("SKIP_WORLD") == "1"
 
-    # --- VINACAPITAL ---
-    {'Ticker': 'FUEVN100', 'Name': 'VinaCapital VN100',   'Issuer': 'VinaCapital',    'Type': 'Equity ETF',   'Benchmark': 'VN100',    'Launch': '2020-06-16', 'Fee': 0.67},
 
-    # --- MIRAE ASSET ---
-    {'Ticker': 'FUEMAV30', 'Name': 'Mirae Asset VN30 ETF','Issuer': 'Mirae Asset',    'Type': 'Equity ETF',   'Benchmark': 'VN30',     'Launch': '2020-09-22', 'Fee': 0.60},
-    {'Ticker': 'FUEMAVND', 'Name': 'MAFM Diamond ETF',    'Issuer': 'Mirae Asset',    'Type': 'Thematic ETF', 'Benchmark': 'VNDIAMOND','Launch': '2024-05-15', 'Fee': 0.70},
+def skip_mutual_funds() -> bool:
+    return os.environ.get("SKIP_MUTUAL_FUNDS") == "1"
 
-    # --- TECHCOM CAPITAL (Mới thêm) ---
-    {'Ticker': 'FUETCV30', 'Name': 'TCInvest VN30 ETF',   'Issuer': 'Techcom Capital','Type': 'Equity ETF',   'Benchmark': 'VN30',     'Launch': '2021-06-15', 'Fee': 0.00},
 
-    # --- KIM VIETNAM ---
-    {'Ticker': 'FUEKIV30', 'Name': 'KIM Growth VN30 ETF', 'Issuer': 'KIM Vietnam',    'Type': 'Equity ETF',   'Benchmark': 'VN30',     'Launch': '2020-12-28', 'Fee': 0.55},
-    {'Ticker': 'FUEKIVFS', 'Name': 'KIM FinSelect ETF',   'Issuer': 'KIM Vietnam',    'Type': 'Sector ETF',   'Benchmark': 'VNFINSELECT','Launch': '2021-11-12', 'Fee': 0.60},
-]
+def max_mutual_funds() -> int:
+    return int(os.environ.get("MAX_MUTUAL_FUNDS", "120"))
 
-# Thời điểm bắt đầu lấy dữ liệu (2014)
-START_TIMESTAMP = 1388534400 
 
-def create_dimension_table():
-    """Tạo file funds_profile.csv chuẩn hóa"""
-    df = pd.DataFrame(MASTER_DATA)
-    # Sắp xếp cho đẹp
-    df = df[['Ticker', 'Name', 'Issuer', 'Type', 'Benchmark', 'Launch', 'Fee']]
-    df.to_csv('funds_profile.csv', index=False)
-    print("✅ Đã chuẩn hóa Master Data: funds_profile.csv")
+def log(msg: str) -> None:
+    print(msg, flush=True)
+
+
+# ---------------------------------------------------------------------------
+# collectors
+# ---------------------------------------------------------------------------
+
+def collect_vietnam(status: dict) -> tuple[dict, dict, list[dict]]:
+    prices, volumes, rows = {}, {}, []
+    static = uni.static_universe()
+    vn = static[static.source == "vndirect"]
+    log(f"Vietnam: fetching {len(vn)} listed symbols from VNDIRECT ...")
+    for _, meta in vn.iterrows():
+        df = sources.fetch_vndirect(meta.symbol)
+        if df.empty:
+            status["failed"].append({"ticker": meta.ticker, "source": "vndirect"})
+            log(f"  ! {meta.ticker}: no data")
+            continue
+        prices[meta.ticker] = df["Close"]
+        volumes[meta.ticker] = df["Volume"]
+        rows.append(meta.to_dict())
+        time.sleep(0.4)
+    log(f"Vietnam: {len(prices)} series")
+    return prices, volumes, rows
+
+
+def collect_mutual_funds(status: dict) -> tuple[dict, list[dict]]:
+    """Vietnamese open-ended funds, discovered live from the fmarket catalogue."""
+    if skip_mutual_funds():
+        return {}, []
+    catalogue = sources.fetch_fmarket_catalogue()
+    if not catalogue:
+        status["warnings"].append("fmarket catalogue unavailable")
+        log("Mutual funds: catalogue unavailable, skipped")
+        return {}, []
+
+    catalogue = catalogue[:max_mutual_funds()]
+    log(f"Mutual funds: {len(catalogue)} funds discovered on fmarket ...")
+    prices, rows = {}, []
+    for fund in catalogue:
+        df = sources.fetch_fmarket_nav(fund["product_id"])
+        if df.empty or len(df) < 20:
+            status["failed"].append({"ticker": fund["ticker"], "source": "fmarket"})
+            continue
+        prices[fund["ticker"]] = df["Close"]
+        rows.append(dict(
+            ticker=fund["ticker"], source="fmarket", symbol=str(fund["product_id"]),
+            name=fund["name"], kind="Mutual Fund", asset_class=fund["asset_class"],
+            region="Vietnam", country="Vietnam", currency="VND",
+            issuer=fund["issuer"], ter=float("nan"), benchmark="VNINDEX",
+            category=fund["category"], inception="",
+        ))
+        time.sleep(0.3)
+    log(f"Mutual funds: {len(prices)} NAV series")
+    return prices, rows
+
+
+def collect_world(status: dict) -> tuple[dict, dict, list[dict]]:
+    if skip_world():
+        return {}, {}, []
+    static = uni.static_universe()
+    world = static[static.source == "yahoo"]
+    symbols = world.symbol.tolist()
+    log(f"World: downloading {len(symbols)} symbols from Yahoo Finance ...")
+    got = sources.fetch_yahoo_batch(symbols)
+    log(f"World: Yahoo returned {len(got)} series")
+
+    prices, volumes, rows = {}, {}, []
+    missing = []
+    for _, meta in world.iterrows():
+        df = got.get(meta.symbol)
+        if df is None or df.empty:
+            missing.append(meta)
+            continue
+        prices[meta.ticker] = df["Close"]
+        volumes[meta.ticker] = df["Volume"]
+        rows.append(meta.to_dict())
+
+    if missing:
+        log(f"World: retrying {len(missing)} symbols on Stooq ...")
+        for meta in missing:
+            df = sources.fetch_stooq(meta.symbol)
+            if df.empty:
+                status["failed"].append({"ticker": meta.ticker, "source": "yahoo/stooq"})
+                continue
+            prices[meta.ticker] = df["Close"]
+            volumes[meta.ticker] = df["Volume"]
+            row = meta.to_dict()
+            row["source"] = "stooq"
+            rows.append(row)
+            time.sleep(0.3)
+    log(f"World: {len(prices)} series")
+    return prices, volumes, rows
+
+
+def collect_fx(status: dict, needed: list[str]) -> pd.DataFrame:
+    log(f"FX: fetching {len(needed)} currencies ...")
+    fx = pd.DataFrame()
+    if not skip_world():
+        fx = sources.fetch_fx_yahoo(needed)
+    have = [c for c in needed if c in fx.columns]
+    missing = [c for c in needed if c not in have]
+
+    if missing:
+        log(f"FX: {len(missing)} currencies missing from Yahoo, trying Frankfurter ...")
+        alt = sources.fetch_fx_frankfurter(missing)
+        if not alt.empty:
+            fx = alt if fx.empty else fx.join(alt[[c for c in alt.columns if c in missing]],
+                                              how="outer")
+            missing = [c for c in needed if c not in fx.columns]
+
+    if missing:
+        log(f"FX: {len(missing)} currencies still missing, using latest snapshot ...")
+        snap = sources.fetch_fx_latest_erapi()
+        for ccy in list(missing):
+            if ccy in snap:
+                if fx.empty:
+                    fx = pd.DataFrame(index=pd.DatetimeIndex([pd.Timestamp.today().normalize()]))
+                fx[ccy] = snap[ccy]
+                status["warnings"].append(f"FX {ccy}: constant snapshot rate used")
+                missing.remove(ccy)
+
+    if missing:
+        status["warnings"].append("FX unavailable for: " + ", ".join(missing))
+    if not fx.empty:
+        fx["USD"] = 1.0
+        fx = fx.sort_index().ffill()
+        fx.index = pd.to_datetime(fx.index)
+        fx.index.name = "Date"
+    return fx
+
+
+# ---------------------------------------------------------------------------
+# assembly
+# ---------------------------------------------------------------------------
+
+def build_frame(series_map: dict) -> pd.DataFrame:
+    if not series_map:
+        return pd.DataFrame()
+    df = pd.concat(series_map, axis=1)
+    df = df[~df.index.duplicated(keep="last")].sort_index()
+    df.index.name = "Date"
     return df
 
-def get_vndirect_data(symbol):
-    """Lấy dữ liệu Full History từ VNDIRECT"""
-    print(f"   -> Đang tải {symbol}...")
-    current_ts = int(time.time())
-    
-    # API của VNDIRECT
-    url = f"https://dchart-api.vndirect.com.vn/dchart/history?resolution=D&symbol={symbol}&from={START_TIMESTAMP}&to={current_ts}"
-    headers = {
-        'User-Agent': 'Mozilla/5.0',
-        'Referer': 'https://dchart.vndirect.com.vn/'
-    }
-    
-    try:
-        response = requests.get(url, headers=headers, timeout=20)
-        if response.status_code == 200:
-            data = response.json()
-            if 't' in data and 'c' in data:
-                df = pd.DataFrame({
-                    'Date': pd.to_datetime(data['t'], unit='s'),
-                    'Close': data['c'],
-                    'Volume': data.get('v', 0)
-                })
-                df['Date'] = df['Date'].dt.normalize()
-                # Loại bỏ các giá trị 0 hoặc NaN
-                df = df[df['Close'] > 0]
-                return df.set_index('Date')
-    except Exception as e:
-        print(f"❌ Lỗi tải {symbol}: {e}")
-    
-    return pd.DataFrame()
 
-def update_csv():
-    # 1. Tạo Dimension Table
-    df_profile = create_dimension_table()
-    tickers_to_fetch = df_profile['Ticker'].tolist()
+def coverage_stats(prices: pd.DataFrame) -> pd.DataFrame:
+    stats = []
+    today = prices.index.max()
+    for col in prices.columns:
+        s = prices[col].dropna()
+        if s.empty:
+            stats.append({"ticker": col, "first_date": "", "last_date": "",
+                          "observations": 0, "stale_days": -1})
+            continue
+        stats.append({
+            "ticker": col,
+            "first_date": s.index.min().strftime("%Y-%m-%d"),
+            "last_date": s.index.max().strftime("%Y-%m-%d"),
+            "observations": int(s.shape[0]),
+            "stale_days": int((today - s.index.max()).days),
+        })
+    return pd.DataFrame(stats)
 
-    # 2. Tải dữ liệu Fact Tables
-    print(f"⏳ Bắt đầu tải dữ liệu lịch sử cho {len(tickers_to_fetch)} mã...")
-    
-    close_list = []
-    vol_list = []
-    
-    for ticker in tickers_to_fetch:
-        df = get_vndirect_data(ticker)
-        if not df.empty:
-            close_list.append(df['Close'].rename(ticker))
-            vol_list.append(df['Volume'].rename(ticker))
-        time.sleep(1) # Delay nhẹ để tránh bị chặn
 
-    if not close_list:
-        print("❌ Không tải được dữ liệu nào!")
+def write_legacy_files(prices: pd.DataFrame, volume: pd.DataFrame,
+                       profile: pd.DataFrame, root: str) -> None:
+    """Keep the original Vietnam-only CSVs in place for backwards compatibility."""
+    vn = profile[(profile.region == "Vietnam") & (profile.kind != "Mutual Fund")]
+    cols = [c for c in vn.ticker if c in prices.columns]
+    if not cols:
         return
+    prices[cols].dropna(how="all").to_csv(os.path.join(root, "funds_data.csv"))
+    vcols = [c for c in cols if c in volume.columns]
+    if vcols:
+        volume[vcols].fillna(0).to_csv(os.path.join(root, "funds_volume.csv"))
+    legacy = vn.rename(columns={
+        "ticker": "Ticker", "name": "Name", "issuer": "Issuer",
+        "kind": "Kind", "benchmark": "Benchmark", "inception": "Launch", "ter": "Fee",
+    })
+    legacy["Type"] = vn.apply(
+        lambda r: r.category if r.kind == "Index" else f"{r.asset_class} ETF", axis=1).values
+    legacy[["Ticker", "Name", "Issuer", "Type", "Benchmark", "Launch", "Fee"]].to_csv(
+        os.path.join(root, "funds_profile.csv"), index=False)
 
-    # 3. Gộp và Xử lý
-    print("🔄 Đang xử lý và gộp dữ liệu...")
-    
-    # Gộp giá (Close Price)
-    df_close = pd.concat(close_list, axis=1)
-    df_close.sort_index(inplace=True)
-    df_close.ffill(inplace=True) # Lấp đầy ngày nghỉ
-    df_close.dropna(how='all', inplace=True)
-    
-    # Gộp khối lượng (Volume)
-    df_vol = pd.concat(vol_list, axis=1)
-    df_vol.sort_index(inplace=True)
-    df_vol.fillna(0, inplace=True)
 
-    # Lọc từ ngày bắt đầu
-    start_date_str = datetime.fromtimestamp(START_TIMESTAMP).strftime('%Y-%m-%d')
-    df_close = df_close[df_close.index >= start_date_str]
-    df_vol = df_vol[df_vol.index >= start_date_str]
+def main(root: str | None = None, data_dir: str | None = None) -> int:
+    root = root or os.path.dirname(os.path.abspath(__file__))
+    data_dir = data_dir or os.path.join(root, "data")
+    os.makedirs(data_dir, exist_ok=True)
+    started = datetime.now(timezone.utc)
+    status = {"started_utc": started.isoformat(), "failed": [], "warnings": []}
 
-    # 4. Lưu file
-    df_close.index.name = 'Date'
-    df_vol.index.name = 'Date'
-    
-    df_close.reset_index().to_csv('funds_data.csv', index=False)
-    df_vol.reset_index().to_csv('funds_volume.csv', index=False)
-    
-    print(f"✅ HOÀN TẤT! Dữ liệu từ {df_close.index.min().date()} đến {df_close.index.max().date()}")
+    price_map, vol_map, rows = {}, {}, []
+
+    vn_p, vn_v, vn_rows = collect_vietnam(status)
+    price_map.update(vn_p); vol_map.update(vn_v); rows += vn_rows
+
+    mf_p, mf_rows = collect_mutual_funds(status)
+    price_map.update(mf_p); rows += mf_rows
+
+    w_p, w_v, w_rows = collect_world(status)
+    price_map.update(w_p); vol_map.update(w_v); rows += w_rows
+
+    if not price_map:
+        log("FATAL: no data could be downloaded from any source.")
+        status["error"] = "no data"
+        with open(os.path.join(data_dir, "status.json"), "w", encoding="utf-8") as fh:
+            json.dump(status, fh, indent=2)
+        return 1
+
+    prices = build_frame(price_map)
+    volume = build_frame(vol_map)
+    profile = pd.DataFrame(rows).drop_duplicates(subset="ticker").reset_index(drop=True)
+
+    currencies = sorted(set(profile.currency.dropna()) | {"USD", "EUR", "VND"})
+    fx = collect_fx(status, currencies)
+
+    # ---- coverage & profile enrichment -----------------------------------
+    cov = coverage_stats(prices)
+    profile = profile.merge(cov, on="ticker", how="left")
+    profile.loc[profile.inception.isin(["", None]) | profile.inception.isna(),
+                "inception"] = profile["first_date"]
+
+    # ---- write -----------------------------------------------------------
+    prices.to_csv(os.path.join(data_dir, "prices.csv"))
+    if not volume.empty:
+        volume.to_csv(os.path.join(data_dir, "volume.csv"))
+    profile.to_csv(os.path.join(data_dir, "profile.csv"), index=False)
+    if not fx.empty:
+        fx.to_csv(os.path.join(data_dir, "fx.csv"))
+
+    write_legacy_files(prices, volume, profile, root)
+
+    status.update({
+        "finished_utc": datetime.now(timezone.utc).isoformat(),
+        "duration_seconds": round((datetime.now(timezone.utc) - started).total_seconds(), 1),
+        "instruments": int(prices.shape[1]),
+        "observations": int(prices.notna().sum().sum()),
+        "first_date": prices.index.min().strftime("%Y-%m-%d"),
+        "last_date": prices.index.max().strftime("%Y-%m-%d"),
+        "by_region": profile.groupby("region").size().to_dict(),
+        "by_kind": profile.groupby("kind").size().to_dict(),
+        "currencies": [c for c in fx.columns] if not fx.empty else [],
+        "stale": cov[cov.stale_days > 7][["ticker", "last_date", "stale_days"]]
+                    .to_dict(orient="records"),
+    })
+    with open(os.path.join(data_dir, "status.json"), "w", encoding="utf-8") as fh:
+        json.dump(status, fh, indent=2, ensure_ascii=False)
+
+    log(f"DONE: {status['instruments']} instruments, "
+        f"{status['first_date']} -> {status['last_date']}, "
+        f"{len(status['failed'])} failures")
+    return 0
+
 
 if __name__ == "__main__":
-    update_csv()
+    sys.exit(main())
