@@ -1,0 +1,91 @@
+{
+  "started_utc": "2026-08-29T21:17:53.190278+00:00",
+  "failed": [
+    {
+      "ticker": "VNMIDCAP",
+      "source": "vndirect"
+    },
+    {
+      "ticker": "VNSMALLCAP",
+      "source": "vndirect"
+    },
+    {
+      "ticker": "HNXINDEX",
+      "source": "vndirect"
+    },
+    {
+      "ticker": "UPCOMINDEX",
+      "source": "vndirect"
+    },
+    {
+      "ticker": "FUETCV30",
+      "source": "vndirect"
+    },
+    {
+      "ticker": "FUEBFVN",
+      "source": "vndirect"
+    },
+    {
+      "ticker": "UMMF",
+      "source": "fmarket"
+    },
+    {
+      "ticker": "SSI-PDF",
+      "source": "fmarket"
+    },
+    {
+      "ticker": "FM",
+      "source": "yahoo/stooq"
+    }
+  ],
+  "warnings": [],
+  "finished_utc": "2026-08-29T21:19:49.096040+00:00",
+  "duration_seconds": 115.9,
+  "instruments": 246,
+  "observations": 714593,
+  "first_date": "2004-05-20",
+  "last_date": "2026-08-29",
+  "by_region": {
+    "Americas": 8,
+    "Asia-Pacific": 38,
+    "Emerging": 7,
+    "Europe": 37,
+    "Global": 21,
+    "US": 50,
+    "Vietnam": 85
+  },
+  "by_kind": {
+    "ETF": 141,
+    "Index": 39,
+    "Mutual Fund": 66
+  },
+  "currencies": [
+    "AUD",
+    "BRL",
+    "CAD",
+    "CHF",
+    "CNY",
+    "EUR",
+    "GBP",
+    "HKD",
+    "IDR",
+    "INR",
+    "JPY",
+    "KRW",
+    "MXN",
+    "MYR",
+    "PHP",
+    "SGD",
+    "THB",
+    "TWD",
+    "VND",
+    "USD"
+  ],
+  "stale": [
+    {
+      "ticker": "TBLF",
+      "last_date": "2026-08-18",
+      "stale_days": 11
+    }
+  ]
+}
