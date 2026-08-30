@@ -23,7 +23,7 @@ PEER_METRICS = ["cagr", "sharpe", "sortino", "calmar", "volatility", "max_drawdo
 
 
 def render(ctx) -> None:
-    options = [t for t in ctx.ds.prices.columns]
+    options = ctx.universe or list(ctx.ds.prices.columns)
     focus = ctx.focus
     picked = st.selectbox(ctx.t("profile_pick"), options,
                           index=options.index(focus) if focus in options else 0,
@@ -40,9 +40,9 @@ def render(ctx) -> None:
         return
 
     _header(ctx, focus, prices)
-    tabs = st.tabs(["📈 " + ctx.t("tab_performance"), "📉 " + ctx.t("tab_risk"),
-                    "🔄 " + ctx.t("tab_cycles"), "🔮 " + ctx.t("tab_forecast"),
-                    "📋 " + ctx.t("profile_metrics")])
+    tabs = st.tabs([ctx.t("tab_performance"), ctx.t("tab_risk"),
+                    ctx.t("tab_cycles"), ctx.t("tab_forecast"),
+                    ctx.t("profile_metrics")])
     with tabs[0]:
         _performance(ctx, focus, prices)
     with tabs[1]:
@@ -158,16 +158,23 @@ def _performance(ctx, ticker: str, prices: pd.Series) -> None:
                                  f"{ctx.t('y_value')} ({ctx.currency})",
                                  height=420, log_y=log_scale), width="stretch")
 
-    st.markdown("##### " + ctx.t("h_period_returns"))
-    periods = an.period_returns(prices.to_frame(ticker))
-    st.dataframe(periods, width="stretch", column_config={
-        c: st.column_config.NumberColumn(c, format="percent") for c in periods.columns})
+    with C.card(ctx.t("h_period_returns")):
+        periods = an.period_returns(prices.to_frame(ticker))
+        st.dataframe(periods, width="stretch", column_config={
+            c: st.column_config.NumberColumn(c, format="percent")
+            for c in periods.columns})
 
-    st.markdown("##### " + ctx.t("h_calendar"))
-    calendar = an.calendar_year_returns(prices.to_frame(ticker))
-    if not calendar.empty:
-        C.bar_compare(ctx, calendar[ticker].tail(12).iloc[::-1],
-                      y_title=ctx.t("y_return"), height=330)
+    with C.card(ctx.t("h_calendar")):
+        calendar = an.calendar_year_returns(prices.to_frame(ticker))
+        if not calendar.empty:
+            series = calendar[ticker].dropna()
+            C.bar_compare(ctx, series.tail(12).iloc[::-1],
+                          y_title=ctx.t("y_return"), height=320)
+            if len(series) >= 2:
+                C.readout(ctx, i18n.calendar_readout(
+                    ctx.lang, str(series.idxmax()), float(series.max()),
+                    str(series.idxmin()), float(series.min()),
+                    int((series > 0).sum()), int(len(series))))
 
 
 # --------------------------------------------------------------------- risk
@@ -213,33 +220,32 @@ def _risk(ctx, ticker: str, prices: pd.Series) -> None:
 
 # ------------------------------------------------------------------- cycles
 def _cycles(ctx, ticker: str, prices: pd.Series) -> None:
-    heat = an.monthly_returns(prices)
-    if heat.empty:
-        st.info(ctx.t("not_enough_data"))
+    with C.card(ctx.t("h_growth_heatmap")):
+        heat = C.growth_heatmap(ctx, prices, ticker)
+    if heat is None or heat.empty:
         return
-    st.markdown("##### " + ctx.t("h_monthly"))
-    fig = px.imshow(heat, text_auto=".1f", color_continuous_scale="RdYlGn",
-                    aspect="auto", height=max(300, 28 * len(heat)),
-                    labels=dict(color="%"))
-    st.plotly_chart(style_fig(fig, "", hover="closest", legend=False), width="stretch")
 
-    left, right = st.columns(2)
+    left, right = st.columns(2, gap="medium")
     with left:
-        st.markdown("##### " + ctx.t("h_seasonality"))
-        C.bar_compare(ctx, heat.mean() / 100, y_title=ctx.t("y_return"), height=320)
+        with C.card(ctx.t("h_seasonality")):
+            monthly = heat.mean()
+            monthly.index = [i18n.month_name(ctx.lang, m) for m in monthly.index]
+            C.bar_compare(ctx, monthly / 100, y_title=ctx.t("y_return"), height=300)
     with right:
-        if ctx.bench_ret is not None:
-            st.markdown("##### " + ctx.t("h_bullbear"))
-            returns = an.daily_returns(prices)
-            split = an.bull_bear_split(returns, ctx.bench_ret)
-            fig = go.Figure()
-            fig.add_trace(go.Bar(x=[ctx.t("bull")], y=[split["bull"] * 100],
-                                 marker_color=GAIN, name=ctx.t("bull")))
-            fig.add_trace(go.Bar(x=[ctx.t("bear")], y=[split["bear"] * 100],
-                                 marker_color=LOSS, name=ctx.t("bear")))
-            st.plotly_chart(style_fig(fig, f"vs {ctx.benchmark}", "",
-                                      ctx.t("y_return"), height=320, hover="closest",
-                                      legend=False), width="stretch")
+        with C.card(ctx.t("h_bullbear")):
+            if ctx.bench_ret is None:
+                st.info(ctx.t("not_enough_data"))
+            else:
+                split = an.bull_bear_split(an.daily_returns(prices), ctx.bench_ret)
+                fig = go.Figure()
+                fig.add_trace(go.Bar(x=[ctx.t("bull")], y=[split["bull"] * 100],
+                                     marker_color=GAIN, name=ctx.t("bull")))
+                fig.add_trace(go.Bar(x=[ctx.t("bear")], y=[split["bear"] * 100],
+                                     marker_color=LOSS, name=ctx.t("bear")))
+                st.plotly_chart(style_fig(fig, f"vs {ctx.benchmark}", "",
+                                          ctx.t("y_return"), height=300,
+                                          hover="closest", legend=False),
+                                width="stretch")
     C.explain(ctx, "x_cycles")
 
 

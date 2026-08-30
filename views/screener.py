@@ -12,6 +12,7 @@ import pandas as pd
 import streamlit as st
 
 import analytics as an
+import i18n
 import report as rp
 from ui import components as C
 from ui import state as S
@@ -25,9 +26,11 @@ SORT_KEYS = ["score", "cagr", "sharpe", "sortino", "calmar", "volatility",
 
 
 @st.cache_data(show_spinner=False, ttl=3600)
-def universe_metrics(_ds, currency: str, period: str, rf: float, last_date: str):
-    """Every metric for every instrument, in one reporting currency."""
-    prices = an.convert_prices(_ds.prices, _ds.profile, _ds.fx, currency)
+def universe_metrics(_ds, tickers: tuple, currency: str, period: str, rf: float,
+                     last_date: str):
+    """Every metric for every instrument the scope filters allow."""
+    columns = [t for t in tickers if t in _ds.prices.columns]
+    prices = an.convert_prices(_ds.prices[columns], _ds.profile, _ds.fx, currency)
     window = rp.slice_window(prices, period).dropna(axis=1, how="all")
     metrics = an.metrics_table(window, benchmark=None, rf=rf, profile=_ds.profile)
     scored = an.composite_score(metrics)
@@ -39,11 +42,13 @@ def universe_metrics(_ds, currency: str, period: str, rf: float, last_date: str)
 
 
 def render(ctx) -> None:
-    st.markdown("### " + ctx.t("screener_title"))
     with st.spinner(ctx.t("screener_computing")):
         scored, window = universe_metrics(
-            ctx.ds, ctx.currency, ctx.period, ctx.rf,
+            ctx.ds, tuple(ctx.universe), ctx.currency, ctx.period, ctx.rf,
             ctx.ds.last_date.strftime("%Y-%m-%d"))
+    if scored.empty:
+        st.warning(ctx.t("screener_no_results"))
+        return
     st.caption(ctx.t("screener_help").format(n=len(scored)))
 
     frame = _filters(ctx, scored)
@@ -53,24 +58,23 @@ def render(ctx) -> None:
 
     _summary(ctx, frame, scored)
 
-    st.markdown(f"#### {ctx.t('screener_results')} · {len(frame)}")
-    st.caption(ctx.t("screener_hint"))
-    top_n = st.session_state.get("screener_top_n", 40)
-    picked = C.leaderboard(ctx, frame.head(top_n), window, RESULT_COLUMNS,
-                           key="screener_table", height=520)
+    with C.card(f"{ctx.t('screener_results')} · {len(frame)}", ctx.t("screener_hint")):
+        top_n = st.session_state.get("screener_top_n", 40)
+        picked = C.leaderboard(ctx, frame.head(top_n), window, RESULT_COLUMNS,
+                               key="screener_table", height=500)
 
-    cols = st.columns([2, 2, 4])
-    if cols[0].button(f"➕ {ctx.t('add_to_compare')} ({len(picked)})",
-                      disabled=not picked, width="stretch", key="scr_add"):
-        added = S.add_to_selection(picked)
-        S.go_to("nav_compare")
-        st.toast(f"{ctx.t('added')}: {added}")
-        st.rerun()
-    if cols[1].button(f"🔬 {ctx.t('open_profile')}", disabled=len(picked) != 1,
-                      width="stretch", key="scr_profile"):
-        S.set_focus(picked[0])
-        S.go_to("nav_profile")
-        st.rerun()
+        cols = st.columns([2, 2, 4])
+        if cols[0].button(f"{ctx.t('add_to_compare')} ({len(picked)})",
+                          disabled=not picked, width="stretch", key="scr_add"):
+            added = S.add_to_selection(picked)
+            S.go_to("nav_compare")
+            st.toast(f"{ctx.t('added')}: {added}")
+            st.rerun()
+        if cols[1].button(ctx.t("open_profile"), disabled=len(picked) != 1,
+                          width="stretch", key="scr_profile"):
+            S.set_focus(picked[0])
+            S.go_to("nav_profile")
+            st.rerun()
 
 
 def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
@@ -78,16 +82,8 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
     frame = scored.copy()
 
     with st.container(border=True):
-        row1 = st.columns([2, 2, 2, 2])
-        regions = sorted(prof.region.dropna().unique())
-        sel_regions = row1[0].multiselect(ctx.t("region"), regions, default=[],
-                                          key="scr_regions")
-        kinds = sorted(prof.kind.dropna().unique())
-        sel_kinds = row1[1].multiselect(ctx.t("kind"), kinds, default=[], key="scr_kinds")
-        classes = sorted(prof.asset_class.dropna().unique())
-        sel_classes = row1[2].multiselect(ctx.t("asset_class"), classes, default=[],
-                                          key="scr_classes")
-        search = row1[3].text_input("🔎 " + ctx.t("search_ticker"), key="scr_search")
+        st.caption(ctx.t("filter_note"))
+        search = st.text_input(ctx.t("search_ticker"), key="scr_search")
 
         row2 = st.columns(6)
         min_cagr = row2[0].slider(ctx.t("screener_min_cagr"), -30.0, 40.0, -30.0, 1.0,
@@ -111,11 +107,9 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
             format_func=lambda k: ctx.t(C.METRIC_FORMAT.get(k, (None, k))[1] or k))
         row3[1].select_slider(ctx.t("top_n"), options=[20, 40, 80, 150, 300],
                               value=40, key="screener_top_n")
-        if row3[2].button("↺ " + ctx.t("screener_reset"), width="stretch",
-                          key="scr_reset"):
-            for key in ["scr_regions", "scr_kinds", "scr_classes", "scr_search",
-                        "scr_cagr", "scr_vol", "scr_sharpe", "scr_dd", "scr_ter",
-                        "scr_hist"]:
+        if row3[2].button(ctx.t("screener_reset"), width="stretch", key="scr_reset"):
+            for key in ["scr_search", "scr_cagr", "scr_vol", "scr_sharpe",
+                        "scr_dd", "scr_ter", "scr_hist"]:
                 st.session_state.pop(key, None)
             st.rerun()
 
@@ -124,12 +118,6 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
         if col not in frame.columns and col in prof.columns:
             frame[col] = prof[col].reindex(frame.index)
 
-    if sel_regions:
-        frame = frame[frame.region.isin(sel_regions)]
-    if sel_kinds:
-        frame = frame[frame.kind.isin(sel_kinds)]
-    if sel_classes:
-        frame = frame[frame.asset_class.isin(sel_classes)]
     if search:
         needle = search.lower()
         haystack = (frame.index.to_series().str.lower() + " "
@@ -151,6 +139,12 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
 
 
 def _summary(ctx, frame: pd.DataFrame, everything: pd.DataFrame) -> None:
+    if len(frame):
+        C.readout(ctx, i18n.screener_readout(
+            ctx.lang, len(frame), len(everything), frame.index[0],
+            float(frame.cagr.iloc[0]) if pd.notna(frame.cagr.iloc[0]) else float("nan"),
+            float(frame.cagr.median()),
+            float(frame.ter.median()) if "ter" in frame else float("nan")))
     cols = st.columns(5)
     cols[0].metric(ctx.t("screener_results"), f"{len(frame)}",
                    f"/ {len(everything)}", delta_color="off")

@@ -20,9 +20,9 @@ from ui.theme import BENCH, GAIN, LOSS, color_for, style_fig
 
 
 def render(ctx) -> None:
-    tabs = st.tabs(["🚀 " + ctx.t("tab_performance"), "📉 " + ctx.t("tab_risk"),
-                    "⚖️ " + ctx.t("tab_riskreturn"), "🎯 " + ctx.t("tab_benchmark"),
-                    "🔗 " + ctx.t("tab_correlation")])
+    tabs = st.tabs([ctx.t("tab_performance"), ctx.t("tab_risk"),
+                    ctx.t("tab_riskreturn"), ctx.t("tab_benchmark"),
+                    ctx.t("tab_correlation"), ctx.t("tab_cycles")])
     with tabs[0]:
         performance(ctx)
     with tabs[1]:
@@ -33,39 +33,43 @@ def render(ctx) -> None:
         versus_benchmark(ctx)
     with tabs[4]:
         correlation(ctx)
+    with tabs[5]:
+        seasonality(ctx)
 
 
 # ---------------------------------------------------------------- performance
 def performance(ctx) -> None:
-    st.markdown("### " + ctx.t("h_growth"))
-    opts = C.chart_options(ctx, "cmp")
-    C.growth_chart(ctx, ctx.window, log_scale=opts["log"], relative=opts["relative"])
-    C.explain(ctx, "x_growth")
+    with C.card(ctx.t("h_growth")):
+        opts = C.chart_options(ctx, "cmp")
+        C.growth_chart(ctx, ctx.window, log_scale=opts["log"],
+                       relative=opts["relative"])
+        _growth_readout(ctx)
+        C.explain(ctx, "x_growth")
 
-    st.markdown("### " + ctx.t("h_period_returns"))
-    periods = an.period_returns(ctx.prices)
-    st.dataframe(
-        periods, width="stretch",
-        column_config={c: st.column_config.NumberColumn(c, format="percent")
-                       for c in periods.columns})
-    C.explain(ctx, "x_periods")
+    with C.card(ctx.t("h_period_returns")):
+        periods = an.period_returns(ctx.prices)
+        st.dataframe(
+            periods, width="stretch",
+            column_config={c: st.column_config.NumberColumn(c, format="percent")
+                           for c in periods.columns})
+        C.explain(ctx, "x_periods")
 
-    st.markdown("### " + ctx.t("h_calendar"))
-    calendar = an.calendar_year_returns(ctx.prices)
-    if not calendar.empty:
-        long = (calendar.tail(12).reset_index()
-                .melt(id_vars="year", var_name="ticker", value_name="ret").dropna())
-        long["ret"] *= 100
-        fig = px.bar(long, x="year", y="ret", color="ticker", barmode="group",
-                     height=420)
-        fig.add_hline(y=0, line_color=BENCH)
-        st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("y_return"),
-                                  hover="closest"), width="stretch")
+    with C.card(ctx.t("h_calendar")):
+        calendar = an.calendar_year_returns(ctx.prices)
+        if not calendar.empty:
+            long = (calendar.tail(12).reset_index()
+                    .melt(id_vars="year", var_name="ticker", value_name="ret").dropna())
+            long["ret"] *= 100
+            fig = px.bar(long, x="year", y="ret", color="ticker", barmode="group",
+                         height=400)
+            fig.add_hline(y=0, line_color=BENCH)
+            st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("y_return"),
+                                      hover="closest"), width="stretch")
+            _calendar_readout(ctx, calendar)
 
     st.markdown("### " + ctx.t("h_rolling"))
     left, right = st.columns([1, 3])
     years = left.slider(ctx.t("c_window_years"), 0.5, 5.0, 1.0, 0.5, key="cmp_roll")
-    left.caption(ctx.t("x_periods"))
     rolling = {}
     for ticker in ctx.window.columns:
         series = an.rolling_returns(ctx.prices[ticker], years)
@@ -78,6 +82,12 @@ def performance(ctx) -> None:
                            width="stretch")
         stats = pd.DataFrame({t: an.rolling_return_stats(ctx.prices[t], years)
                               for t in ctx.window.columns}).T
+        focus = ctx.focus if ctx.focus in stats.index else stats.index[0]
+        row = stats.loc[focus]
+        if pd.notna(row.get("win_rate")):
+            C.readout(ctx, i18n.rolling_readout(
+                ctx.lang, focus, years, float(row.win_rate), float(row["median"]),
+                float(row["min"])))
         st.dataframe(stats, width="stretch", column_config={
             "windows": st.column_config.NumberColumn(ctx.t("windows"), format="%d"),
             "mean": st.column_config.NumberColumn(ctx.t("average"), format="percent"),
@@ -92,24 +102,26 @@ def performance(ctx) -> None:
 
 # ----------------------------------------------------------------------- risk
 def risk(ctx) -> None:
-    st.markdown("### " + ctx.t("h_drawdown"))
+    card = C.card(ctx.t("h_drawdown"))
     drawdowns = an.drawdown(ctx.window.ffill()) * 100
     fig = go.Figure()
     for i, ticker in enumerate(drawdowns.columns):
         fig.add_trace(go.Scatter(
             x=drawdowns.index, y=drawdowns[ticker], name=ticker, fill="tozeroy",
             line=dict(width=1.2, color=color_for(i)), opacity=.5))
-    st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("y_dd"), height=420),
-                    width="stretch")
-    C.explain(ctx, "x_drawdown")
+    with card:
+        st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("y_dd"), height=400),
+                        width="stretch")
+        _drawdown_readout(ctx, drawdowns)
+        C.explain(ctx, "x_drawdown")
 
-    st.markdown("### " + ctx.t("h_riskmetrics"))
-    risk_cols = ["volatility", "downside_dev", "max_drawdown", "var95", "cvar95",
-                 "ulcer", "martin", "skew", "kurtosis", "tail_ratio", "hit_rate",
-                 "stability", "best_day", "worst_day"]
-    have = [c for c in risk_cols if c in ctx.metrics.columns]
-    st.dataframe(ctx.metrics[have], width="stretch",
-                 column_config=C.metric_columns(ctx, have))
+    with C.card(ctx.t("h_riskmetrics")):
+        risk_cols = ["volatility", "downside_dev", "max_drawdown", "var95", "cvar95",
+                     "ulcer", "martin", "skew", "kurtosis", "tail_ratio", "hit_rate",
+                     "stability", "best_day", "worst_day"]
+        have = [c for c in risk_cols if c in ctx.metrics.columns]
+        st.dataframe(ctx.metrics[have], width="stretch",
+                     column_config=C.metric_columns(ctx, have))
 
     left, right = st.columns(2)
     with left:
@@ -150,6 +162,7 @@ def risk_return(ctx) -> None:
     C.scatter_picker(ctx, frame, "vol_pct", "cagr_pct", "cmp_scatter",
                      ctx.t("x_vol"), ctx.t("y_cagr"),
                      color="region" if "region" in frame.columns else None)
+    _positioning_readout(ctx)
     C.explain(ctx, "x_riskreturn")
 
     left, right = st.columns(2)
@@ -228,8 +241,13 @@ def versus_benchmark(ctx) -> None:
                              name=ctx.t("m_down"), marker_color=LOSS))
         fig.add_hline(y=100, line_dash="dot", line_color=BENCH)
         fig.update_layout(barmode="group")
-        st.plotly_chart(style_fig(fig, "", "", "%", height=360, hover="closest"),
+        st.plotly_chart(style_fig(fig, "", "", "%", height=340, hover="closest"),
                         width="stretch")
+        up, down = capture.up_capture.dropna(), capture.down_capture.dropna()
+        if len(up) and len(down):
+            C.readout(ctx, i18n.capture_readout(
+                ctx.lang, up.idxmax(), float(up.max()), down.idxmin(),
+                float(down.min()), ctx.benchmark))
     C.explain(ctx, "x_benchmark")
 
 
@@ -241,15 +259,7 @@ def correlation(ctx) -> None:
                     zmin=-1, zmax=1, height=max(400, 40 * len(corr)))
     st.plotly_chart(style_fig(fig, "", hover="closest", legend=False), width="stretch")
 
-    score = an.diversification_score(corr)
-    cols = st.columns(3)
-    cols[0].metric(ctx.t("average") + " ρ", C.num(score))
-    least = corr.where(~np.eye(len(corr), dtype=bool)).mean().sort_values()
-    if not least.empty:
-        cols[1].metric(ctx.t("best") + " · " + ctx.t("h_corr"), least.index[0],
-                       C.num(least.iloc[0]))
-        cols[2].metric(ctx.t("worst") + " · " + ctx.t("h_corr"), least.index[-1],
-                       C.num(least.iloc[-1]))
+    _correlation_readout(ctx, corr)
     C.explain(ctx, "x_correlation")
 
     if ctx.bench_ret is not None:
@@ -261,3 +271,99 @@ def correlation(ctx) -> None:
             st.plotly_chart(style_fig(px.line(rolling, height=360), "",
                                       ctx.t("x_date"), ctx.t("h_corr")),
                             width="stretch")
+
+
+# ---------------------------------------------------------------- readouts
+def _growth_readout(ctx) -> None:
+    growth = an.cumulative_growth(ctx.window.ffill())
+    if growth.empty:
+        return
+    final = (growth.iloc[-1] / 100 - 1).dropna()
+    if len(final) < 2 or ctx.benchmark not in final.index:
+        return
+    bench = float(final[ctx.benchmark])
+    C.readout(ctx, i18n.performance_readout(
+        ctx.lang, final.idxmax(), float(final.max()), final.idxmin(),
+        float(final.min()), ctx.benchmark, bench,
+        int((final > bench).sum()), int(len(final))))
+
+
+def _calendar_readout(ctx, calendar: pd.DataFrame) -> None:
+    focus = ctx.focus if ctx.focus in calendar.columns else calendar.columns[0]
+    series = calendar[focus].dropna()
+    if len(series) < 2:
+        return
+    C.readout(ctx, i18n.calendar_readout(
+        ctx.lang, str(series.idxmax()), float(series.max()),
+        str(series.idxmin()), float(series.min()),
+        int((series > 0).sum()), int(len(series))))
+
+
+def _drawdown_readout(ctx, drawdowns: pd.DataFrame) -> None:
+    deepest = drawdowns.min().dropna() / 100
+    current = drawdowns.iloc[-1].dropna() / 100
+    if deepest.empty or current.empty:
+        return
+    C.readout(ctx, i18n.drawdown_readout(
+        ctx.lang, deepest.idxmin(), float(deepest.min()),
+        deepest.idxmax(), float(deepest.max()),
+        current.idxmin(), float(current.min())))
+
+
+def _positioning_readout(ctx) -> None:
+    metrics = ctx.metrics
+    sharpe, cagr, vol = (metrics.sharpe.dropna(), metrics.cagr.dropna(),
+                         metrics.volatility.dropna())
+    if sharpe.empty or cagr.empty or vol.empty:
+        return
+    C.readout(ctx, i18n.positioning_readout(
+        ctx.lang, sharpe.idxmax(), float(sharpe.max()), cagr.idxmax(),
+        float(cagr.max()), vol.idxmax(), float(vol.max())))
+
+
+def _correlation_readout(ctx, corr: pd.DataFrame) -> None:
+    if corr.shape[0] < 2:
+        return
+    pairs = corr.where(np.triu(np.ones(corr.shape), k=1).astype(bool)).stack()
+    if pairs.empty:
+        return
+    low, high = pairs.idxmin(), pairs.idxmax()
+    C.readout(ctx, i18n.correlation_readout(
+        ctx.lang, an.diversification_score(corr), low[0], low[1],
+        float(pairs.min()), high[0], high[1], float(pairs.max())))
+
+
+# -------------------------------------------------------------- seasonality
+def seasonality(ctx) -> None:
+    """Year x month growth grid, plus the month-of-year pattern underneath."""
+    options = list(ctx.window.columns)
+    focus = st.selectbox(ctx.t("focus_fund"), options, format_func=ctx.label,
+                         index=options.index(ctx.focus) if ctx.focus in options else 0,
+                         key="cmp_heat_fund")
+    with C.card(ctx.t("h_growth_heatmap")):
+        heat = C.growth_heatmap(ctx, ctx.prices[focus], focus)
+
+    if heat is None or heat.empty:
+        return
+    left, right = st.columns(2, gap="medium")
+    with left:
+        with C.card(ctx.t("h_seasonality")):
+            monthly = heat.mean()
+            monthly.index = [i18n.month_name(ctx.lang, m) for m in monthly.index]
+            C.bar_compare(ctx, monthly / 100, y_title=ctx.t("y_return"), height=320)
+    with right:
+        with C.card(ctx.t("h_bullbear")):
+            if ctx.bench_ret is None:
+                st.info(ctx.t("not_enough_data"))
+            else:
+                split = an.bull_bear_split(an.daily_returns(ctx.window[focus]),
+                                           ctx.bench_ret)
+                fig = go.Figure()
+                fig.add_trace(go.Bar(x=[ctx.t("bull")], y=[split["bull"] * 100],
+                                     marker_color=GAIN, name=ctx.t("bull")))
+                fig.add_trace(go.Bar(x=[ctx.t("bear")], y=[split["bear"] * 100],
+                                     marker_color=LOSS, name=ctx.t("bear")))
+                st.plotly_chart(style_fig(fig, "", "", ctx.t("y_return"), height=320,
+                                          hover="closest", legend=False),
+                                width="stretch")
+    C.explain(ctx, "x_cycles")

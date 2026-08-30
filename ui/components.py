@@ -35,15 +35,31 @@ def _md_bold(text: str) -> str:
 
 
 def commentary(ctx, text: str) -> None:
+    """The headline narrative for a section."""
     st.markdown(
-        f"<div class='commentary'><b>{ctx.t('auto_commentary')}</b><br>"
+        f"<div class='commentary'><span class='lead'>{ctx.t('auto_commentary')}</span>"
         f"{_md_bold(text)}</div>", unsafe_allow_html=True)
 
 
+def readout(ctx, text: str) -> None:
+    """A quiet line under a chart saying what it actually shows."""
+    st.markdown(f"<div class='readout'>{_md_bold(text)}</div>", unsafe_allow_html=True)
+
+
 def explain(ctx, key: str) -> None:
-    """Explanations live in a popover so the charts stay the main event."""
+    """Static teaching text, folded away so it never competes with the data."""
     with st.popover(ctx.t("insight"), width="content"):
         st.markdown(ctx.t(key))
+
+
+def card(title: str = "", subtitle: str = ""):
+    """A bento tile: white surface, hairline border, optional heading."""
+    box = st.container(border=True)
+    if title:
+        box.markdown(f"##### {title}")
+    if subtitle:
+        box.caption(subtitle)
+    return box
 
 
 # --------------------------------------------------------------------------
@@ -242,3 +258,47 @@ def bar_compare(ctx, series: pd.Series, title: str = "", y_title: str = "",
         hovertemplate="%{y}: %{x:.2f}<extra></extra>"))
     st.plotly_chart(style_fig(fig, title, y_title, "", height=height,
                               hover="closest", legend=False), width="stretch")
+
+
+def growth_heatmap(ctx, prices: pd.Series, ticker: str, height: int | None = None):
+    """Year × month growth grid — the calendar view of a track record."""
+    import plotly.graph_objects as go
+
+    import analytics as an
+    import i18n
+    from ui.theme import DIVERGING
+
+    heat = an.monthly_returns(prices)
+    if heat.empty:
+        st.info(ctx.t("not_enough_data"))
+        return heat
+
+    months = [i18n.month_name(ctx.lang, m) for m in heat.columns]
+    limit = float(np.nanmax(np.abs(heat.values))) or 1.0
+    fig = go.Figure(go.Heatmap(
+        z=heat.values, x=months, y=[str(y) for y in heat.index],
+        colorscale=DIVERGING, zmid=0, zmin=-limit, zmax=limit,
+        xgap=2, ygap=2, colorbar=dict(title="%", thickness=10, len=.7,
+                                      outlinewidth=0),
+        hovertemplate="%{y} %{x}: %{z:.2f}%<extra></extra>",
+        # empty string, not "NaN", for months a fund did not yet exist
+        text=[["" if np.isnan(v) else f"{v:.1f}" for v in row] for row in heat.values],
+        texttemplate="%{text}", textfont=dict(size=10)))
+    fig.update_yaxes(autorange="reversed")
+    fig.update_xaxes(side="top", tickangle=0)
+    st.plotly_chart(
+        style_fig(fig, "", "", "",
+                  height=height or max(240, 30 * len(heat) + 90),
+                  hover="closest", legend=False), width="stretch")
+
+    monthly_avg = heat.mean()
+    yearly = an.calendar_year_returns(prices.to_frame(ticker))[ticker].dropna()
+    flat = heat.values[~np.isnan(heat.values)]
+    if len(monthly_avg.dropna()) and len(yearly) and len(flat):
+        readout(ctx, i18n.heatmap_readout(
+            ctx.lang, ticker,
+            i18n.month_name(ctx.lang, monthly_avg.idxmax()), float(monthly_avg.max()),
+            i18n.month_name(ctx.lang, monthly_avg.idxmin()), float(monthly_avg.min()),
+            float((flat > 0).mean() * 100),
+            str(yearly.idxmax()), float(yearly.max())))
+    return heat

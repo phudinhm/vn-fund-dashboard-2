@@ -29,8 +29,7 @@ def render(ctx) -> None:
     cols[2].metric(ctx.t("n_currencies"), f"{ds.currencies}")
     cols[3].metric(ctx.t("data_updated"), f"{ds.last_date:%d.%m.%Y}")
 
-    tabs = st.tabs(["🗂️ " + ctx.t("h_universe"), "🩺 " + ctx.t("h_quality"),
-                    "📐 " + ctx.t("h_method")])
+    tabs = st.tabs([ctx.t("h_universe"), ctx.t("h_quality"), ctx.t("h_method")])
 
     with tabs[0]:
         _universe(ctx)
@@ -49,7 +48,7 @@ def _universe(ctx) -> None:
     frame = frame[[c for c in UNIVERSE_COLUMNS if c in frame.columns]]
 
     cols = st.columns([2, 2, 2])
-    search = cols[0].text_input("🔎 " + ctx.t("search_ticker"), key="data_search")
+    search = cols[0].text_input(ctx.t("search_ticker"), key="data_search")
     regions = sorted(frame.region.dropna().unique()) if "region" in frame else []
     chosen = cols[1].multiselect(ctx.t("region"), regions, key="data_regions")
     kinds = sorted(frame.kind.dropna().unique()) if "kind" in frame else []
@@ -74,7 +73,7 @@ def _universe(ctx) -> None:
         })
     rows = event.selection.rows if hasattr(event, "selection") else []
     picked = [frame.iloc[i]["ticker"] for i in rows if i < len(frame)]
-    if st.button(f"➕ {ctx.t('add_to_compare')} ({len(picked)})", disabled=not picked,
+    if st.button(f"{ctx.t('add_to_compare')} ({len(picked)})", disabled=not picked,
                  key="data_add"):
         S.add_to_selection(picked)
         S.go_to("nav_compare")

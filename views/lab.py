@@ -16,8 +16,8 @@ from ui.theme import BENCH, GAIN, LOSS, style_fig
 
 
 def render(ctx) -> None:
-    tabs = st.tabs(["💸 " + ctx.t("lab_dca"), "⚔️ " + ctx.t("lab_lsdca"),
-                    "🧩 " + ctx.t("lab_portfolio"), "💰 " + ctx.t("lab_costs")])
+    tabs = st.tabs([ctx.t("lab_dca"), ctx.t("lab_lsdca"),
+                    ctx.t("lab_portfolio"), ctx.t("lab_costs")])
     with tabs[0]:
         _dca(ctx)
     with tabs[1]:
@@ -151,6 +151,11 @@ def _portfolio(ctx) -> None:
     st.markdown("##### " + ctx.t("risk_contribution"))
     contribution = an.risk_contribution(ctx.window, weights)
     if not contribution.empty:
+        top = contribution.idxmax()
+        C.readout(ctx, i18n.portfolio_readout(
+            ctx.lang, an.cagr(curve), an.annual_volatility(returns),
+            an.max_drawdown(curve), top, float(contribution.max()),
+            weights[top] / total))
         frame = pd.DataFrame({
             ctx.t("weights"): pd.Series({k: v / total for k, v in weights.items()}),
             ctx.t("risk_contribution"): contribution})

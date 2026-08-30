@@ -12,12 +12,14 @@ import analytics as an
 import i18n
 import report as rp
 from ui import components as C
-from ui.theme import BENCH, LOSS, style_fig
+from ui.theme import BENCH, DIVERGING, LOSS, style_fig
 
 
 @st.cache_data(show_spinner=False, ttl=3600)
-def _universe_performance(_ds, currency: str, period: str, last_date: str):
-    prices = an.convert_prices(_ds.prices, _ds.profile, _ds.fx, currency)
+def _universe_performance(_ds, tickers: tuple, currency: str, period: str,
+                          last_date: str):
+    columns = [t for t in tickers if t in _ds.prices.columns]
+    prices = an.convert_prices(_ds.prices[columns], _ds.profile, _ds.fx, currency)
     window = rp.slice_window(prices, period)
     return rp.region_performance(window, _ds.profile)
 
@@ -30,7 +32,8 @@ def render(ctx) -> None:
     if scope == ctx.t("select_funds"):
         perf = rp.region_performance(ctx.window, ctx.profile)
     else:
-        perf = _universe_performance(ctx.ds, ctx.currency, ctx.period,
+        perf = _universe_performance(ctx.ds, tuple(ctx.universe), ctx.currency,
+                                     ctx.period,
                                      ctx.ds.last_date.strftime("%Y-%m-%d"))
     if perf.empty:
         st.info(ctx.t("not_enough_data"))
@@ -57,35 +60,41 @@ def render(ctx) -> None:
         ctx.lang, by_region.index[0], float(by_region.cagr.iloc[0]),
         by_region.index[-1], float(by_region.cagr.iloc[-1]), ctx.currency))
 
-    st.markdown("### " + ctx.t("h_region"))
-    left, right = st.columns([3, 2])
+    left, right = st.columns([3, 2], gap="medium")
     with left:
-        C.bar_compare(ctx, by_region.cagr, y_title=ctx.t("y_cagr"), height=340)
+        with C.card(ctx.t("h_region")):
+            C.bar_compare(ctx, by_region.cagr, y_title=ctx.t("y_cagr"), height=340)
     with right:
-        st.dataframe(by_region, width="stretch", column_config={
-            "cagr": st.column_config.NumberColumn(ctx.t("m_cagr"), format="percent"),
-            "volatility": st.column_config.NumberColumn(ctx.t("m_volatility"),
-                                                        format="percent"),
-            "max_drawdown": st.column_config.NumberColumn(ctx.t("m_maxdd"),
-                                                          format="percent"),
-            "n": st.column_config.NumberColumn(ctx.t("n_funds"), format="%d")})
+        with C.card(ctx.t("h_region")):
+            st.dataframe(by_region, width="stretch", column_config={
+                "cagr": st.column_config.NumberColumn(ctx.t("m_cagr"), format="percent"),
+                "volatility": st.column_config.NumberColumn(ctx.t("m_volatility"),
+                                                            format="percent"),
+                "max_drawdown": st.column_config.NumberColumn(ctx.t("m_maxdd"),
+                                                              format="percent"),
+                "n": st.column_config.NumberColumn(ctx.t("n_funds"), format="%d")})
 
-    st.markdown("### " + ctx.t("h_market_matrix"))
     by_country = perf.groupby("country").agg(
         cagr=("cagr", "median"), volatility=("volatility", "median"),
         max_drawdown=("max_drawdown", "median"), n=("ticker", "count")
     ).sort_values("cagr", ascending=False)
-    data = by_country.reset_index()
-    fig = px.scatter(data, x="volatility", y="cagr", text="country", size="n",
-                     color="cagr", color_continuous_scale="RdYlGn", height=480,
-                     hover_data=["n"])
-    fig.update_traces(textposition="top center")
-    fig.add_hline(y=float(data.cagr.median()), line_dash="dot", line_color=BENCH)
-    st.plotly_chart(style_fig(fig, "", ctx.t("x_vol"), ctx.t("y_cagr"),
-                              hover="closest", legend=False), width="stretch")
+    with C.card(ctx.t("h_market_matrix")):
+        data = by_country.reset_index()
+        fig = px.scatter(data, x="volatility", y="cagr", text="country", size="n",
+                         color="cagr", color_continuous_scale=DIVERGING, height=460,
+                         hover_data=["n"])
+        fig.update_traces(textposition="top center")
+        fig.add_hline(y=float(data.cagr.median()), line_dash="dot", line_color=BENCH)
+        st.plotly_chart(style_fig(fig, "", ctx.t("x_vol"), ctx.t("y_cagr"),
+                                  hover="closest", legend=False), width="stretch")
+        ordered = by_country.cagr.dropna().sort_values()
+        if len(ordered) >= 2:
+            C.readout(ctx, i18n.country_readout(
+                ctx.lang, ordered.index[-1], float(ordered.iloc[-1]),
+                ordered.index[0], float(ordered.iloc[0]), len(ordered), ctx.currency))
 
-    st.markdown("### " + ctx.t("h_currency_effect"))
-    _currency_effect(ctx)
+    with C.card(ctx.t("h_currency_effect")):
+        _currency_effect(ctx)
     C.explain(ctx, "x_markets")
 
 
@@ -119,5 +128,9 @@ def _currency_effect(ctx) -> None:
                              mode="markers", marker=dict(size=10, color=LOSS,
                                                          symbol="diamond")))
     fig.update_layout(barmode="group")
-    st.plotly_chart(style_fig(fig, "", "", ctx.t("y_cagr"), height=360,
+    st.plotly_chart(style_fig(fig, "", "", ctx.t("y_cagr"), height=340,
                               hover="closest"), width="stretch")
+    biggest = frame.fx.abs().idxmax()
+    C.readout(ctx, i18n.currency_readout(
+        ctx.lang, biggest, float(frame.loc[biggest, "local"]),
+        float(frame.loc[biggest, "converted"]), ctx.currency))

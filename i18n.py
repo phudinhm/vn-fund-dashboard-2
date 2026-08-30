@@ -23,6 +23,25 @@ FLAGS = {"VI": "🇻🇳", "EN": "🇬🇧", "DE": "🇩🇪"}
 STRINGS: dict[str, dict[str, str]] = {}
 
 STRINGS["VI"] = {
+    "edit_selection": "Sửa danh sách",
+    # --- v3 UI: dock, scope filters, readouts ---
+    "group_sections": "Phần",
+    "group_scope": "Phạm vi dữ liệu",
+    "group_params": "Tham số",
+    "brand_sub": "Báo cáo tự động · cập nhật hàng ngày",
+    "filter_country": "Quốc gia / Thị trường",
+    "filter_reset": "Bỏ mọi bộ lọc",
+    "universe_size": "Sau bộ lọc",
+    "filter_note": "Bộ lọc áp dụng cho toàn bộ báo cáo: bảng xếp hạng, bộ lọc quỹ, thị trường và danh sách chọn.",
+    "fresh_today": "Mới hôm nay",
+    "fresh_days": "Trễ {n} ngày",
+    "fresh_stale": "Cũ {n} ngày",
+    "auto_daily": "Dữ liệu tự cập nhật mỗi ngày sau phiên đóng cửa Việt Nam và Mỹ.",
+    "h_growth_heatmap": "Bản đồ nhiệt tăng trưởng (năm × tháng)",
+    "month": "Tháng",
+    "year": "Năm",
+    "positive_months": "Tháng tăng",
+    "readout_label": "Kết quả đọc được",
     "ccy": "Tiền tệ",
     # --- navigation & interaction (v2 UI) ---
     "nav_overview": "Tổng quan",
@@ -249,8 +268,8 @@ STRINGS["VI"] = {
     "n_instruments": "Số công cụ",
     "n_markets": "Số thị trường",
     "n_currencies": "Số đồng tiền",
-    "insight": "💡 Đọc hiểu số liệu",
-    "auto_commentary": "🤖 Nhận định tự động",
+    "insight": "Cách đọc",
+    "auto_commentary": "Nhận định",
     "bull": "Thị trường tăng",
     "bear": "Thị trường giảm",
     "best": "Tốt nhất",
@@ -335,6 +354,25 @@ STRINGS["VI"] = {
 }
 
 STRINGS["EN"] = {
+    "edit_selection": "Edit list",
+    # --- v3 UI: dock, scope filters, readouts ---
+    "group_sections": "Sections",
+    "group_scope": "Data scope",
+    "group_params": "Parameters",
+    "brand_sub": "Automated report · refreshed daily",
+    "filter_country": "Country / market",
+    "filter_reset": "Clear all filters",
+    "universe_size": "After filters",
+    "filter_note": "Filters apply to the whole report: leaderboard, screener, markets and the picker.",
+    "fresh_today": "Fresh today",
+    "fresh_days": "{n} days behind",
+    "fresh_stale": "{n} days old",
+    "auto_daily": "Data refreshes itself every day after the Vietnamese and US closes.",
+    "h_growth_heatmap": "Growth heatmap (year × month)",
+    "month": "Month",
+    "year": "Year",
+    "positive_months": "Positive months",
+    "readout_label": "What the chart says",
     "ccy": "Currency",
     # --- navigation & interaction (v2 UI) ---
     "nav_overview": "Overview",
@@ -554,8 +592,8 @@ STRINGS["EN"] = {
     "n_instruments": "Instruments",
     "n_markets": "Markets",
     "n_currencies": "Currencies",
-    "insight": "💡 How to read this",
-    "auto_commentary": "🤖 Automated commentary",
+    "insight": "How to read this",
+    "auto_commentary": "Commentary",
     "bull": "Bull market",
     "bear": "Bear market",
     "best": "Best",
@@ -639,6 +677,25 @@ STRINGS["EN"] = {
 }
 
 STRINGS["DE"] = {
+    "edit_selection": "Liste ändern",
+    # --- v3 UI: dock, scope filters, readouts ---
+    "group_sections": "Bereiche",
+    "group_scope": "Datenumfang",
+    "group_params": "Parameter",
+    "brand_sub": "Automatisierter Bericht · täglich aktualisiert",
+    "filter_country": "Land / Markt",
+    "filter_reset": "Alle Filter löschen",
+    "universe_size": "Nach Filtern",
+    "filter_note": "Filter gelten für den ganzen Bericht: Rangliste, Screener, Märkte und Auswahl.",
+    "fresh_today": "Heute aktuell",
+    "fresh_days": "{n} Tage zurück",
+    "fresh_stale": "{n} Tage alt",
+    "auto_daily": "Die Daten aktualisieren sich täglich nach dem vietnamesischen und dem US-Schluss.",
+    "h_growth_heatmap": "Wachstums-Heatmap (Jahr × Monat)",
+    "month": "Monat",
+    "year": "Jahr",
+    "positive_months": "Positive Monate",
+    "readout_label": "Was das Diagramm zeigt",
     "ccy": "Währung",
     # --- navigation & interaction (v2 UI) ---
     "nav_overview": "Überblick",
@@ -858,8 +915,8 @@ STRINGS["DE"] = {
     "n_instruments": "Instrumente",
     "n_markets": "Märkte",
     "n_currencies": "Währungen",
-    "insight": "💡 So liest man das",
-    "auto_commentary": "🤖 Automatischer Kommentar",
+    "insight": "Lesehilfe",
+    "auto_commentary": "Kommentar",
     "bull": "Bullenmarkt",
     "bear": "Bärenmarkt",
     "best": "Bester",
@@ -1099,3 +1156,214 @@ def quality_narrative(lang: str, instruments: int, markets: int, currencies: int
                 f"Stand {last_date}; {stale} Ticker sind älter als 7 Tage.")
     return (f"The dataset covers {instruments} instruments across {markets} markets and {currencies} currencies, "
             f"updated to {last_date}; {stale} tickers are more than 7 days stale.")
+
+
+# ===========================================================================
+# chart readouts — one sentence per chart, written from that chart's numbers
+# ===========================================================================
+
+MONTHS = {
+    "VI": ["Th1", "Th2", "Th3", "Th4", "Th5", "Th6", "Th7", "Th8", "Th9",
+           "Th10", "Th11", "Th12"],
+    "EN": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+           "Oct", "Nov", "Dec"],
+    "DE": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep",
+           "Okt", "Nov", "Dez"],
+}
+
+
+def month_name(lang: str, month: int) -> str:
+    names = MONTHS.get(lang, MONTHS["EN"])
+    return names[int(month) - 1] if 1 <= int(month) <= 12 else str(month)
+
+
+def _pick(lang: str, vi: str, en: str, de: str) -> str:
+    return {"VI": vi, "EN": en, "DE": de}.get(lang, en)
+
+
+def performance_readout(lang, best, best_ret, worst, worst_ret, bench,
+                        bench_ret, beat, total):
+    return _pick(
+        lang,
+        f"**{best}** tạo ra nhiều tài sản nhất ({_pct(best_ret)}), **{worst}** ít nhất "
+        f"({_pct(worst_ret)}); {beat}/{total} công cụ vượt **{bench}** ({_pct(bench_ret)}). "
+        f"Khoảng cách giữa đầu và cuối bảng là {_pct(best_ret - worst_ret)}.",
+        f"**{best}** built the most wealth ({_pct(best_ret)}) and **{worst}** the least "
+        f"({_pct(worst_ret)}); {beat} of {total} beat **{bench}** ({_pct(bench_ret)}). "
+        f"The spread between first and last is {_pct(best_ret - worst_ret)}.",
+        f"**{best}** hat am meisten Vermögen aufgebaut ({_pct(best_ret)}), **{worst}** am "
+        f"wenigsten ({_pct(worst_ret)}); {beat} von {total} schlagen **{bench}** "
+        f"({_pct(bench_ret)}). Der Abstand beträgt {_pct(best_ret - worst_ret)}.")
+
+
+def drawdown_readout(lang, deepest, deepest_value, shallowest, shallowest_value,
+                     current_worst, current_worst_value):
+    return _pick(
+        lang,
+        f"Trong kỳ, **{deepest}** chịu đáy sâu nhất {_pct(deepest_value)} còn **{shallowest}** "
+        f"chỉ {_pct(shallowest_value)}. Hiện **{current_worst}** đang xa đỉnh nhất, "
+        f"thấp hơn {_pct(abs(current_worst_value))}.",
+        f"**{deepest}** fell furthest at {_pct(deepest_value)} while **{shallowest}** only "
+        f"gave up {_pct(shallowest_value)}. Right now **{current_worst}** sits furthest from "
+        f"its peak, {_pct(abs(current_worst_value))} below it.",
+        f"**{deepest}** fiel am tiefsten ({_pct(deepest_value)}), **{shallowest}** nur "
+        f"{_pct(shallowest_value)}. Aktuell liegt **{current_worst}** am weitesten unter "
+        f"seinem Höchststand, {_pct(abs(current_worst_value))} darunter.")
+
+
+def positioning_readout(lang, efficient, sharpe_value, highest, highest_ret,
+                        riskiest, riskiest_vol):
+    return _pick(
+        lang,
+        f"**{efficient}** đổi rủi ro lấy lợi nhuận hiệu quả nhất (Sharpe {_num(sharpe_value)}). "
+        f"**{highest}** lãi cao nhất ({_pct(highest_ret)}), còn **{riskiest}** biến động mạnh "
+        f"nhất ({_pct(riskiest_vol)}) — hai điều đó thường đi cùng nhau.",
+        f"**{efficient}** converts risk into return most efficiently (Sharpe {_num(sharpe_value)}). "
+        f"**{highest}** returned the most ({_pct(highest_ret)}) and **{riskiest}** swung hardest "
+        f"({_pct(riskiest_vol)}) — usually the same story from two sides.",
+        f"**{efficient}** setzt Risiko am effizientesten in Rendite um (Sharpe {_num(sharpe_value)}). "
+        f"**{highest}** brachte die höchste Rendite ({_pct(highest_ret)}), **{riskiest}** schwankte "
+        f"am stärksten ({_pct(riskiest_vol)}) — meist zwei Seiten derselben Sache.")
+
+
+def capture_readout(lang, best_up, up_value, best_down, down_value, benchmark):
+    return _pick(
+        lang,
+        f"So với **{benchmark}**: **{best_up}** bám sóng tăng tốt nhất ({_num(up_value, 0)}% mức "
+        f"tăng của chỉ số), **{best_down}** phòng thủ tốt nhất khi giảm (chỉ {_num(down_value, 0)}% "
+        f"mức giảm). Quỹ lý tưởng có cột xanh cao và cột đỏ thấp.",
+        f"Against **{benchmark}**: **{best_up}** captures the most upside ({_num(up_value, 0)}% of "
+        f"the index's rise) and **{best_down}** defends best on the way down (only "
+        f"{_num(down_value, 0)}% of the fall). You want a tall green bar and a short red one.",
+        f"Gegen **{benchmark}**: **{best_up}** nimmt am meisten Aufwärtsbewegung mit "
+        f"({_num(up_value, 0)}%), **{best_down}** verteidigt am besten nach unten (nur "
+        f"{_num(down_value, 0)}%). Ideal ist ein hoher grüner und ein kurzer roter Balken.")
+
+
+def correlation_readout(lang, average, low_a, low_b, low_value, high_a, high_b,
+                        high_value):
+    verdict = _pick(
+        lang,
+        "phần lớn danh sách đang di chuyển cùng nhau, nên lợi ích đa dạng hóa còn mỏng"
+        if average > 0.7 else "danh sách đủ khác nhau để việc nắm nhiều mã thực sự giảm rủi ro",
+        "most of the list moves together, so the diversification benefit is thin"
+        if average > 0.7 else "the list is varied enough that holding several genuinely cuts risk",
+        "die Auswahl bewegt sich weitgehend gemeinsam, der Diversifikationseffekt ist dünn"
+        if average > 0.7 else "die Auswahl ist unterschiedlich genug, dass mehrere Positionen das Risiko wirklich senken")
+    return _pick(
+        lang,
+        f"Tương quan trung bình {_num(average)} — {verdict}. Cặp ít liên quan nhất là "
+        f"**{low_a}** / **{low_b}** ({_num(low_value)}); giống nhau nhất là **{high_a}** / "
+        f"**{high_b}** ({_num(high_value)}).",
+        f"Average correlation is {_num(average)} — {verdict}. The least related pair is "
+        f"**{low_a}** / **{low_b}** ({_num(low_value)}); the most alike are **{high_a}** / "
+        f"**{high_b}** ({_num(high_value)}).",
+        f"Die durchschnittliche Korrelation liegt bei {_num(average)} — {verdict}. Das am "
+        f"wenigsten verbundene Paar ist **{low_a}** / **{low_b}** ({_num(low_value)}), am "
+        f"ähnlichsten sind **{high_a}** / **{high_b}** ({_num(high_value)}).")
+
+
+def heatmap_readout(lang, ticker, best_month, best_value, worst_month,
+                    worst_value, positive_share, best_year, best_year_value):
+    return _pick(
+        lang,
+        f"**{ticker}** tăng trong {_num(positive_share, 0)}% số tháng. Tháng **{best_month}** "
+        f"thường tốt nhất (trung bình {_num(best_value, 1)}%), **{worst_month}** kém nhất "
+        f"({_num(worst_value, 1)}%). Năm mạnh nhất là **{best_year}** với {_pct(best_year_value)}.",
+        f"**{ticker}** rose in {_num(positive_share, 0)}% of months. **{best_month}** is "
+        f"historically its best month (avg {_num(best_value, 1)}%) and **{worst_month}** its "
+        f"weakest ({_num(worst_value, 1)}%). Its strongest year was **{best_year}** at "
+        f"{_pct(best_year_value)}.",
+        f"**{ticker}** stieg in {_num(positive_share, 0)}% der Monate. **{best_month}** ist "
+        f"historisch der beste Monat (Ø {_num(best_value, 1)}%), **{worst_month}** der "
+        f"schwächste ({_num(worst_value, 1)}%). Stärkstes Jahr: **{best_year}** mit "
+        f"{_pct(best_year_value)}.")
+
+
+def calendar_readout(lang, best_year, best_value, worst_year, worst_value,
+                     positive_years, total_years):
+    return _pick(
+        lang,
+        f"Trong {total_years} năm có dữ liệu, {positive_years} năm dương. Tốt nhất là "
+        f"**{best_year}** ({_pct(best_value)}), tệ nhất **{worst_year}** ({_pct(worst_value)}).",
+        f"Of {total_years} calendar years, {positive_years} were positive. The best was "
+        f"**{best_year}** ({_pct(best_value)}), the worst **{worst_year}** ({_pct(worst_value)}).",
+        f"Von {total_years} Kalenderjahren waren {positive_years} positiv. Das beste war "
+        f"**{best_year}** ({_pct(best_value)}), das schlechteste **{worst_year}** "
+        f"({_pct(worst_value)}).")
+
+
+def rolling_readout(lang, ticker, years, win_rate, median, worst):
+    return _pick(
+        lang,
+        f"Với mọi thời điểm mua trong quá khứ, **{ticker}** nắm giữ {years} năm sinh lời "
+        f"{_num(win_rate, 0)}% số lần; trung vị {_pct(median)}, kịch bản xấu nhất {_pct(worst)}.",
+        f"Across every possible entry date, holding **{ticker}** for {years} years was "
+        f"profitable {_num(win_rate, 0)}% of the time; median {_pct(median)}, worst case "
+        f"{_pct(worst)}.",
+        f"Über alle möglichen Einstiegszeitpunkte war **{ticker}** über {years} Jahre in "
+        f"{_num(win_rate, 0)}% der Fälle im Plus; Median {_pct(median)}, schlimmster Fall "
+        f"{_pct(worst)}.")
+
+
+def screener_readout(lang, shown, total, top, top_cagr, median_cagr, median_ter):
+    return _pick(
+        lang,
+        f"{shown}/{total} công cụ qua bộ lọc. Dẫn đầu là **{top}** ({_pct(top_cagr)}); "
+        f"trung vị nhóm {_pct(median_cagr)} với phí {_num(median_ter)}%/năm.",
+        f"{shown} of {total} instruments pass. **{top}** leads at {_pct(top_cagr)}; the median "
+        f"of the group is {_pct(median_cagr)} at {_num(median_ter)}% a year in fees.",
+        f"{shown} von {total} Instrumenten passen. **{top}** führt mit {_pct(top_cagr)}; der "
+        f"Median der Gruppe liegt bei {_pct(median_cagr)} bei {_num(median_ter)}% Kosten p.a.")
+
+
+def portfolio_readout(lang, cagr, volatility, drawdown, top_risk, top_risk_share,
+                      top_weight):
+    return _pick(
+        lang,
+        f"Danh mục đạt {_pct(cagr)} mỗi năm với biến động {_pct(volatility)} và đáy "
+        f"{_pct(drawdown)}. **{top_risk}** chiếm {_num(top_risk_share * 100, 0)}% rủi ro dù chỉ "
+        f"{_num(top_weight * 100, 0)}% tỷ trọng — đó mới là vị thế quyết định.",
+        f"The portfolio returned {_pct(cagr)} a year with {_pct(volatility)} volatility and a "
+        f"{_pct(drawdown)} trough. **{top_risk}** carries {_num(top_risk_share * 100, 0)}% of the "
+        f"risk on {_num(top_weight * 100, 0)}% of the weight — that is the position that decides "
+        f"the outcome.",
+        f"Das Portfolio erzielte {_pct(cagr)} p.a. bei {_pct(volatility)} Volatilität und einem "
+        f"Tief von {_pct(drawdown)}. **{top_risk}** trägt {_num(top_risk_share * 100, 0)}% des "
+        f"Risikos bei {_num(top_weight * 100, 0)}% Gewicht — diese Position entscheidet.")
+
+
+def country_readout(lang, best, best_value, worst, worst_value, count, currency):
+    return _pick(
+        lang,
+        f"Trong {count} thị trường, **{best}** dẫn đầu ({_pct(best_value)} tính bằng {currency}) "
+        f"và **{worst}** ở cuối ({_pct(worst_value)}). Chênh lệch này đã bao gồm cả biến động tỷ giá.",
+        f"Across {count} markets, **{best}** leads ({_pct(best_value)} in {currency}) and "
+        f"**{worst}** trails ({_pct(worst_value)}). That gap already includes the currency move.",
+        f"Über {count} Märkte führt **{best}** ({_pct(best_value)} in {currency}), **{worst}** "
+        f"bildet das Schlusslicht ({_pct(worst_value)}). Die Währungsbewegung steckt darin.")
+
+
+def currency_readout(lang, ticker, local, converted, currency):
+    delta = converted - local
+    direction = _pick(lang,
+                      "cộng thêm" if delta >= 0 else "lấy đi",
+                      "added" if delta >= 0 else "took away",
+                      "brachte zusätzlich" if delta >= 0 else "kostete")
+    return _pick(
+        lang,
+        f"Với **{ticker}**, quy đổi sang {currency} {direction} {_pct(abs(delta))} mỗi năm so với "
+        f"lợi nhuận tính bằng nội tệ ({_pct(local)} → {_pct(converted)}).",
+        f"For **{ticker}**, converting into {currency} {direction} {_pct(abs(delta))} a year versus "
+        f"the local-currency return ({_pct(local)} → {_pct(converted)}).",
+        f"Bei **{ticker}** {direction} die Umrechnung in {currency} {_pct(abs(delta))} p.a. "
+        f"gegenüber der Rendite in Landeswährung ({_pct(local)} → {_pct(converted)}).")
+
+
+def freshness_label(lang: str, days: int) -> tuple[str, str]:
+    """(text, css class) for the data freshness pill."""
+    if days <= 1:
+        return t(lang, "fresh_today"), "fresh-ok"
+    if days <= 4:
+        return t(lang, "fresh_days").format(n=days), "fresh-warn"
+    return t(lang, "fresh_stale").format(n=days), "fresh-old"

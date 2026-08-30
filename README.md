@@ -43,33 +43,50 @@ risk-free rate); everything else is one click away.
 
 ### Interaction
 
+- **A navigation dock** on the left holds the seven sections, the scope filters
+  and the four parameters, grouped. It dims to 62% until the pointer reaches it,
+  so the data owns the screen.
+- **Scope filters cascade**: region narrows the countries, country narrows the
+  asset classes, and so on. Whatever survives is the report's universe — the
+  screener, the markets view, the pickers *and* the comparison list all follow it.
 - **Click a point** on any risk-return or fee-vs-performance chart to open that
   fund's profile.
 - **Tick rows** in the screener, the leaderboard or the universe table and add
   them to the comparison in one click.
-- **Chart toggles** on the wealth curves: logarithmic scale, and a relative
-  mode that divides every line by the benchmark so out- and underperformance
-  is read directly off the 100 line.
-- **One focused fund** shared across the whole report, instead of a separate
-  "pick an instrument" dropdown inside each tab.
-- **The URL carries the state.** Language, section, selection, benchmark,
-  currency, period and risk-free rate all travel in the link, so a particular
-  view of the report can be sent to someone else and it opens exactly as it was.
-- **Explanations on demand** in a popover next to each chart; the automatically
-  generated commentary stays in view.
+- **Chart toggles** on the wealth curves: logarithmic scale, and a relative mode
+  that divides every line by the benchmark.
+- **A readout under every chart** states what that chart actually shows —
+  written from its own numbers, in the current language, not a static caption.
+- **The URL carries the state.** Language, section, filters, selection,
+  benchmark, currency, period and risk-free rate all travel in the link.
+
+### Design
+
+Enterprise bento, minimalist. Modular white cards on a neutral ground, hairline
+borders, no shadows, no decorative colour. Colour carries meaning only: one
+accent for interactive chrome, green and red reserved for gains and losses, a
+diverging red-to-green scale for the year × month growth heatmap. Type is Roboto
+with tabular figures, so columns of numbers line up. Charts follow the same
+grammar — no frame, hairline gridlines, and the benchmark always dotted grey.
 
 ## Automation
 
-`.github/workflows/daily_update.yml` runs every day at 10:15 UTC (17:15 Vietnam):
+`.github/workflows/daily_update.yml` runs **twice a day** — 10:15 UTC (17:15
+Vietnam, after the HOSE close) and 22:30 UTC (after the US close, so Europe and
+Asia are captured on their own trading day). There is no refresh button in the
+report: freshness is the pipeline's job, and the header shows how old the data
+is at a glance.
 
 1. installs dependencies and **runs the test suite**
 2. `python update_data.py` — Vietnam (VNDIRECT) → open-ended funds (fmarket) →
    world ETFs and indices (Yahoo Finance, Stooq as fallback) → FX rates
    (Yahoo → Frankfurter → open.er-api)
-3. writes `data/prices.csv`, `data/volume.csv`, `data/profile.csv`, `data/fx.csv`
+3. retries three times, then fails the run if the newest date is more than 5
+   days old or fewer than 100 instruments came back
+4. writes `data/prices.csv`, `data/volume.csv`, `data/profile.csv`, `data/fx.csv`
    and a machine-readable health report in `data/status.json`
-4. renders `docs/report_VI.md`, `docs/report_EN.md`, `docs/report_DE.md`
-5. commits and pushes
+5. renders `docs/report_VI.md`, `docs/report_EN.md`, `docs/report_DE.md`
+6. commits and pushes
 
 Any single source failing degrades gracefully: the ticker is recorded in
 `status.json` and the rest of the report still builds.
@@ -89,8 +106,9 @@ Any single source failing degrades gracefully: the ticker is recorded in
 | `ui/state.py` | session state, URL sync and the context handed to every view |
 | `ui/components.py` | shared widgets: leaderboards, sparklines, click-to-focus charts |
 | `views/*.py` | one module per section (overview, screener, compare, markets, profile, lab, data) |
+| `.streamlit/config.toml` | the design tokens Streamlit applies to its own widgets |
 | `metrics.py` | thin compatibility shim over `analytics.py` |
-| `tests/` | 70 tests covering analytics, i18n completeness, the pipeline and every view |
+| `tests/` | 75 tests covering analytics, i18n completeness, the pipeline and every view |
 
 ---
 

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Overview: what the current selection looks like at a glance."""
+"""Overview: the current selection as a bento of headline tiles."""
 
 from __future__ import annotations
 
 import numpy as np
 import streamlit as st
 
+import analytics as an
 import i18n
 import report as rp
 from ui import components as C
@@ -22,18 +23,24 @@ def render(ctx) -> None:
 
     _kpis(ctx)
 
-    st.markdown("### " + ctx.t("h_growth"))
-    opts = C.chart_options(ctx, "ov")
-    C.growth_chart(ctx, ctx.window, log_scale=opts["log"], relative=opts["relative"])
-    C.explain(ctx, "x_growth")
+    left, right = st.columns([3, 2], gap="medium")
+    with left:
+        with C.card(ctx.t("h_growth")):
+            options = C.chart_options(ctx, "ov")
+            C.growth_chart(ctx, ctx.window, log_scale=options["log"],
+                           relative=options["relative"], height=380)
+            _performance_readout(ctx)
+    with right:
+        with C.card(ctx.t("h_growth_heatmap")):
+            focus = ctx.focus if ctx.focus in ctx.window.columns else ctx.window.columns[0]
+            C.growth_heatmap(ctx, ctx.prices[focus], focus, height=380)
 
-    st.markdown("### " + ctx.t("h_leaderboard"))
-    st.caption(ctx.t("screener_hint"))
-    picked = C.leaderboard(ctx, ctx.scored, ctx.prices, BOARD_COLUMNS,
-                           key="overview_board",
-                           height=min(120 + 36 * len(ctx.scored), 460))
-    if len(picked) == 1:
-        if st.button(f"🔬 {ctx.t('open_profile')}: {picked[0]}", key="ov_profile"):
+    with C.card(ctx.t("h_leaderboard"), ctx.t("screener_hint")):
+        picked = C.leaderboard(ctx, ctx.scored, ctx.prices, BOARD_COLUMNS,
+                               key="overview_board",
+                               height=min(120 + 36 * len(ctx.scored), 420))
+        if len(picked) == 1 and st.button(f"{ctx.t('open_profile')}: {picked[0]}",
+                                          key="ov_profile"):
             S.set_focus(picked[0])
             S.go_to("nav_profile")
             st.rerun()
@@ -50,9 +57,9 @@ def _kpis(ctx) -> None:
     cols[0].metric(ctx.t("n_instruments"), f"{len(ctx.window.columns)}",
                    f"{f.get('beat_count', 0)}/{f.get('total', 0)} > {ctx.benchmark}",
                    delta_color="off")
-    best_delta = f.get("best_cagr", np.nan) - bench_cagr if bench_cagr == bench_cagr else None
+    delta = f.get("best_cagr", np.nan) - bench_cagr if bench_cagr == bench_cagr else None
     cols[1].metric(ctx.t("best"), f.get("best", "—"),
-                   C.pct(best_delta, 1) if best_delta is not None else None)
+                   C.pct(delta, 1) if delta is not None else None)
     cols[2].metric(ctx.t("worst"), f.get("worst", "—"),
                    C.pct(f.get("worst_cagr", np.nan), 1), delta_color="off")
     cols[3].metric(f"{ctx.t('m_sharpe')} · {f.get('best_sharpe', '—')}",
@@ -61,20 +68,34 @@ def _kpis(ctx) -> None:
                    C.pct(f.get("deepest_dd_value", np.nan), 1))
 
 
+def _performance_readout(ctx) -> None:
+    growth = an.cumulative_growth(ctx.window.ffill())
+    if growth.empty:
+        return
+    final = (growth.iloc[-1] / 100 - 1).dropna()
+    if len(final) < 2 or ctx.benchmark not in final.index:
+        return
+    bench = float(final[ctx.benchmark])
+    C.readout(ctx, i18n.performance_readout(
+        ctx.lang, final.idxmax(), float(final.max()), final.idxmin(),
+        float(final.min()), ctx.benchmark, bench,
+        int((final > bench).sum()), int(len(final))))
+
+
 def _exports(ctx) -> None:
-    st.markdown("### " + ctx.t("h_export"))
-    cols = st.columns(3)
-    cols[0].download_button(
-        "⬇️ " + ctx.t("c_download_csv"), ctx.scored.to_csv().encode("utf-8"),
-        file_name=f"etf_metrics_{ctx.period}_{ctx.currency}.csv",
-        mime="text/csv", width="stretch")
-    markdown = rp.markdown_report(ctx.lang, ctx.ds, ctx.tickers, ctx.period,
-                                  ctx.benchmark, ctx.currency, ctx.rf)
-    cols[1].download_button(
-        "⬇️ " + ctx.t("c_download_report"), markdown.encode("utf-8"),
-        file_name=f"etf_report_{ctx.lang}_{ctx.period}.md",
-        mime="text/markdown", width="stretch")
-    cols[2].download_button(
-        "⬇️ " + ctx.t("y_value") + " (CSV)", ctx.window.to_csv().encode("utf-8"),
-        file_name=f"prices_{ctx.currency}_{ctx.period}.csv",
-        mime="text/csv", width="stretch")
+    with C.card(ctx.t("h_export")):
+        cols = st.columns(3)
+        cols[0].download_button(
+            ctx.t("c_download_csv"), ctx.scored.to_csv().encode("utf-8"),
+            file_name=f"etf_metrics_{ctx.period}_{ctx.currency}.csv",
+            mime="text/csv", width="stretch")
+        markdown = rp.markdown_report(ctx.lang, ctx.ds, ctx.tickers, ctx.period,
+                                      ctx.benchmark, ctx.currency, ctx.rf)
+        cols[1].download_button(
+            ctx.t("c_download_report"), markdown.encode("utf-8"),
+            file_name=f"etf_report_{ctx.lang}_{ctx.period}.md",
+            mime="text/markdown", width="stretch")
+        cols[2].download_button(
+            ctx.t("y_value") + " (CSV)", ctx.window.to_csv().encode("utf-8"),
+            file_name=f"prices_{ctx.currency}_{ctx.period}.csv",
+            mime="text/csv", width="stretch")

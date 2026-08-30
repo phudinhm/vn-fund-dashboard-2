@@ -29,6 +29,12 @@ DEFAULTS = {
     "focus": "",
 }
 
+# the scope filters cascade: each one narrows the options of the next, and the
+# result (ctx.universe) is what every view is allowed to show
+FILTER_KEYS = ["f_region", "f_country", "f_class", "f_kind", "f_issuer"]
+FILTER_FIELDS = {"f_region": "region", "f_country": "country",
+                 "f_class": "asset_class", "f_kind": "kind", "f_issuer": "issuer"}
+
 # query-string keys are short on purpose: the shared link stays readable
 QUERY_MAP = {"lang": "l", "view": "v", "period": "p", "currency": "c",
              "benchmark": "b", "selection": "s", "focus": "f", "rf": "rf"}
@@ -70,6 +76,50 @@ def pick_default_benchmark(ds) -> str:
     return ds.prices.columns[0]
 
 
+def filter_options(profile, prices, upto: str) -> list[str]:
+    """Options for one filter, already narrowed by the filters above it."""
+    frame = profile[profile.ticker.isin(prices.columns)]
+    for key in FILTER_KEYS:
+        if key == upto:
+            break
+        chosen = st.session_state.get(key) or []
+        if chosen:
+            frame = frame[frame[FILTER_FIELDS[key]].isin(chosen)]
+    field = FILTER_FIELDS[upto]
+    return sorted(frame[field].dropna().unique().tolist())
+
+
+def filtered_universe(profile, prices) -> list[str]:
+    """Tickers surviving every scope filter, in profile order."""
+    frame = profile[profile.ticker.isin(prices.columns)]
+    for key in FILTER_KEYS:
+        chosen = st.session_state.get(key) or []
+        if chosen:
+            frame = frame[frame[FILTER_FIELDS[key]].isin(chosen)]
+    return frame.ticker.tolist()
+
+
+def filters_active() -> bool:
+    return any(st.session_state.get(key) for key in FILTER_KEYS)
+
+
+def clear_filters() -> None:
+    for key in FILTER_KEYS:
+        st.session_state.pop(key, None)
+
+
+def prune_stale_filter_values(profile, prices) -> None:
+    """Drop selections that the filters above have just made impossible."""
+    for key in FILTER_KEYS:
+        chosen = st.session_state.get(key)
+        if not chosen:
+            continue
+        allowed = set(filter_options(profile, prices, key))
+        kept = [v for v in chosen if v in allowed]
+        if len(kept) != len(chosen):
+            st.session_state[key] = kept
+
+
 def sync_query_params() -> None:
     """Write the current state back into the URL."""
     out = {}
@@ -83,10 +133,22 @@ def sync_query_params() -> None:
 # mutations used by the interactive widgets
 # --------------------------------------------------------------------------
 
+# The picker widget cannot own the selection: Streamlit drops the state of any
+# widget a run did not draw, and the picker is hidden on the screener and data
+# sections. "selection" is therefore a plain key holding the truth, and
+# PICKER_KEY is the widget that re-seeds from it whenever it reappears.
+PICKER_KEY = "selection_picker"
+
+
+def set_selection(tickers: list[str]) -> None:
+    st.session_state["selection"] = list(dict.fromkeys(tickers))
+    st.session_state.pop(PICKER_KEY, None)   # force the widget to re-seed
+
+
 def add_to_selection(tickers: list[str], limit: int = 20) -> int:
     current = list(st.session_state.get("selection", []))
     added = [t for t in tickers if t not in current]
-    st.session_state["selection"] = (current + added)[:limit]
+    set_selection((current + added)[:limit])
     return len(added)
 
 
@@ -118,6 +180,7 @@ class Ctx:
     window: pd.DataFrame          # selection, converted, sliced to the period
     metrics: pd.DataFrame
     scored: pd.DataFrame
+    universe: list[str] = field(default_factory=list)
     facts: dict = field(default_factory=dict)
 
     # ---- helpers -------------------------------------------------------
@@ -127,6 +190,19 @@ class Ctx:
     @property
     def profile(self) -> pd.DataFrame:
         return self.ds.profile
+
+    @cached_property
+    def universe_profile(self) -> pd.DataFrame:
+        """Metadata of the instruments the scope filters allow."""
+        return self.ds.profile[self.ds.profile.ticker.isin(self.universe)]
+
+    @property
+    def universe_prices(self) -> pd.DataFrame:
+        return self.ds.prices[[t for t in self.universe if t in self.ds.prices.columns]]
+
+    @property
+    def stale_days(self) -> int:
+        return int((pd.Timestamp.today().normalize() - self.ds.last_date).days)
 
     @cached_property
     def returns(self) -> pd.DataFrame:
@@ -189,7 +265,9 @@ def build_context(ds) -> Ctx:
     prices, window, metrics, scored, facts = _compute(
         ds, tuple(tickers), benchmark, currency, period, rf,
         ds.last_date.strftime("%Y-%m-%d"))
+    universe = filtered_universe(ds.profile, ds.prices)
 
     return Ctx(ds=ds, lang=lang, tickers=tickers, benchmark=benchmark,
                currency=currency, period=period, rf=rf, prices=prices,
-               window=window, metrics=metrics, scored=scored, facts=facts)
+               window=window, metrics=metrics, scored=scored,
+               universe=universe, facts=facts)
