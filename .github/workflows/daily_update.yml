@@ -1,10 +1,13 @@
 name: Daily Data Update
 
-# 10:15 UTC = 17:15 Vietnam time, after the HOSE close.
-# World markets are covered by the same run using the previous US/EU close.
+# Two runs a day, so every market is captured on its own trading day:
+#   10:15 UTC = 17:15 Vietnam, after the HOSE close
+#   22:30 UTC = after the US close, and therefore after Europe and Asia too
+# The evening run is what makes the world data same-day instead of a day behind.
 on:
   schedule:
     - cron: '15 10 * * *'
+    - cron: '30 22 * * *'
   workflow_dispatch:
     inputs:
       skip_world:
@@ -47,7 +50,36 @@ jobs:
         env:
           SKIP_WORLD: ${{ inputs.skip_world && '1' || '0' }}
           SKIP_MUTUAL_FUNDS: ${{ inputs.skip_mutual_funds && '1' || '0' }}
-        run: python update_data.py
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::update attempt $attempt"
+            python update_data.py && { echo "::endgroup::"; exit 0; }
+            echo "::endgroup::"
+            echo "attempt $attempt failed, retrying in $((attempt * 30))s"
+            sleep $((attempt * 30))
+          done
+          echo "::error::update_data.py failed three times"
+          exit 1
+
+      - name: Verify the dataset is fresh
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          from datetime import date, datetime
+          status = json.loads(pathlib.Path("data/status.json").read_text())
+          last = datetime.strptime(status["last_date"], "%Y-%m-%d").date()
+          age = (date.today() - last).days
+          print(f"last date {last} ({age} days old), "
+                f"{status['instruments']} instruments, "
+                f"{len(status.get('failed', []))} failures")
+          # markets close on weekends and holidays, so allow a few days of slack
+          if age > 5:
+              print(f"::error::dataset is {age} days old")
+              sys.exit(1)
+          if status["instruments"] < 100:
+              print(f"::error::only {status['instruments']} instruments")
+              sys.exit(1)
+          PY
 
       - name: Data summary
         run: |

@@ -1,0 +1,16 @@
+# Design tokens Streamlit applies to its own widgets (buttons, sliders,
+# toggles, selection highlights). They mirror ui/theme.py so the chrome and the
+# charts belong to the same system.
+[theme]
+base = "light"
+primaryColor = "#0B57D0"
+backgroundColor = "#F1F3F4"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#16181B"
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"
+
+[server]
+headless = true

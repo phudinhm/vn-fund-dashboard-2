@@ -23,6 +23,93 @@ FLAGS = {"VI": "🇻🇳", "EN": "🇬🇧", "DE": "🇩🇪"}
 STRINGS: dict[str, dict[str, str]] = {}
 
 STRINGS["VI"] = {
+    "edit_selection": "Sửa danh sách",
+    # --- v3 UI: dock, scope filters, readouts ---
+    "group_sections": "Phần",
+    "group_scope": "Phạm vi dữ liệu",
+    "group_params": "Tham số",
+    "brand_sub": "Báo cáo tự động · cập nhật hàng ngày",
+    "filter_country": "Quốc gia / Thị trường",
+    "filter_reset": "Bỏ mọi bộ lọc",
+    "universe_size": "Sau bộ lọc",
+    "filter_note": "Bộ lọc áp dụng cho toàn bộ báo cáo: bảng xếp hạng, bộ lọc quỹ, thị trường và danh sách chọn.",
+    "fresh_today": "Mới hôm nay",
+    "fresh_days": "Trễ {n} ngày",
+    "fresh_stale": "Cũ {n} ngày",
+    "auto_daily": "Dữ liệu tự cập nhật mỗi ngày sau phiên đóng cửa Việt Nam và Mỹ.",
+    "h_growth_heatmap": "Bản đồ nhiệt tăng trưởng (năm × tháng)",
+    "month": "Tháng",
+    "year": "Năm",
+    "positive_months": "Tháng tăng",
+    "readout_label": "Kết quả đọc được",
+    "ccy": "Tiền tệ",
+    # --- navigation & interaction (v2 UI) ---
+    "nav_overview": "Tổng quan",
+    "nav_screener": "Bộ lọc quỹ",
+    "nav_compare": "So sánh",
+    "nav_markets": "Thị trường",
+    "nav_profile": "Hồ sơ quỹ",
+    "nav_lab": "Phòng thí nghiệm",
+    "nav_data": "Dữ liệu",
+    "nav_overview_help": "Bức tranh tổng thể của danh sách đang so sánh",
+    "nav_screener_help": "Lọc và xếp hạng toàn bộ vũ trụ đầu tư theo chỉ số",
+    "nav_compare_help": "Hiệu suất, rủi ro và tương quan giữa các lựa chọn",
+    "nav_markets_help": "So sánh chéo khu vực, quốc gia và tác động tỷ giá",
+    "nav_profile_help": "Phân tích sâu một quỹ duy nhất",
+    "nav_lab_help": "Mô phỏng chiến lược đầu tư và chi phí",
+    "nav_data_help": "Chất lượng dữ liệu, vũ trụ đầu tư và phương pháp",
+    "selection": "Đang so sánh",
+    "selection_count": "công cụ",
+    "clear_selection": "Xóa hết",
+    "add_to_compare": "Thêm vào so sánh",
+    "added": "Đã thêm",
+    "remove": "Bỏ chọn",
+    "focus_fund": "Quỹ đang xem",
+    "open_profile": "Mở hồ sơ quỹ",
+    "share_link": "Đường dẫn chia sẻ",
+    "share_help": "Sao chép URL để mở lại đúng cấu hình này",
+    "screener_title": "Bộ lọc toàn vũ trụ đầu tư",
+    "screener_help": "Lọc {n} công cụ theo chỉ số thực tế, chọn dòng rồi thêm vào danh sách so sánh.",
+    "screener_min_cagr": "CAGR tối thiểu (%)",
+    "screener_max_vol": "Biến động tối đa (%)",
+    "screener_min_sharpe": "Sharpe tối thiểu",
+    "screener_max_dd": "Sụt giảm tối đa cho phép (%)",
+    "screener_max_ter": "Phí tối đa (%)",
+    "screener_min_history": "Lịch sử tối thiểu (năm)",
+    "screener_results": "Kết quả",
+    "screener_no_results": "Không có công cụ nào thỏa bộ lọc.",
+    "screener_reset": "Đặt lại bộ lọc",
+    "screener_sort": "Sắp xếp theo",
+    "screener_computing": "Đang tính chỉ số cho toàn bộ vũ trụ...",
+    "screener_hint": "Tick vào ô đầu dòng rồi bấm nút để thêm vào so sánh.",
+    "sparkline": "1 năm gần nhất",
+    "chart_options": "Tùy chọn biểu đồ",
+    "opt_log": "Thang logarit",
+    "opt_relative": "Tương đối so với chỉ số",
+    "opt_show_dd": "Hiện vùng sụt giảm",
+    "opt_normalize": "Quy về 100",
+    "profile_facts": "Thông tin cơ bản",
+    "profile_vs_peers": "So với nhóm cùng loại",
+    "peer_group": "Nhóm so sánh",
+    "profile_pick": "Chọn quỹ để phân tích sâu",
+    "percentile": "Thứ hạng phần trăm",
+    "inception": "Ngày bắt đầu dữ liệu",
+    "profile_metrics": "Toàn bộ chỉ số",
+    "lab_dca": "Tích lũy định kỳ",
+    "lab_lsdca": "Một lần vs định kỳ",
+    "lab_portfolio": "Xây dựng danh mục",
+    "lab_costs": "Chi phí",
+    "weights": "Tỷ trọng (%)",
+    "normalize_weights": "Chuẩn hóa về 100%",
+    "risk_contribution": "Đóng góp rủi ro",
+    "equal_weight": "Chia đều",
+    "portfolio_vs": "Danh mục so với",
+    "add_all_selected": "Dùng toàn bộ lựa chọn",
+    "no_focus": "Chưa chọn quỹ nào.",
+    "compare_tabs": "Nhóm phân tích",
+    "click_hint": "Bấm vào một điểm trên biểu đồ để mở hồ sơ quỹ đó.",
+    "top_n": "Số dòng hiển thị",
+    "all": "Tất cả",
     # --- chrome -----------------------------------------------------------
     "app_title": "Báo cáo ETF Toàn cầu",
     "app_subtitle": "So sánh toàn diện ETF và quỹ mở trên mọi thị trường, đối chiếu với chỉ số tham chiếu",
@@ -181,8 +268,8 @@ STRINGS["VI"] = {
     "n_instruments": "Số công cụ",
     "n_markets": "Số thị trường",
     "n_currencies": "Số đồng tiền",
-    "insight": "💡 Đọc hiểu số liệu",
-    "auto_commentary": "🤖 Nhận định tự động",
+    "insight": "Cách đọc",
+    "auto_commentary": "Nhận định",
     "bull": "Thị trường tăng",
     "bear": "Thị trường giảm",
     "best": "Tốt nhất",
@@ -267,6 +354,93 @@ STRINGS["VI"] = {
 }
 
 STRINGS["EN"] = {
+    "edit_selection": "Edit list",
+    # --- v3 UI: dock, scope filters, readouts ---
+    "group_sections": "Sections",
+    "group_scope": "Data scope",
+    "group_params": "Parameters",
+    "brand_sub": "Automated report · refreshed daily",
+    "filter_country": "Country / market",
+    "filter_reset": "Clear all filters",
+    "universe_size": "After filters",
+    "filter_note": "Filters apply to the whole report: leaderboard, screener, markets and the picker.",
+    "fresh_today": "Fresh today",
+    "fresh_days": "{n} days behind",
+    "fresh_stale": "{n} days old",
+    "auto_daily": "Data refreshes itself every day after the Vietnamese and US closes.",
+    "h_growth_heatmap": "Growth heatmap (year × month)",
+    "month": "Month",
+    "year": "Year",
+    "positive_months": "Positive months",
+    "readout_label": "What the chart says",
+    "ccy": "Currency",
+    # --- navigation & interaction (v2 UI) ---
+    "nav_overview": "Overview",
+    "nav_screener": "Screener",
+    "nav_compare": "Compare",
+    "nav_markets": "Markets",
+    "nav_profile": "Fund profile",
+    "nav_lab": "Lab",
+    "nav_data": "Data",
+    "nav_overview_help": "The big picture for the funds you are comparing",
+    "nav_screener_help": "Filter and rank the whole universe by its metrics",
+    "nav_compare_help": "Performance, risk and correlation across your selection",
+    "nav_markets_help": "Region and country comparison plus the currency effect",
+    "nav_profile_help": "Deep dive into a single fund",
+    "nav_lab_help": "Simulate strategies and costs",
+    "nav_data_help": "Data quality, the universe and the methodology",
+    "selection": "Comparing",
+    "selection_count": "instruments",
+    "clear_selection": "Clear",
+    "add_to_compare": "Add to comparison",
+    "added": "Added",
+    "remove": "Remove",
+    "focus_fund": "Focused fund",
+    "open_profile": "Open fund profile",
+    "share_link": "Shareable link",
+    "share_help": "Copy the URL to reopen exactly this view",
+    "screener_title": "Universe screener",
+    "screener_help": "Filter {n} instruments on their real metrics, tick the rows you want and add them to the comparison.",
+    "screener_min_cagr": "Minimum CAGR (%)",
+    "screener_max_vol": "Maximum volatility (%)",
+    "screener_min_sharpe": "Minimum Sharpe",
+    "screener_max_dd": "Worst drawdown allowed (%)",
+    "screener_max_ter": "Maximum fee (%)",
+    "screener_min_history": "Minimum history (years)",
+    "screener_results": "Results",
+    "screener_no_results": "Nothing matches these filters.",
+    "screener_reset": "Reset filters",
+    "screener_sort": "Sort by",
+    "screener_computing": "Computing metrics for the whole universe...",
+    "screener_hint": "Tick a row and press the button to add it to the comparison.",
+    "sparkline": "Last 12 months",
+    "chart_options": "Chart options",
+    "opt_log": "Logarithmic scale",
+    "opt_relative": "Relative to benchmark",
+    "opt_show_dd": "Show drawdown band",
+    "opt_normalize": "Rebase to 100",
+    "profile_facts": "Key facts",
+    "profile_vs_peers": "Against its peer group",
+    "peer_group": "Peer group",
+    "profile_pick": "Fund to analyse",
+    "percentile": "Percentile",
+    "inception": "Data starts",
+    "profile_metrics": "Every metric",
+    "lab_dca": "Dollar cost averaging",
+    "lab_lsdca": "Lump sum vs DCA",
+    "lab_portfolio": "Portfolio builder",
+    "lab_costs": "Costs",
+    "weights": "Weight (%)",
+    "normalize_weights": "Normalise to 100%",
+    "risk_contribution": "Risk contribution",
+    "equal_weight": "Equal weight",
+    "portfolio_vs": "Portfolio versus",
+    "add_all_selected": "Use the whole selection",
+    "no_focus": "No fund selected yet.",
+    "compare_tabs": "Analysis group",
+    "click_hint": "Click a point on the chart to open that fund's profile.",
+    "top_n": "Rows to show",
+    "all": "All",
     "app_title": "Global ETF Report",
     "app_subtitle": "Comprehensive comparison of ETFs and mutual funds across every market, against their benchmarks",
     "language": "Language",
@@ -418,8 +592,8 @@ STRINGS["EN"] = {
     "n_instruments": "Instruments",
     "n_markets": "Markets",
     "n_currencies": "Currencies",
-    "insight": "💡 How to read this",
-    "auto_commentary": "🤖 Automated commentary",
+    "insight": "How to read this",
+    "auto_commentary": "Commentary",
     "bull": "Bull market",
     "bear": "Bear market",
     "best": "Best",
@@ -503,6 +677,93 @@ STRINGS["EN"] = {
 }
 
 STRINGS["DE"] = {
+    "edit_selection": "Liste ändern",
+    # --- v3 UI: dock, scope filters, readouts ---
+    "group_sections": "Bereiche",
+    "group_scope": "Datenumfang",
+    "group_params": "Parameter",
+    "brand_sub": "Automatisierter Bericht · täglich aktualisiert",
+    "filter_country": "Land / Markt",
+    "filter_reset": "Alle Filter löschen",
+    "universe_size": "Nach Filtern",
+    "filter_note": "Filter gelten für den ganzen Bericht: Rangliste, Screener, Märkte und Auswahl.",
+    "fresh_today": "Heute aktuell",
+    "fresh_days": "{n} Tage zurück",
+    "fresh_stale": "{n} Tage alt",
+    "auto_daily": "Die Daten aktualisieren sich täglich nach dem vietnamesischen und dem US-Schluss.",
+    "h_growth_heatmap": "Wachstums-Heatmap (Jahr × Monat)",
+    "month": "Monat",
+    "year": "Jahr",
+    "positive_months": "Positive Monate",
+    "readout_label": "Was das Diagramm zeigt",
+    "ccy": "Währung",
+    # --- navigation & interaction (v2 UI) ---
+    "nav_overview": "Überblick",
+    "nav_screener": "Screener",
+    "nav_compare": "Vergleich",
+    "nav_markets": "Märkte",
+    "nav_profile": "Fondsprofil",
+    "nav_lab": "Labor",
+    "nav_data": "Daten",
+    "nav_overview_help": "Das Gesamtbild der verglichenen Fonds",
+    "nav_screener_help": "Das gesamte Universum nach Kennzahlen filtern und ranken",
+    "nav_compare_help": "Performance, Risiko und Korrelation der Auswahl",
+    "nav_markets_help": "Regionen- und Ländervergleich samt Währungseffekt",
+    "nav_profile_help": "Tiefenanalyse eines einzelnen Fonds",
+    "nav_lab_help": "Strategien und Kosten simulieren",
+    "nav_data_help": "Datenqualität, Universum und Methodik",
+    "selection": "Im Vergleich",
+    "selection_count": "Instrumente",
+    "clear_selection": "Leeren",
+    "add_to_compare": "Zum Vergleich hinzufügen",
+    "added": "Hinzugefügt",
+    "remove": "Entfernen",
+    "focus_fund": "Ausgewählter Fonds",
+    "open_profile": "Fondsprofil öffnen",
+    "share_link": "Teilbarer Link",
+    "share_help": "URL kopieren, um genau diese Ansicht wieder zu öffnen",
+    "screener_title": "Universum-Screener",
+    "screener_help": "{n} Instrumente nach echten Kennzahlen filtern, Zeilen markieren und in den Vergleich übernehmen.",
+    "screener_min_cagr": "Mindest-CAGR (%)",
+    "screener_max_vol": "Maximale Volatilität (%)",
+    "screener_min_sharpe": "Mindest-Sharpe",
+    "screener_max_dd": "Maximal erlaubter Drawdown (%)",
+    "screener_max_ter": "Maximale Kosten (%)",
+    "screener_min_history": "Mindesthistorie (Jahre)",
+    "screener_results": "Ergebnisse",
+    "screener_no_results": "Kein Instrument passt zu diesen Filtern.",
+    "screener_reset": "Filter zurücksetzen",
+    "screener_sort": "Sortieren nach",
+    "screener_computing": "Kennzahlen für das gesamte Universum werden berechnet...",
+    "screener_hint": "Zeile markieren und den Knopf drücken, um sie in den Vergleich zu übernehmen.",
+    "sparkline": "Letzte 12 Monate",
+    "chart_options": "Diagrammoptionen",
+    "opt_log": "Logarithmische Skala",
+    "opt_relative": "Relativ zur Benchmark",
+    "opt_show_dd": "Drawdown-Band anzeigen",
+    "opt_normalize": "Auf 100 normieren",
+    "profile_facts": "Eckdaten",
+    "profile_vs_peers": "Gegen die Vergleichsgruppe",
+    "peer_group": "Vergleichsgruppe",
+    "profile_pick": "Zu analysierender Fonds",
+    "percentile": "Perzentil",
+    "inception": "Daten ab",
+    "profile_metrics": "Alle Kennzahlen",
+    "lab_dca": "Sparplan",
+    "lab_lsdca": "Einmalanlage vs. Sparplan",
+    "lab_portfolio": "Portfolio-Baukasten",
+    "lab_costs": "Kosten",
+    "weights": "Gewicht (%)",
+    "normalize_weights": "Auf 100% normieren",
+    "risk_contribution": "Risikobeitrag",
+    "equal_weight": "Gleichgewichtet",
+    "portfolio_vs": "Portfolio gegen",
+    "add_all_selected": "Gesamte Auswahl übernehmen",
+    "no_focus": "Noch kein Fonds ausgewählt.",
+    "compare_tabs": "Analysegruppe",
+    "click_hint": "Auf einen Punkt im Diagramm klicken, um das Fondsprofil zu öffnen.",
+    "top_n": "Angezeigte Zeilen",
+    "all": "Alle",
     "app_title": "Globaler ETF-Bericht",
     "app_subtitle": "Umfassender Vergleich von ETFs und Investmentfonds über alle Märkte hinweg, gemessen an ihren Benchmarks",
     "language": "Sprache",
@@ -654,8 +915,8 @@ STRINGS["DE"] = {
     "n_instruments": "Instrumente",
     "n_markets": "Märkte",
     "n_currencies": "Währungen",
-    "insight": "💡 So liest man das",
-    "auto_commentary": "🤖 Automatischer Kommentar",
+    "insight": "Lesehilfe",
+    "auto_commentary": "Kommentar",
     "bull": "Bullenmarkt",
     "bear": "Bärenmarkt",
     "best": "Bester",
@@ -827,12 +1088,12 @@ def tracking_narrative(lang: str, ticker: str, te: float, ir: float,
 def market_narrative(lang: str, best_region: str, best_value: float,
                      worst_region: str, worst_value: float, currency: str) -> str:
     if lang == "VI":
-        return (f"Tính theo {currency}, khu vực **{best_region}** dẫn đầu với lợi nhuận trung bình "
+        return (f"Tính theo {currency}, khu vực **{best_region}** dẫn đầu với lợi nhuận trung vị "
                 f"{_pct(best_value)}, trong khi **{worst_region}** thấp nhất ở {_pct(worst_value)}.")
     if lang == "DE":
-        return (f"Gerechnet in {currency} führt die Region **{best_region}** mit einer Durchschnittsrendite "
+        return (f"Gerechnet in {currency} führt die Region **{best_region}** mit einer Medianrendite "
                 f"von {_pct(best_value)}, **{worst_region}** liegt mit {_pct(worst_value)} am Ende.")
-    return (f"Measured in {currency}, **{best_region}** leads with an average return of {_pct(best_value)}, "
+    return (f"Measured in {currency}, **{best_region}** leads with a median return of {_pct(best_value)}, "
             f"while **{worst_region}** is last at {_pct(worst_value)}.")
 
 
@@ -895,3 +1156,214 @@ def quality_narrative(lang: str, instruments: int, markets: int, currencies: int
                 f"Stand {last_date}; {stale} Ticker sind älter als 7 Tage.")
     return (f"The dataset covers {instruments} instruments across {markets} markets and {currencies} currencies, "
             f"updated to {last_date}; {stale} tickers are more than 7 days stale.")
+
+
+# ===========================================================================
+# chart readouts — one sentence per chart, written from that chart's numbers
+# ===========================================================================
+
+MONTHS = {
+    "VI": ["Th1", "Th2", "Th3", "Th4", "Th5", "Th6", "Th7", "Th8", "Th9",
+           "Th10", "Th11", "Th12"],
+    "EN": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+           "Oct", "Nov", "Dec"],
+    "DE": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep",
+           "Okt", "Nov", "Dez"],
+}
+
+
+def month_name(lang: str, month: int) -> str:
+    names = MONTHS.get(lang, MONTHS["EN"])
+    return names[int(month) - 1] if 1 <= int(month) <= 12 else str(month)
+
+
+def _pick(lang: str, vi: str, en: str, de: str) -> str:
+    return {"VI": vi, "EN": en, "DE": de}.get(lang, en)
+
+
+def performance_readout(lang, best, best_ret, worst, worst_ret, bench,
+                        bench_ret, beat, total):
+    return _pick(
+        lang,
+        f"**{best}** tạo ra nhiều tài sản nhất ({_pct(best_ret)}), **{worst}** ít nhất "
+        f"({_pct(worst_ret)}); {beat}/{total} công cụ vượt **{bench}** ({_pct(bench_ret)}). "
+        f"Khoảng cách giữa đầu và cuối bảng là {_pct(best_ret - worst_ret)}.",
+        f"**{best}** built the most wealth ({_pct(best_ret)}) and **{worst}** the least "
+        f"({_pct(worst_ret)}); {beat} of {total} beat **{bench}** ({_pct(bench_ret)}). "
+        f"The spread between first and last is {_pct(best_ret - worst_ret)}.",
+        f"**{best}** hat am meisten Vermögen aufgebaut ({_pct(best_ret)}), **{worst}** am "
+        f"wenigsten ({_pct(worst_ret)}); {beat} von {total} schlagen **{bench}** "
+        f"({_pct(bench_ret)}). Der Abstand beträgt {_pct(best_ret - worst_ret)}.")
+
+
+def drawdown_readout(lang, deepest, deepest_value, shallowest, shallowest_value,
+                     current_worst, current_worst_value):
+    return _pick(
+        lang,
+        f"Trong kỳ, **{deepest}** chịu đáy sâu nhất {_pct(deepest_value)} còn **{shallowest}** "
+        f"chỉ {_pct(shallowest_value)}. Hiện **{current_worst}** đang xa đỉnh nhất, "
+        f"thấp hơn {_pct(abs(current_worst_value))}.",
+        f"**{deepest}** fell furthest at {_pct(deepest_value)} while **{shallowest}** only "
+        f"gave up {_pct(shallowest_value)}. Right now **{current_worst}** sits furthest from "
+        f"its peak, {_pct(abs(current_worst_value))} below it.",
+        f"**{deepest}** fiel am tiefsten ({_pct(deepest_value)}), **{shallowest}** nur "
+        f"{_pct(shallowest_value)}. Aktuell liegt **{current_worst}** am weitesten unter "
+        f"seinem Höchststand, {_pct(abs(current_worst_value))} darunter.")
+
+
+def positioning_readout(lang, efficient, sharpe_value, highest, highest_ret,
+                        riskiest, riskiest_vol):
+    return _pick(
+        lang,
+        f"**{efficient}** đổi rủi ro lấy lợi nhuận hiệu quả nhất (Sharpe {_num(sharpe_value)}). "
+        f"**{highest}** lãi cao nhất ({_pct(highest_ret)}), còn **{riskiest}** biến động mạnh "
+        f"nhất ({_pct(riskiest_vol)}) — hai điều đó thường đi cùng nhau.",
+        f"**{efficient}** converts risk into return most efficiently (Sharpe {_num(sharpe_value)}). "
+        f"**{highest}** returned the most ({_pct(highest_ret)}) and **{riskiest}** swung hardest "
+        f"({_pct(riskiest_vol)}) — usually the same story from two sides.",
+        f"**{efficient}** setzt Risiko am effizientesten in Rendite um (Sharpe {_num(sharpe_value)}). "
+        f"**{highest}** brachte die höchste Rendite ({_pct(highest_ret)}), **{riskiest}** schwankte "
+        f"am stärksten ({_pct(riskiest_vol)}) — meist zwei Seiten derselben Sache.")
+
+
+def capture_readout(lang, best_up, up_value, best_down, down_value, benchmark):
+    return _pick(
+        lang,
+        f"So với **{benchmark}**: **{best_up}** bám sóng tăng tốt nhất ({_num(up_value, 0)}% mức "
+        f"tăng của chỉ số), **{best_down}** phòng thủ tốt nhất khi giảm (chỉ {_num(down_value, 0)}% "
+        f"mức giảm). Quỹ lý tưởng có cột xanh cao và cột đỏ thấp.",
+        f"Against **{benchmark}**: **{best_up}** captures the most upside ({_num(up_value, 0)}% of "
+        f"the index's rise) and **{best_down}** defends best on the way down (only "
+        f"{_num(down_value, 0)}% of the fall). You want a tall green bar and a short red one.",
+        f"Gegen **{benchmark}**: **{best_up}** nimmt am meisten Aufwärtsbewegung mit "
+        f"({_num(up_value, 0)}%), **{best_down}** verteidigt am besten nach unten (nur "
+        f"{_num(down_value, 0)}%). Ideal ist ein hoher grüner und ein kurzer roter Balken.")
+
+
+def correlation_readout(lang, average, low_a, low_b, low_value, high_a, high_b,
+                        high_value):
+    verdict = _pick(
+        lang,
+        "phần lớn danh sách đang di chuyển cùng nhau, nên lợi ích đa dạng hóa còn mỏng"
+        if average > 0.7 else "danh sách đủ khác nhau để việc nắm nhiều mã thực sự giảm rủi ro",
+        "most of the list moves together, so the diversification benefit is thin"
+        if average > 0.7 else "the list is varied enough that holding several genuinely cuts risk",
+        "die Auswahl bewegt sich weitgehend gemeinsam, der Diversifikationseffekt ist dünn"
+        if average > 0.7 else "die Auswahl ist unterschiedlich genug, dass mehrere Positionen das Risiko wirklich senken")
+    return _pick(
+        lang,
+        f"Tương quan trung bình {_num(average)} — {verdict}. Cặp ít liên quan nhất là "
+        f"**{low_a}** / **{low_b}** ({_num(low_value)}); giống nhau nhất là **{high_a}** / "
+        f"**{high_b}** ({_num(high_value)}).",
+        f"Average correlation is {_num(average)} — {verdict}. The least related pair is "
+        f"**{low_a}** / **{low_b}** ({_num(low_value)}); the most alike are **{high_a}** / "
+        f"**{high_b}** ({_num(high_value)}).",
+        f"Die durchschnittliche Korrelation liegt bei {_num(average)} — {verdict}. Das am "
+        f"wenigsten verbundene Paar ist **{low_a}** / **{low_b}** ({_num(low_value)}), am "
+        f"ähnlichsten sind **{high_a}** / **{high_b}** ({_num(high_value)}).")
+
+
+def heatmap_readout(lang, ticker, best_month, best_value, worst_month,
+                    worst_value, positive_share, best_year, best_year_value):
+    return _pick(
+        lang,
+        f"**{ticker}** tăng trong {_num(positive_share, 0)}% số tháng. Tháng **{best_month}** "
+        f"thường tốt nhất (trung bình {_num(best_value, 1)}%), **{worst_month}** kém nhất "
+        f"({_num(worst_value, 1)}%). Năm mạnh nhất là **{best_year}** với {_pct(best_year_value)}.",
+        f"**{ticker}** rose in {_num(positive_share, 0)}% of months. **{best_month}** is "
+        f"historically its best month (avg {_num(best_value, 1)}%) and **{worst_month}** its "
+        f"weakest ({_num(worst_value, 1)}%). Its strongest year was **{best_year}** at "
+        f"{_pct(best_year_value)}.",
+        f"**{ticker}** stieg in {_num(positive_share, 0)}% der Monate. **{best_month}** ist "
+        f"historisch der beste Monat (Ø {_num(best_value, 1)}%), **{worst_month}** der "
+        f"schwächste ({_num(worst_value, 1)}%). Stärkstes Jahr: **{best_year}** mit "
+        f"{_pct(best_year_value)}.")
+
+
+def calendar_readout(lang, best_year, best_value, worst_year, worst_value,
+                     positive_years, total_years):
+    return _pick(
+        lang,
+        f"Trong {total_years} năm có dữ liệu, {positive_years} năm dương. Tốt nhất là "
+        f"**{best_year}** ({_pct(best_value)}), tệ nhất **{worst_year}** ({_pct(worst_value)}).",
+        f"Of {total_years} calendar years, {positive_years} were positive. The best was "
+        f"**{best_year}** ({_pct(best_value)}), the worst **{worst_year}** ({_pct(worst_value)}).",
+        f"Von {total_years} Kalenderjahren waren {positive_years} positiv. Das beste war "
+        f"**{best_year}** ({_pct(best_value)}), das schlechteste **{worst_year}** "
+        f"({_pct(worst_value)}).")
+
+
+def rolling_readout(lang, ticker, years, win_rate, median, worst):
+    return _pick(
+        lang,
+        f"Với mọi thời điểm mua trong quá khứ, **{ticker}** nắm giữ {years} năm sinh lời "
+        f"{_num(win_rate, 0)}% số lần; trung vị {_pct(median)}, kịch bản xấu nhất {_pct(worst)}.",
+        f"Across every possible entry date, holding **{ticker}** for {years} years was "
+        f"profitable {_num(win_rate, 0)}% of the time; median {_pct(median)}, worst case "
+        f"{_pct(worst)}.",
+        f"Über alle möglichen Einstiegszeitpunkte war **{ticker}** über {years} Jahre in "
+        f"{_num(win_rate, 0)}% der Fälle im Plus; Median {_pct(median)}, schlimmster Fall "
+        f"{_pct(worst)}.")
+
+
+def screener_readout(lang, shown, total, top, top_cagr, median_cagr, median_ter):
+    return _pick(
+        lang,
+        f"{shown}/{total} công cụ qua bộ lọc. Dẫn đầu là **{top}** ({_pct(top_cagr)}); "
+        f"trung vị nhóm {_pct(median_cagr)} với phí {_num(median_ter)}%/năm.",
+        f"{shown} of {total} instruments pass. **{top}** leads at {_pct(top_cagr)}; the median "
+        f"of the group is {_pct(median_cagr)} at {_num(median_ter)}% a year in fees.",
+        f"{shown} von {total} Instrumenten passen. **{top}** führt mit {_pct(top_cagr)}; der "
+        f"Median der Gruppe liegt bei {_pct(median_cagr)} bei {_num(median_ter)}% Kosten p.a.")
+
+
+def portfolio_readout(lang, cagr, volatility, drawdown, top_risk, top_risk_share,
+                      top_weight):
+    return _pick(
+        lang,
+        f"Danh mục đạt {_pct(cagr)} mỗi năm với biến động {_pct(volatility)} và đáy "
+        f"{_pct(drawdown)}. **{top_risk}** chiếm {_num(top_risk_share * 100, 0)}% rủi ro dù chỉ "
+        f"{_num(top_weight * 100, 0)}% tỷ trọng — đó mới là vị thế quyết định.",
+        f"The portfolio returned {_pct(cagr)} a year with {_pct(volatility)} volatility and a "
+        f"{_pct(drawdown)} trough. **{top_risk}** carries {_num(top_risk_share * 100, 0)}% of the "
+        f"risk on {_num(top_weight * 100, 0)}% of the weight — that is the position that decides "
+        f"the outcome.",
+        f"Das Portfolio erzielte {_pct(cagr)} p.a. bei {_pct(volatility)} Volatilität und einem "
+        f"Tief von {_pct(drawdown)}. **{top_risk}** trägt {_num(top_risk_share * 100, 0)}% des "
+        f"Risikos bei {_num(top_weight * 100, 0)}% Gewicht — diese Position entscheidet.")
+
+
+def country_readout(lang, best, best_value, worst, worst_value, count, currency):
+    return _pick(
+        lang,
+        f"Trong {count} thị trường, **{best}** dẫn đầu ({_pct(best_value)} tính bằng {currency}) "
+        f"và **{worst}** ở cuối ({_pct(worst_value)}). Chênh lệch này đã bao gồm cả biến động tỷ giá.",
+        f"Across {count} markets, **{best}** leads ({_pct(best_value)} in {currency}) and "
+        f"**{worst}** trails ({_pct(worst_value)}). That gap already includes the currency move.",
+        f"Über {count} Märkte führt **{best}** ({_pct(best_value)} in {currency}), **{worst}** "
+        f"bildet das Schlusslicht ({_pct(worst_value)}). Die Währungsbewegung steckt darin.")
+
+
+def currency_readout(lang, ticker, local, converted, currency):
+    delta = converted - local
+    direction = _pick(lang,
+                      "cộng thêm" if delta >= 0 else "lấy đi",
+                      "added" if delta >= 0 else "took away",
+                      "brachte zusätzlich" if delta >= 0 else "kostete")
+    return _pick(
+        lang,
+        f"Với **{ticker}**, quy đổi sang {currency} {direction} {_pct(abs(delta))} mỗi năm so với "
+        f"lợi nhuận tính bằng nội tệ ({_pct(local)} → {_pct(converted)}).",
+        f"For **{ticker}**, converting into {currency} {direction} {_pct(abs(delta))} a year versus "
+        f"the local-currency return ({_pct(local)} → {_pct(converted)}).",
+        f"Bei **{ticker}** {direction} die Umrechnung in {currency} {_pct(abs(delta))} p.a. "
+        f"gegenüber der Rendite in Landeswährung ({_pct(local)} → {_pct(converted)}).")
+
+
+def freshness_label(lang: str, days: int) -> tuple[str, str]:
+    """(text, css class) for the data freshness pill."""
+    if days <= 1:
+        return t(lang, "fresh_today"), "fresh-ok"
+    if days <= 4:
+        return t(lang, "fresh_days").format(n=days), "fresh-warn"
+    return t(lang, "fresh_stale").format(n=days), "fresh-old"
