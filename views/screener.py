@@ -146,8 +146,7 @@ def _summary(ctx, frame: pd.DataFrame, everything: pd.DataFrame) -> None:
             float(frame.cagr.median()),
             float(frame.ter.median()) if "ter" in frame else float("nan")))
     cols = st.columns(5)
-    cols[0].metric(ctx.t("screener_results"), f"{len(frame)}",
-                   f"/ {len(everything)}", delta_color="off")
+    cols[0].metric(f"{ctx.t('screener_results')} / {len(everything)}", f"{len(frame)}")
     cols[1].metric(ctx.t("median") + " " + ctx.t("m_cagr"),
                    C.pct(frame.cagr.median(), 1))
     cols[2].metric(ctx.t("median") + " " + ctx.t("m_volatility"),
