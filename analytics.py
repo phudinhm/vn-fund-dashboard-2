@@ -642,6 +642,30 @@ def rebalanced_portfolio(prices: pd.DataFrame, weights: dict,
     return pd.Series(out).sort_index()
 
 
+def risk_contribution(prices: pd.DataFrame, weights: dict) -> pd.Series:
+    """Share of portfolio variance each holding is responsible for.
+
+    A holding can carry far more risk than its weight suggests; this is the
+    number that says so. Contributions sum to 1.
+    """
+    cols = [c for c in weights if c in prices.columns]
+    if len(cols) < 2:
+        return pd.Series(dtype=float)
+    rets = daily_returns(prices[cols]).dropna()
+    if rets.empty:
+        return pd.Series(dtype=float)
+    w = np.array([weights[c] for c in cols], dtype=float)
+    if w.sum() <= 0:
+        return pd.Series(dtype=float)
+    w = w / w.sum()
+    cov = rets.cov().to_numpy() * TRADING_DAYS
+    variance = float(w @ cov @ w)
+    if variance <= 0:
+        return pd.Series(dtype=float)
+    contribution = w * (cov @ w) / variance
+    return pd.Series(contribution, index=cols)
+
+
 def fee_erosion(initial: float, gross_return: float, ter: float,
                 years: int = 20) -> pd.DataFrame:
     """Wealth with and without the annual expense ratio."""

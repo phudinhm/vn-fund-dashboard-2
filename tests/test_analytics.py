@@ -206,3 +206,19 @@ def test_empty_and_short_series_do_not_raise():
     assert np.isnan(an.cagr(empty))
     assert np.isnan(an.max_drawdown(empty))
     assert an.metrics_table(pd.DataFrame({"X": empty})).empty
+
+
+def test_risk_contribution_sums_to_one(data):
+    prices, _, _ = data
+    contribution = an.risk_contribution(prices[["SPY", "AGG", "GLD"]],
+                                        {"SPY": 60, "AGG": 30, "GLD": 10})
+    assert contribution.sum() == pytest.approx(1.0, abs=1e-9)
+    # the volatile equity leg carries more risk than its 60% weight
+    assert contribution["SPY"] > 0.6
+    assert contribution["AGG"] < 0.3
+
+
+def test_risk_contribution_handles_degenerate_input(data):
+    prices, _, _ = data
+    assert an.risk_contribution(prices[["SPY"]], {"SPY": 100}).empty
+    assert an.risk_contribution(prices[["SPY", "AGG"]], {"SPY": 0, "AGG": 0}).empty
