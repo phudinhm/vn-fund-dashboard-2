@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "humanize-ui": {
+      "source": "umitkaanusta/humanize-ui",
+      "sourceType": "github",
+      "skillPath": "skills/humanize-ui/SKILL.md",
+      "computedHash": "6564bb381b8a43e6cfcf1e27cfcf7f870fda7fec11ecbb9138c0df46db912f7e"
+    }
+  }
+}
