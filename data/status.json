@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-08-31T17:38:56.478224+00:00",
+  "started_utc": "2026-09-01T01:22:02.179602+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -8,25 +8,17 @@
     {
       "ticker": "FUEBFVN",
       "source": "vndirect"
-    },
-    {
-      "ticker": "UMMF",
-      "source": "fmarket"
-    },
-    {
-      "ticker": "SSI-PDF",
-      "source": "fmarket"
     }
   ],
   "warnings": [
-    "dropped, too few observations: VBIF"
+    "fmarket catalogue unavailable"
   ],
-  "finished_utc": "2026-08-31T17:42:05.057417+00:00",
-  "duration_seconds": 188.6,
+  "finished_utc": "2026-09-01T01:24:18.825569+00:00",
+  "duration_seconds": 136.6,
   "instruments": 249,
-  "observations": 731772,
+  "observations": 731815,
   "first_date": "2004-05-20",
-  "last_date": "2026-08-31",
+  "last_date": "2026-09-01",
   "by_region": {
     "Americas": 8,
     "Asia-Pacific": 38,
@@ -34,12 +26,11 @@
     "Europe": 37,
     "Global": 21,
     "US": 50,
-    "Vietnam": 88
+    "Vietnam": 23
   },
   "by_kind": {
     "ETF": 141,
-    "Index": 43,
-    "Mutual Fund": 65
+    "Index": 43
   },
   "currencies": [
     "AUD",
@@ -67,7 +58,7 @@
     {
       "ticker": "TBLF",
       "last_date": "2026-08-18",
-      "stale_days": 13
+      "stale_days": 14
     }
   ]
 }
