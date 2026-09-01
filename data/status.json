@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-09-01T01:22:02.179602+00:00",
+  "started_utc": "2026-09-01T14:57:10.277639+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -8,29 +8,42 @@
     {
       "ticker": "FUEBFVN",
       "source": "vndirect"
+    },
+    {
+      "ticker": "UMMF",
+      "source": "fmarket"
+    },
+    {
+      "ticker": "SSI-PDF",
+      "source": "fmarket"
+    },
+    {
+      "ticker": "STOXX600",
+      "source": "yahoo/stooq"
     }
   ],
   "warnings": [
-    "fmarket catalogue unavailable"
+    "dropped, too few observations: VBIF"
   ],
-  "finished_utc": "2026-09-01T01:24:18.825569+00:00",
-  "duration_seconds": 136.6,
+  "finished_utc": "2026-09-01T15:00:02.354552+00:00",
+  "duration_seconds": 172.1,
   "instruments": 249,
-  "observations": 731815,
+  "observations": 731965,
   "first_date": "2004-05-20",
   "last_date": "2026-09-01",
   "by_region": {
     "Americas": 8,
     "Asia-Pacific": 38,
     "Emerging": 7,
-    "Europe": 37,
+    "Europe": 36,
     "Global": 21,
     "US": 50,
-    "Vietnam": 23
+    "Vietnam": 88
   },
   "by_kind": {
     "ETF": 141,
-    "Index": 43
+    "Index": 42,
+    "Mutual Fund": 65
   },
   "currencies": [
     "AUD",
