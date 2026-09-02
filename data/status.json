@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-09-01T14:57:10.277639+00:00",
+  "started_utc": "2026-09-02T00:25:41.452784+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -16,33 +16,29 @@
     {
       "ticker": "SSI-PDF",
       "source": "fmarket"
-    },
-    {
-      "ticker": "STOXX600",
-      "source": "yahoo/stooq"
     }
   ],
   "warnings": [
     "dropped, too few observations: VBIF"
   ],
-  "finished_utc": "2026-09-01T15:00:02.354552+00:00",
-  "duration_seconds": 172.1,
+  "finished_utc": "2026-09-02T00:28:45.765554+00:00",
+  "duration_seconds": 184.3,
   "instruments": 249,
-  "observations": 731965,
+  "observations": 731978,
   "first_date": "2004-05-20",
-  "last_date": "2026-09-01",
+  "last_date": "2026-09-02",
   "by_region": {
     "Americas": 8,
     "Asia-Pacific": 38,
     "Emerging": 7,
-    "Europe": 36,
+    "Europe": 37,
     "Global": 21,
     "US": 50,
     "Vietnam": 88
   },
   "by_kind": {
     "ETF": 141,
-    "Index": 42,
+    "Index": 43,
     "Mutual Fund": 65
   },
   "currencies": [
@@ -71,7 +67,7 @@
     {
       "ticker": "TBLF",
       "last_date": "2026-08-18",
-      "stale_days": 14
+      "stale_days": 15
     }
   ]
 }

@@ -1,249 +1,250 @@
 ticker,source,symbol,name,kind,asset_class,region,country,currency,issuer,ter,benchmark,category,inception,first_date,last_date,observations,stale_days
-VNINDEX,vndirect,VNINDEX,VN-Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Broad Market,2000-07-28,2017-08-24,2026-08-28,2250,4
-VN30,vndirect,VN30,VN30 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Large Cap,2012-02-06,2017-08-24,2026-08-28,2250,4
-VN100,vndirect,VN100,VN100 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Broad Market,2014-01-24,2017-08-24,2026-08-28,2250,4
-VNMIDCAP,vndirect,VNMIDCAP,VN Midcap Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Mid Cap,2017-10-23,2017-08-24,2026-08-28,2250,4
-VNSMALLCAP,vndirect,VNSMALLCAP,VN Smallcap Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Small Cap,2017-10-23,2017-08-24,2026-08-28,2250,4
-VNX50,vndirect,VNX50,VNX50 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Large Cap,2017-10-23,2017-08-24,2026-08-28,2250,4
-VNFINLEAD,vndirect,VNFINLEAD,VN Financials Leading,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Sector: Financials,2019-11-18,2019-11-18,2026-08-28,1693,4
-VNFINSELECT,vndirect,VNFINSELECT,VN Financials Select,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Sector: Financials,2019-11-18,2019-11-18,2026-08-28,1693,4
-VNDIAMOND,vndirect,VNDIAMOND,VN Diamond Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Thematic,2019-11-18,2019-11-18,2026-08-28,1693,4
-HNXINDEX,vndirect,HNXINDEX,HNX-Index,Index,Equity,Vietnam,Vietnam,VND,HNX,0.0,,Broad Market,2005-07-14,2017-08-24,2026-08-28,2252,4
-UPCOMINDEX,vndirect,UPCOMINDEX,UPCoM-Index,Index,Equity,Vietnam,Vietnam,VND,UPCOM,0.0,,Broad Market,2009-06-24,2017-08-24,2026-08-28,2252,4
-E1VFVN30,vndirect,E1VFVN30,DCVFM VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.65,VN30,Large Cap,2014-10-06,2014-10-06,2026-08-28,2971,4
-FUEVFVND,vndirect,FUEVFVND,DCVFM VN Diamond ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.8,VNDIAMOND,Thematic,2020-05-12,2020-05-12,2026-08-28,1576,4
-FUEDCMID,vndirect,FUEDCMID,DCVFM VN Midcap ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.8,VNMIDCAP,Mid Cap,2022-09-29,2022-09-29,2026-08-28,977,4
-FUEIP100,vndirect,FUEIP100,IPAAM VN100 ETF,ETF,Equity,Vietnam,Vietnam,VND,IPAAM,0.7,VN100,Broad Market,2021-09-14,2021-10-12,2026-08-28,1218,4
-FUESSV30,vndirect,FUESSV30,SSIAM VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,SSIAM,0.55,VN30,Large Cap,2020-08-18,2020-08-18,2026-08-28,1506,4
-FUESSVFL,vndirect,FUESSVFL,SSIAM VNFIN LEAD ETF,ETF,Equity,Vietnam,Vietnam,VND,SSIAM,0.65,VNFINLEAD,Sector: Financials,2020-01-14,2020-03-18,2026-08-28,1612,4
-FUESSV50,vndirect,FUESSV50,SSIAM VNX50 ETF,ETF,Equity,Vietnam,Vietnam,VND,SSIAM,0.5,VNX50,Large Cap,2014-11-17,2017-10-24,2026-08-28,2208,4
-FUEVN100,vndirect,FUEVN100,VinaCapital VN100 ETF,ETF,Equity,Vietnam,Vietnam,VND,VinaCapital,0.67,VN100,Broad Market,2020-06-16,2020-07-21,2026-08-28,1526,4
-FUEMAV30,vndirect,FUEMAV30,Mirae Asset VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,Mirae Asset,0.6,VN30,Large Cap,2020-09-22,2020-12-08,2026-08-28,1427,4
-FUEMAVND,vndirect,FUEMAVND,MAFM VN Diamond ETF,ETF,Equity,Vietnam,Vietnam,VND,Mirae Asset,0.7,VNDIAMOND,Thematic,2024-05-15,2023-04-07,2026-08-28,847,4
-FUEKIV30,vndirect,FUEKIV30,KIM Growth VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,KIM Vietnam,0.55,VN30,Large Cap,2020-12-28,2022-01-07,2026-08-28,1156,4
-FUEKIVFS,vndirect,FUEKIVFS,KIM Growth VNFIN SELECT,ETF,Equity,Vietnam,Vietnam,VND,KIM Vietnam,0.6,VNFINSELECT,Sector: Financials,2021-11-12,2022-11-11,2026-08-28,946,4
-PVBF,fmarket,45,QUỸ ĐẦU TƯ TRÁI PHIẾU PVCOM,Mutual Fund,Equity,Vietnam,Vietnam,VND,PVCB CAPITAL,,VNINDEX,Equity Fund,2020-02-07,2020-02-07,2026-08-27,727,5
-MAFF,fmarket,50,QUỸ ĐẦU TƯ TRÁI PHIẾU LINH HOẠT MIRAE ASSET VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,MIRAE ASSET,,VNINDEX,Equity Fund,2021-11-12,2021-11-12,2026-08-28,827,4
-VCBF-FIF,fmarket,33,QUỸ ĐẦU TƯ TRÁI PHIẾU VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2019-08-09,2019-08-09,2026-08-27,587,5
-ABBF,fmarket,65,QUỸ ĐẦU TƯ TRÁI PHIẾU AN BÌNH,Mutual Fund,Equity,Vietnam,Vietnam,VND,ABF,,VNINDEX,Equity Fund,2020-11-06,2020-11-06,2026-08-28,1168,4
-VFF,fmarket,21,QUỸ ĐẦU TƯ TRÁI PHIẾU NÂNG CAO VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2013-04-01,2013-04-01,2026-08-27,994,5
-LPBF,fmarket,69,QUỸ ĐẦU TƯ TRÁI PHIẾU LP,Mutual Fund,Equity,Vietnam,Vietnam,VND,LPBA,,VNINDEX,Equity Fund,2025-07-21,2025-07-21,2026-08-28,278,4
-VNDBF,fmarket,37,QUỸ ĐẦU TƯ TRÁI PHIẾU VND,Mutual Fund,Equity,Vietnam,Vietnam,VND,IPA PARTNER,,VNINDEX,Equity Fund,2019-07-05,2019-07-05,2026-08-28,1791,4
-MBBOND,fmarket,48,QUỸ ĐẦU TƯ TRÁI PHIẾU MB,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2020-08-04,2020-08-04,2026-08-28,1524,4
-DCBF,fmarket,27,QUỸ ĐẦU TƯ TRÁI PHIẾU DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2013-06-10,2013-06-10,2026-08-28,1152,4
-ASBF,fmarket,51,QUỸ ĐẦU TƯ TRÁI PHIẾU AN TOÀN AMBER,Mutual Fund,Equity,Vietnam,Vietnam,VND,AMBER CAPITAL,,VNINDEX,Equity Fund,2021-08-25,2021-08-25,2026-08-28,1243,4
-LHBF,fmarket,64,QUỸ ĐẦU TƯ TRÁI PHIẾU LIGHTHOUSE,Mutual Fund,Equity,Vietnam,Vietnam,VND,LIGHTHOUSE CAPITAL,,VNINDEX,Equity Fund,2022-12-29,2022-12-29,2026-08-27,245,5
-VNDCF,fmarket,40,QUỸ ĐẦU TƯ TRÁI PHIẾU LINH HOẠT VND,Mutual Fund,Equity,Vietnam,Vietnam,VND,IPA PARTNER,,VNINDEX,Equity Fund,2023-08-18,2023-08-18,2026-08-28,747,4
-VLBF,fmarket,53,QUỸ ĐẦU TƯ TRÁI PHIẾU THANH KHOẢN VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2021-09-07,2021-09-07,2026-08-28,1244,4
-DCIP,fmarket,67,QUỸ ĐẦU TƯ TRÁI PHIẾU GIA TĂNG THU NHẬP CỐ ĐỊNH DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2019-04-03,2019-04-03,2026-08-28,1444,4
-SSIBF,fmarket,8,QUỸ ĐẦU TƯ TRÁI PHIẾU SSI,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2017-08-30,2017-08-30,2026-08-28,1999,4
-BVBF,fmarket,13,QUỸ ĐẦU TƯ TRÁI PHIẾU BẢO VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,BAOVIETFUND,,VNINDEX,Equity Fund,2016-05-16,2016-05-16,2026-08-26,547,6
-LHFCF,fmarket,93,QUỸ ĐẦU TƯ TRÁI PHIẾU DÒNG TIỀN LINH HOẠT LIGHTHOUSE,Mutual Fund,Equity,Vietnam,Vietnam,VND,LIGHTHOUSE CAPITAL,,VNINDEX,Equity Fund,2026-02-11,2026-02-11,2026-08-28,130,4
-DFIX,fmarket,30,QUỸ ĐẦU TƯ TRÁI PHIẾU DFVN,Mutual Fund,Equity,Vietnam,Vietnam,VND,DFVN,,VNINDEX,Equity Fund,2021-02-04,2021-02-04,2026-08-27,334,5
-VCAMFI,fmarket,63,QUỸ ĐẦU TƯ TRÁI PHIẾU BẢN VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,VCAM,,VNINDEX,Equity Fund,2022-09-22,2022-09-22,2026-08-28,975,4
-MBAM,fmarket,88,QUỸ ĐẦU TƯ TRÁI PHIẾU DÒNG TIỀN LINH HOẠT MB,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2024-05-14,2024-05-14,2026-08-28,577,4
-TBLF,fmarket,41,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG BALLAD VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,SGIC,,VNINDEX,Equity Fund,2021-10-01,2021-10-01,2026-08-18,231,14
-HDBOND,fmarket,62,QUỸ ĐẦU TƯ TRÁI PHIẾU LỢI TỨC CAO HD,Mutual Fund,Equity,Vietnam,Vietnam,VND,HDCAPITAL,,VNINDEX,Equity Fund,2022-12-30,2022-12-30,2026-08-28,905,4
-UVDIF,fmarket,78,QUỸ ĐẦU TƯ UNITED THU NHẬP NĂNG ĐỘNG VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,UOBAM VIETNAM,,VNINDEX,Equity Fund,2024-08-09,2024-08-09,2026-08-27,205,5
-BMFF,fmarket,87,QUỸ ĐẦU TƯ TĂNG TRƯỞNG BORDIER - MB FLAGSHIP,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2023-02-14,2023-02-14,2026-08-28,900,4
-EVESG,fmarket,89,QUỸ ĐẦU TƯ CỔ PHIẾU ESG EASTSPRING INVESTMENTS VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,EASTSPRING VIET NAM,,VNINDEX,Equity Fund,2024-11-13,2024-11-13,2026-08-28,182,4
-MBVF,fmarket,47,QUỸ ĐẦU TƯ GIÁ TRỊ MB CAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2014-04-25,2014-04-25,2026-08-28,1683,4
-VCBF-TBF,fmarket,31,QUỸ ĐẦU TƯ CÂN BẰNG CHIẾN LƯỢC VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2013-12-26,2013-12-26,2026-08-28,1138,4
-BVFED,fmarket,12,QUỸ ĐẦU TƯ CỔ PHIẾU NĂNG ĐỘNG BẢO VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,BAOVIETFUND,,VNINDEX,Equity Fund,2014-01-22,2014-01-22,2026-08-28,997,4
-ENF,fmarket,81,QUỸ ĐẦU TƯ NĂNG ĐỘNG EASTSPRING INVESTMENTS VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,EASTSPRING VIET NAM,,VNINDEX,Equity Fund,2014-03-25,2014-03-25,2026-08-28,880,4
-MAFBAL,fmarket,71,QUỸ ĐẦU TƯ CÂN BẰNG MANULIFE,Mutual Fund,Equity,Vietnam,Vietnam,VND,MANULIFE INVESTMENTS,,VNINDEX,Equity Fund,2017-11-27,2017-11-27,2026-08-27,1089,5
-VCAMBF,fmarket,70,QUỸ ĐẦU TƯ CÂN BẰNG BẢN VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,VCAM,,VNINDEX,Equity Fund,2014-04-11,2014-04-11,2026-08-28,1345,4
-SSI-EF,fmarket,90,QUỸ ĐẦU TƯ KIẾN TẠO TƯƠNG LAI SSI,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2025-10-10,2025-10-10,2026-08-28,218,4
-VIBF,fmarket,22,QUỸ ĐẦU TƯ CÂN BẰNG GẮN KẾT VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2019-07-02,2019-07-02,2026-08-28,1234,4
-MDI,fmarket,77,QUỸ ĐẦU TƯ NĂNG ĐỘNG MANULIFE,Mutual Fund,Equity,Vietnam,Vietnam,VND,MANULIFE INVESTMENTS,,VNINDEX,Equity Fund,2024-01-18,2024-01-18,2026-08-27,477,5
-LHCDF,fmarket,76,QUỸ ĐẦU TƯ NĂNG ĐỘNG LIGHTHOUSE,Mutual Fund,Equity,Vietnam,Vietnam,VND,LIGHTHOUSE CAPITAL,,VNINDEX,Equity Fund,2024-03-25,2024-03-25,2026-08-28,214,4
-BVPF,fmarket,14,QUỸ ĐẦU TƯ CỔ PHIẾU TRIỂN VỌNG BẢO VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,BAOVIETFUND,,VNINDEX,Equity Fund,2017-01-02,2017-01-02,2026-08-28,1244,4
-GDEGF,fmarket,92,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG RỒNG VÀNG,Mutual Fund,Equity,Vietnam,Vietnam,VND,HDCAPITAL,,VNINDEX,Equity Fund,2025-08-05,2025-08-05,2026-08-28,265,4
-PBIF,fmarket,61,QUỸ ĐẦU TƯ CÂN BẰNG PVCOM,Mutual Fund,Equity,Vietnam,Vietnam,VND,PVCB CAPITAL,,VNINDEX,Equity Fund,2023-01-06,2023-01-06,2026-08-26,169,6
-VCBF-AIF,fmarket,82,QUỸ ĐẦU TƯ THU NHẬP CHỦ ĐỘNG VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2025-02-04,2025-02-04,2026-08-28,267,4
-VNDAF,fmarket,38,QUỸ ĐẦU TƯ CHỦ ĐỘNG VND,Mutual Fund,Equity,Vietnam,Vietnam,VND,IPA PARTNER,,VNINDEX,Equity Fund,2018-01-12,2018-01-12,2026-08-28,1447,4
-UVEEF,fmarket,58,QUỸ ĐẦU TƯ CỔ PHIẾU UNITED ESG VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,UOBAM VIETNAM,,VNINDEX,Equity Fund,2022-11-08,2022-11-08,2026-08-28,942,4
-MAGEF,fmarket,35,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG MIRAE ASSET VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,MIRAE ASSET,,VNINDEX,Equity Fund,2019-07-23,2019-07-23,2026-08-28,1111,4
-VCBF-BCF,fmarket,32,QUỸ ĐẦU TƯ CỔ PHIẾU HÀNG ĐẦU VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2014-08-27,2014-08-27,2026-08-28,1069,4
-PHVSF,fmarket,66,QUỸ ĐẦU TƯ CHỌN LỌC PHÚ HƯNG VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,PHFM,,VNINDEX,Equity Fund,2022-11-24,2022-11-24,2026-08-28,641,4
-VDEF,fmarket,80,QUỸ ĐẦU TƯ CỔ PHIẾU CƠ HỘI TIÊN PHONG VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2024-06-28,2024-06-28,2026-08-28,538,4
-MAFEQI,fmarket,72,QUỸ ĐẦU TƯ CỔ PHIẾU MANULIFE,Mutual Fund,Equity,Vietnam,Vietnam,VND,MANULIFE INVESTMENTS,,VNINDEX,Equity Fund,2014-10-21,2014-10-21,2026-08-27,1282,5
-NTPPF,fmarket,52,QUỸ ĐẦU TƯ CỔ PHIẾU TRIỂN VỌNG NTP,Mutual Fund,Equity,Vietnam,Vietnam,VND,NTP AM,,VNINDEX,Equity Fund,2022-07-19,2022-07-19,2026-08-28,1027,4
-VCBF-MGF,fmarket,46,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2021-09-15,2021-09-15,2026-08-28,559,4
-VCAMDF,fmarket,75,QUỸ ĐẦU TƯ BẢN VIỆT DISCOVERY,Mutual Fund,Equity,Vietnam,Vietnam,VND,VCAM,,VNINDEX,Equity Fund,2024-03-18,2024-03-18,2026-08-28,567,4
-SSISCA,fmarket,11,QUỸ ĐẦU TƯ LỢI THẾ CẠNH TRANH BỀN VỮNG SSI,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2014-09-26,2014-09-26,2026-08-28,2188,4
-RVPIF,fmarket,83,QUỸ ĐẦU TƯ THỊNH VƯỢNG RỒNG VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,VDAM,,VNINDEX,Equity Fund,2025-03-27,2025-03-27,2026-08-28,269,4
-DCDS,fmarket,28,QUỸ ĐẦU TƯ CHỨNG KHOÁN NĂNG ĐỘNG DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2004-05-20,2004-05-20,2026-08-28,3650,4
-TCGF,fmarket,79,QUỸ ĐẦU TƯ TĂNG TRƯỞNG THÀNH CÔNG,Mutual Fund,Equity,Vietnam,Vietnam,VND,TCAM,,VNINDEX,Equity Fund,2024-10-16,2024-10-16,2026-08-27,184,5
-VLGF,fmarket,49,QUỸ ĐẦU TƯ TĂNG TRƯỞNG DÀI HẠN VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2021-12-09,2021-12-09,2026-08-28,1179,4
-DCAF,fmarket,29,QUỸ ĐẦU TƯ TĂNG TRƯỞNG DFVN,Mutual Fund,Equity,Vietnam,Vietnam,VND,DFVN,,VNINDEX,Equity Fund,2019-01-07,2019-01-07,2026-08-28,476,4
-KDEF,fmarket,86,QUỸ ĐẦU TƯ CỔ PHIẾU CỔ TỨC TĂNG TRƯỞNG KIM,Mutual Fund,Equity,Vietnam,Vietnam,VND,KIM,,VNINDEX,Equity Fund,2025-04-23,2025-04-23,2026-08-28,336,4
-VESAF,fmarket,23,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG CHIẾN LƯỢC VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2017-04-25,2017-04-25,2026-08-28,1493,4
-VEOF,fmarket,20,QUỸ ĐẦU TƯ CỔ PHIẾU DOANH NGHIỆP HÀNG ĐẦU VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2014-07-01,2014-07-01,2026-08-28,1898,4
-VMEEF,fmarket,68,QUỸ ĐẦU TƯ CỔ PHIẾU KINH TẾ HIỆN ĐẠI VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2023-05-09,2023-05-09,2026-08-28,814,4
-DCDE,fmarket,25,QUỸ ĐẦU TƯ CỔ PHIẾU TẬP TRUNG CỔ TỨC DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2008-02-29,2008-02-29,2026-08-28,3582,4
-AEIF,fmarket,115,QUỸ ĐẦU TƯ CỔ PHIẾU AMBER,Mutual Fund,Equity,Vietnam,Vietnam,VND,AMBER CAPITAL,,VNINDEX,Equity Fund,2026-07-06,2026-07-06,2026-08-28,40,4
-KSIF,fmarket,114,QUỸ ĐẦU TƯ TRÁI PHIẾU CHIẾN LƯỢC KIM,Mutual Fund,Equity,Vietnam,Vietnam,VND,KIM,,VNINDEX,Equity Fund,2026-07-13,2026-07-13,2026-08-28,33,4
-LPLF,fmarket,97,QUỸ ĐẦU TƯ DOANH NGHIỆP DẪN ĐẦU LP,Mutual Fund,Equity,Vietnam,Vietnam,VND,LPBA,,VNINDEX,Equity Fund,2026-05-12,2026-05-12,2026-08-28,78,4
-ABEF,fmarket,96,QUỸ ĐẦU TƯ CỔ PHIẾU AN BÌNH THỊNH VƯỢNG,Mutual Fund,Equity,Vietnam,Vietnam,VND,ABF,,VNINDEX,Equity Fund,2026-04-01,2026-04-01,2026-08-28,99,4
-USIF,fmarket,91,QUỸ ĐẦU TƯ TRÁI PHIẾU UNITED THU NHẬP ỔN ĐỊNH,Mutual Fund,Equity,Vietnam,Vietnam,VND,UOBAM VIETNAM,,VNINDEX,Equity Fund,2026-04-06,2026-04-06,2026-08-27,39,5
-SP500,yahoo,^GSPC,S&P 500,Index,Equity,US,United States,USD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-NASDAQ,yahoo,^IXIC,Nasdaq Composite,Index,Equity,US,United States,USD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-NASDAQ100,yahoo,^NDX,Nasdaq 100,Index,Equity,US,United States,USD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-DOWJONES,yahoo,^DJI,Dow Jones Industrial Average,Index,Equity,US,United States,USD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-RUSSELL2000,yahoo,^RUT,Russell 2000,Index,Equity,US,United States,USD,-,0.0,,Small Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-VIX,yahoo,^VIX,CBOE Volatility Index,Index,Volatility,US,United States,USD,-,0.0,,Volatility,2010-01-04,2010-01-04,2026-09-01,4192,0
-DAX,yahoo,^GDAXI,DAX 40,Index,Equity,Europe,Germany,EUR,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4229,0
-MDAX,yahoo,^MDAXI,MDAX,Index,Equity,Europe,Germany,EUR,-,0.0,,Mid Cap,2010-01-04,2010-01-04,2026-09-01,4229,0
-TECDAX,yahoo,^TECDAX,TecDAX,Index,Equity,Europe,Germany,EUR,-,0.0,,Sector: Technology,2010-01-04,2010-01-04,2026-09-01,4222,0
-ESTX50,yahoo,^STOXX50E,EURO STOXX 50,Index,Equity,Europe,Eurozone,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4179,0
-FTSE100,yahoo,^FTSE,FTSE 100,Index,Equity,Europe,United Kingdom,GBP,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4207,0
-CAC40,yahoo,^FCHI,CAC 40,Index,Equity,Europe,France,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4261,0
-SMI,yahoo,^SSMI,Swiss Market Index,Index,Equity,Europe,Switzerland,CHF,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4175,0
-AEX,yahoo,^AEX,AEX Index,Index,Equity,Europe,Netherlands,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4264,0
-IBEX35,yahoo,^IBEX,IBEX 35,Index,Equity,Europe,Spain,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4261,0
-NIKKEI225,yahoo,^N225,Nikkei 225,Index,Equity,Asia-Pacific,Japan,JPY,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4075,0
-HANGSENG,yahoo,^HSI,Hang Seng Index,Index,Equity,Asia-Pacific,Hong Kong,HKD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4101,0
-SHANGHAI,yahoo,000001.SS,SSE Composite,Index,Equity,Asia-Pacific,China,CNY,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4043,0
-KOSPI,yahoo,^KS11,KOSPI,Index,Equity,Asia-Pacific,South Korea,KRW,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4097,0
-TAIEX,yahoo,^TWII,TAIEX,Index,Equity,Asia-Pacific,Taiwan,TWD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4068,0
-NIFTY50,yahoo,^NSEI,NIFTY 50,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4093,0
-SENSEX,yahoo,^BSESN,BSE SENSEX,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4098,0
-STI,yahoo,^STI,Straits Times Index,Index,Equity,Asia-Pacific,Singapore,SGD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4167,0
-SET,yahoo,^SET.BK,SET Index,Index,Equity,Asia-Pacific,Thailand,THB,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4019,0
-KLCI,yahoo,^KLSE,FTSE Bursa Malaysia KLCI,Index,Equity,Asia-Pacific,Malaysia,MYR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4081,0
-JKSE,yahoo,^JKSE,IDX Composite,Index,Equity,Asia-Pacific,Indonesia,IDR,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4040,0
-PSEI,yahoo,PSEI.PS,PSEi Composite,Index,Equity,Asia-Pacific,Philippines,PHP,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4033,0
-ASX200,yahoo,^AXJO,S&P/ASX 200,Index,Equity,Asia-Pacific,Australia,AUD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4206,0
-TSX,yahoo,^GSPTSE,S&P/TSX Composite,Index,Equity,Americas,Canada,CAD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4182,0
-BOVESPA,yahoo,^BVSP,Ibovespa,Index,Equity,Americas,Brazil,BRL,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4132,0
-IPC,yahoo,^MXX,S&P/BMV IPC,Index,Equity,Americas,Mexico,MXN,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4180,0
-SPY,yahoo,SPY,SPDR S&P 500 ETF Trust,ETF,Equity,US,United States,USD,State Street,0.0945,SP500,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-IVV,yahoo,IVV,iShares Core S&P 500 ETF,ETF,Equity,US,United States,USD,BlackRock,0.03,SP500,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-VOO,yahoo,VOO,Vanguard S&P 500 ETF,ETF,Equity,US,United States,USD,Vanguard,0.03,SP500,Broad Market,2010-09-09,2010-09-09,2026-09-01,4019,0
-VTI,yahoo,VTI,Vanguard Total Stock Market ETF,ETF,Equity,US,United States,USD,Vanguard,0.03,SP500,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-QQQ,yahoo,QQQ,Invesco QQQ Trust,ETF,Equity,US,United States,USD,Invesco,0.2,NASDAQ100,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-QQQM,yahoo,QQQM,Invesco NASDAQ 100 ETF,ETF,Equity,US,United States,USD,Invesco,0.15,NASDAQ100,Large Cap,2020-10-13,2020-10-13,2026-09-01,1478,0
-DIA,yahoo,DIA,SPDR Dow Jones Industrial Average ETF,ETF,Equity,US,United States,USD,State Street,0.16,DOWJONES,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-IWM,yahoo,IWM,iShares Russell 2000 ETF,ETF,Equity,US,United States,USD,BlackRock,0.19,RUSSELL2000,Small Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-IJH,yahoo,IJH,iShares Core S&P Mid-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,0.05,SP500,Mid Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-IJR,yahoo,IJR,iShares Core S&P Small-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,0.06,RUSSELL2000,Small Cap,2010-01-04,2010-01-04,2026-09-01,4191,0
-RSP,yahoo,RSP,Invesco S&P 500 Equal Weight ETF,ETF,Equity,US,United States,USD,Invesco,0.2,SP500,Smart Beta,2010-01-04,2010-01-04,2026-09-01,4191,0
-VTV,yahoo,VTV,Vanguard Value ETF,ETF,Equity,US,United States,USD,Vanguard,0.04,SP500,Style: Value,2010-01-04,2010-01-04,2026-09-01,4191,0
-VUG,yahoo,VUG,Vanguard Growth ETF,ETF,Equity,US,United States,USD,Vanguard,0.04,SP500,Style: Growth,2010-01-04,2010-01-04,2026-09-01,4191,0
-MTUM,yahoo,MTUM,iShares MSCI USA Momentum Factor ETF,ETF,Equity,US,United States,USD,BlackRock,0.15,SP500,Smart Beta,2013-04-18,2013-04-18,2026-09-01,3364,0
-QUAL,yahoo,QUAL,iShares MSCI USA Quality Factor ETF,ETF,Equity,US,United States,USD,BlackRock,0.15,SP500,Smart Beta,2013-07-18,2013-07-18,2026-09-01,3301,0
-USMV,yahoo,USMV,iShares MSCI USA Min Vol Factor ETF,ETF,Equity,US,United States,USD,BlackRock,0.15,SP500,Smart Beta,2011-10-20,2011-10-20,2026-09-01,3737,0
-SCHD,yahoo,SCHD,Schwab US Dividend Equity ETF,ETF,Equity,US,United States,USD,Schwab,0.06,SP500,Dividend,2011-10-20,2011-10-20,2026-09-01,3737,0
-VYM,yahoo,VYM,Vanguard High Dividend Yield ETF,ETF,Equity,US,United States,USD,Vanguard,0.06,SP500,Dividend,2010-01-04,2010-01-04,2026-09-01,4191,0
-VIG,yahoo,VIG,Vanguard Dividend Appreciation ETF,ETF,Equity,US,United States,USD,Vanguard,0.05,SP500,Dividend,2010-01-04,2010-01-04,2026-09-01,4191,0
-ARKK,yahoo,ARKK,ARK Innovation ETF,ETF,Equity,US,United States,USD,ARK Invest,0.75,NASDAQ100,Thematic,2014-10-31,2014-10-31,2026-09-01,2975,0
-XLK,yahoo,XLK,Technology Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Technology,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLF,yahoo,XLF,Financial Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Financials,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLV,yahoo,XLV,Health Care Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Health Care,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLE,yahoo,XLE,Energy Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Energy,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLI,yahoo,XLI,Industrial Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Industrials,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLY,yahoo,XLY,Consumer Discretionary Select SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Cons. Discr.,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLP,yahoo,XLP,Consumer Staples Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Cons. Staples,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLU,yahoo,XLU,Utilities Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Utilities,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLB,yahoo,XLB,Materials Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Materials,2010-01-04,2010-01-04,2026-09-01,4191,0
-XLRE,yahoo,XLRE,Real Estate Select Sector SPDR,ETF,Real Estate,US,United States,USD,State Street,0.09,SP500,Sector: Real Estate,2015-10-08,2015-10-08,2026-09-01,2740,0
-XLC,yahoo,XLC,Communication Services Select SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Comm. Services,2018-06-19,2018-06-19,2026-09-01,2062,0
-SMH,yahoo,SMH,VanEck Semiconductor ETF,ETF,Equity,US,United States,USD,VanEck,0.35,NASDAQ100,Sector: Semiconductors,2010-01-04,2010-01-04,2026-09-01,4191,0
-SOXX,yahoo,SOXX,iShares Semiconductor ETF,ETF,Equity,US,United States,USD,BlackRock,0.35,NASDAQ100,Sector: Semiconductors,2010-01-04,2010-01-04,2026-09-01,4191,0
-IBB,yahoo,IBB,iShares Biotechnology ETF,ETF,Equity,US,United States,USD,BlackRock,0.45,NASDAQ100,Sector: Biotech,2010-01-04,2010-01-04,2026-09-01,4191,0
-IGV,yahoo,IGV,iShares Expanded Tech-Software ETF,ETF,Equity,US,United States,USD,BlackRock,0.41,NASDAQ100,Sector: Software,2010-01-04,2010-01-04,2026-09-01,4191,0
-ICLN,yahoo,ICLN,iShares Global Clean Energy ETF,ETF,Equity,Global,Global,USD,BlackRock,0.41,URTH,Thematic,2010-01-04,2010-01-04,2026-09-01,4191,0
-TAN,yahoo,TAN,Invesco Solar ETF,ETF,Equity,Global,Global,USD,Invesco,0.67,URTH,Thematic,2010-01-04,2010-01-04,2026-09-01,4191,0
-BOTZ,yahoo,BOTZ,Global X Robotics & AI ETF,ETF,Equity,Global,Global,USD,Global X,0.68,URTH,Thematic,2016-09-13,2016-09-13,2026-09-01,2506,0
-LIT,yahoo,LIT,Global X Lithium & Battery Tech ETF,ETF,Equity,Global,Global,USD,Global X,0.75,URTH,Thematic,2010-07-23,2010-07-23,2026-09-01,4052,0
-HACK,yahoo,HACK,Amplify Cybersecurity ETF,ETF,Equity,Global,Global,USD,Amplify,0.6,URTH,Thematic,2014-11-12,2014-11-12,2026-09-01,2967,0
-VT,yahoo,VT,Vanguard Total World Stock ETF,ETF,Equity,Global,Global,USD,Vanguard,0.06,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-ACWI,yahoo,ACWI,iShares MSCI ACWI ETF,ETF,Equity,Global,Global,USD,BlackRock,0.32,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-URTH,yahoo,URTH,iShares MSCI World ETF,ETF,Equity,Global,Developed,USD,BlackRock,0.24,,Broad Market,2012-01-12,2012-01-12,2026-09-01,3680,0
-VEA,yahoo,VEA,Vanguard FTSE Developed Markets ETF,ETF,Equity,Global,Developed ex-US,USD,Vanguard,0.03,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-EFA,yahoo,EFA,iShares MSCI EAFE ETF,ETF,Equity,Global,Developed ex-US,USD,BlackRock,0.33,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-IEFA,yahoo,IEFA,iShares Core MSCI EAFE ETF,ETF,Equity,Global,Developed ex-US,USD,BlackRock,0.07,,Broad Market,2012-10-24,2012-10-24,2026-09-01,3482,0
-VXUS,yahoo,VXUS,Vanguard Total International Stock ETF,ETF,Equity,Global,Ex-US,USD,Vanguard,0.05,,Broad Market,2011-01-28,2011-01-28,2026-09-01,3921,0
-EEM,yahoo,EEM,iShares MSCI Emerging Markets ETF,ETF,Equity,Emerging,Emerging,USD,BlackRock,0.72,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-VWO,yahoo,VWO,Vanguard FTSE Emerging Markets ETF,ETF,Equity,Emerging,Emerging,USD,Vanguard,0.07,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,0
-IEMG,yahoo,IEMG,iShares Core MSCI Emerging Markets,ETF,Equity,Emerging,Emerging,USD,BlackRock,0.09,,Broad Market,2012-10-24,2012-10-24,2026-09-01,3482,0
-VNM,yahoo,VNM,VanEck Vietnam ETF,ETF,Equity,Emerging,Vietnam,USD,VanEck,0.66,VNINDEX,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWG,yahoo,EWG,iShares MSCI Germany ETF,ETF,Equity,Europe,Germany,USD,BlackRock,0.5,DAX,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWU,yahoo,EWU,iShares MSCI United Kingdom ETF,ETF,Equity,Europe,United Kingdom,USD,BlackRock,0.5,FTSE100,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWQ,yahoo,EWQ,iShares MSCI France ETF,ETF,Equity,Europe,France,USD,BlackRock,0.5,CAC40,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWL,yahoo,EWL,iShares MSCI Switzerland ETF,ETF,Equity,Europe,Switzerland,USD,BlackRock,0.5,SMI,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWN,yahoo,EWN,iShares MSCI Netherlands ETF,ETF,Equity,Europe,Netherlands,USD,BlackRock,0.5,AEX,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWJ,yahoo,EWJ,iShares MSCI Japan ETF,ETF,Equity,Asia-Pacific,Japan,USD,BlackRock,0.5,NIKKEI225,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWY,yahoo,EWY,iShares MSCI South Korea ETF,ETF,Equity,Asia-Pacific,South Korea,USD,BlackRock,0.59,KOSPI,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWT,yahoo,EWT,iShares MSCI Taiwan ETF,ETF,Equity,Asia-Pacific,Taiwan,USD,BlackRock,0.59,TAIEX,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWA,yahoo,EWA,iShares MSCI Australia ETF,ETF,Equity,Asia-Pacific,Australia,USD,BlackRock,0.5,ASX200,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWS,yahoo,EWS,iShares MSCI Singapore ETF,ETF,Equity,Asia-Pacific,Singapore,USD,BlackRock,0.5,STI,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWM,yahoo,EWM,iShares MSCI Malaysia ETF,ETF,Equity,Asia-Pacific,Malaysia,USD,BlackRock,0.5,KLCI,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-THD,yahoo,THD,iShares MSCI Thailand ETF,ETF,Equity,Asia-Pacific,Thailand,USD,BlackRock,0.59,SET,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EIDO,yahoo,EIDO,iShares MSCI Indonesia ETF,ETF,Equity,Asia-Pacific,Indonesia,USD,BlackRock,0.59,JKSE,Country,2010-05-07,2010-05-07,2026-09-01,4105,0
-EPHE,yahoo,EPHE,iShares MSCI Philippines ETF,ETF,Equity,Asia-Pacific,Philippines,USD,BlackRock,0.59,PSEI,Country,2010-09-29,2010-09-29,2026-09-01,4005,0
-INDA,yahoo,INDA,iShares MSCI India ETF,ETF,Equity,Asia-Pacific,India,USD,BlackRock,0.62,NIFTY50,Country,2012-02-03,2012-02-03,2026-09-01,3665,0
-MCHI,yahoo,MCHI,iShares MSCI China ETF,ETF,Equity,Asia-Pacific,China,USD,BlackRock,0.59,HANGSENG,Country,2011-03-31,2011-03-31,2026-09-01,3878,0
-FXI,yahoo,FXI,iShares China Large-Cap ETF,ETF,Equity,Asia-Pacific,China,USD,BlackRock,0.74,HANGSENG,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-ASHR,yahoo,ASHR,Xtrackers Harvest CSI 300 China A ETF,ETF,Equity,Asia-Pacific,China,USD,DWS,0.65,SHANGHAI,Country,2013-11-06,2013-11-06,2026-09-01,3223,0
-KWEB,yahoo,KWEB,KraneShares CSI China Internet ETF,ETF,Equity,Asia-Pacific,China,USD,KraneShares,0.7,HANGSENG,Sector: Technology,2013-08-01,2013-08-01,2026-09-01,3291,0
-EWC,yahoo,EWC,iShares MSCI Canada ETF,ETF,Equity,Americas,Canada,USD,BlackRock,0.5,TSX,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWZ,yahoo,EWZ,iShares MSCI Brazil ETF,ETF,Equity,Americas,Brazil,USD,BlackRock,0.59,BOVESPA,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EWW,yahoo,EWW,iShares MSCI Mexico ETF,ETF,Equity,Americas,Mexico,USD,BlackRock,0.5,IPC,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EZA,yahoo,EZA,iShares MSCI South Africa ETF,ETF,Equity,Emerging,South Africa,USD,BlackRock,0.59,,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-TUR,yahoo,TUR,iShares MSCI Turkey ETF,ETF,Equity,Emerging,Turkey,USD,BlackRock,0.59,,Country,2010-01-04,2010-01-04,2026-09-01,4191,0
-EUNL.DE,yahoo,EUNL.DE,iShares Core MSCI World UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4232,0
-SXR8.DE,yahoo,SXR8.DE,iShares Core S&P 500 UCITS ETF (Acc),ETF,Equity,Europe,Germany,EUR,BlackRock,0.07,SP500,Broad Market,2010-05-19,2010-05-19,2026-09-01,4137,0
-IUSQ.DE,yahoo,IUSQ.DE,iShares MSCI ACWI UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,,Broad Market,2011-10-21,2011-10-21,2026-09-01,3770,0
-IS3N.DE,yahoo,IS3N.DE,iShares Core MSCI EM IMI UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.18,,Broad Market,2014-06-11,2014-06-11,2026-09-01,3103,0
-EXS1.DE,yahoo,EXS1.DE,iShares Core DAX UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.16,DAX,Country,2010-01-04,2010-01-04,2026-09-01,4231,0
-EXSA.DE,yahoo,EXSA.DE,iShares STOXX Europe 600 UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,STOXX600,Broad Market,2010-01-04,2010-01-04,2026-09-01,4231,0
-EXW1.DE,yahoo,EXW1.DE,iShares EURO STOXX 50 UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.1,ESTX50,Large Cap,2010-01-04,2010-01-04,2026-09-01,4232,0
-EXSI.DE,yahoo,EXSI.DE,iShares STOXX Europe Mid 200 UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,STOXX600,Mid Cap,2010-01-04,2010-01-04,2026-09-01,4231,0
-VWCE.DE,yahoo,VWCE.DE,Vanguard FTSE All-World UCITS ETF (Acc),ETF,Equity,Europe,Germany,EUR,Vanguard,0.22,,Broad Market,2019-07-29,2019-07-29,2026-09-01,1803,0
-VGWL.DE,yahoo,VGWL.DE,Vanguard FTSE All-World UCITS ETF (Dist),ETF,Equity,Europe,Germany,EUR,Vanguard,0.22,,Broad Market,2017-10-26,2017-10-26,2026-09-01,2244,0
-XDWD.DE,yahoo,XDWD.DE,Xtrackers MSCI World UCITS ETF,ETF,Equity,Europe,Germany,EUR,DWS,0.19,,Broad Market,2014-08-15,2014-08-15,2026-09-01,3055,0
-XMME.DE,yahoo,XMME.DE,Xtrackers MSCI Emerging Markets UCITS,ETF,Equity,Europe,Germany,EUR,DWS,0.18,,Broad Market,2017-06-21,2017-06-21,2026-09-01,2336,0
-EUNA.DE,yahoo,EUNA.DE,iShares Core Euro Aggregate Bond UCITS,ETF,Bond,Europe,Germany,EUR,BlackRock,0.09,,Aggregate Bond,2017-11-21,2017-11-21,2026-09-01,2227,0
-IBCI.DE,yahoo,IBCI.DE,iShares Euro Infl. Linked Govt Bond,ETF,Bond,Europe,Germany,EUR,BlackRock,0.09,,Inflation Linked,2010-01-04,2010-01-04,2026-09-01,4230,0
-CSPX.L,yahoo,CSPX.L,iShares Core S&P 500 UCITS ETF,ETF,Equity,Europe,United Kingdom,USD,BlackRock,0.07,SP500,Broad Market,2010-09-15,2010-09-15,2026-09-01,4031,0
-VUSA.L,yahoo,VUSA.L,Vanguard S&P 500 UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,Vanguard,0.07,SP500,Broad Market,2012-05-22,2012-05-22,2026-09-01,3605,0
-VWRL.L,yahoo,VWRL.L,Vanguard FTSE All-World UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,Vanguard,0.22,,Broad Market,2012-05-22,2012-05-22,2026-09-01,3605,0
-ISF.L,yahoo,ISF.L,iShares Core FTSE 100 UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,BlackRock,0.07,FTSE100,Country,2010-01-04,2010-01-04,2026-09-01,4208,0
-VUKE.L,yahoo,VUKE.L,Vanguard FTSE 100 UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,Vanguard,0.09,FTSE100,Country,2012-05-22,2012-05-22,2026-09-01,3607,0
-IWDA.AS,yahoo,IWDA.AS,iShares Core MSCI World UCITS ETF (Acc),ETF,Equity,Europe,Netherlands,EUR,BlackRock,0.2,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4264,0
-CW8.PA,yahoo,CW8.PA,Amundi MSCI World UCITS ETF,ETF,Equity,Europe,France,EUR,Amundi,0.38,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4261,0
-1306.T,yahoo,1306.T,NEXT FUNDS TOPIX ETF,ETF,Equity,Asia-Pacific,Japan,JPY,Nomura,0.06,NIKKEI225,Broad Market,2010-01-04,2010-01-04,2026-09-01,4095,0
-1321.T,yahoo,1321.T,NEXT FUNDS Nikkei 225 ETF,ETF,Equity,Asia-Pacific,Japan,JPY,Nomura,0.19,NIKKEI225,Large Cap,2010-01-04,2010-01-04,2026-09-01,4094,0
-2800.HK,yahoo,2800.HK,Tracker Fund of Hong Kong,ETF,Equity,Asia-Pacific,Hong Kong,HKD,State Street,0.09,HANGSENG,Large Cap,2010-01-04,2010-01-04,2026-09-01,4103,0
-2828.HK,yahoo,2828.HK,Hang Seng China Enterprises Index ETF,ETF,Equity,Asia-Pacific,Hong Kong,HKD,Hang Seng,0.6,HANGSENG,Large Cap,2024-04-24,2024-04-24,2026-09-01,578,0
-069500.KS,yahoo,069500.KS,KODEX 200 ETF,ETF,Equity,Asia-Pacific,South Korea,KRW,Samsung,0.15,KOSPI,Large Cap,2010-01-04,2010-01-04,2026-09-01,4070,0
-102110.KS,yahoo,102110.KS,TIGER 200 ETF,ETF,Equity,Asia-Pacific,South Korea,KRW,Mirae Asset,0.05,KOSPI,Large Cap,2010-01-04,2010-01-04,2026-09-01,4070,0
-0050.TW,yahoo,0050.TW,Yuanta Taiwan Top 50 ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.32,TAIEX,Large Cap,2010-01-04,2010-01-04,2026-09-01,4075,0
-0056.TW,yahoo,0056.TW,Yuanta Taiwan Dividend Plus ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.4,TAIEX,Dividend,2010-01-04,2010-01-04,2026-09-01,4079,0
-NIFTYBEES.NS,yahoo,NIFTYBEES.NS,Nippon India ETF Nifty 50 BeES,ETF,Equity,Asia-Pacific,India,INR,Nippon,0.04,NIFTY50,Large Cap,2010-01-04,2010-01-04,2026-09-01,4115,0
-VAS.AX,yahoo,VAS.AX,Vanguard Australian Shares Index ETF,ETF,Equity,Asia-Pacific,Australia,AUD,Vanguard,0.07,ASX200,Broad Market,2010-01-04,2010-01-04,2026-09-01,4212,0
-STW.AX,yahoo,STW.AX,SPDR S&P/ASX 200 Fund,ETF,Equity,Asia-Pacific,Australia,AUD,State Street,0.05,ASX200,Large Cap,2010-01-04,2010-01-04,2026-09-01,4213,0
-XIU.TO,yahoo,XIU.TO,iShares S&P/TSX 60 Index ETF,ETF,Equity,Americas,Canada,CAD,BlackRock,0.18,TSX,Large Cap,2010-01-04,2010-01-04,2026-09-01,4182,0
-VFV.TO,yahoo,VFV.TO,Vanguard S&P 500 Index ETF,ETF,Equity,Americas,Canada,CAD,Vanguard,0.09,SP500,Broad Market,2012-11-08,2012-11-08,2026-09-01,3466,0
-AGG,yahoo,AGG,iShares Core US Aggregate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.03,,Aggregate Bond,2010-01-04,2010-01-04,2026-09-01,4191,0
-BND,yahoo,BND,Vanguard Total Bond Market ETF,ETF,Bond,US,United States,USD,Vanguard,0.03,,Aggregate Bond,2010-01-04,2010-01-04,2026-09-01,4191,0
-TLT,yahoo,TLT,iShares 20+ Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.15,,Government Long,2010-01-04,2010-01-04,2026-09-01,4191,0
-IEF,yahoo,IEF,iShares 7-10 Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.15,,Government Mid,2010-01-04,2010-01-04,2026-09-01,4191,0
-SHY,yahoo,SHY,iShares 1-3 Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.15,,Government Short,2010-01-04,2010-01-04,2026-09-01,4191,0
-LQD,yahoo,LQD,iShares iBoxx IG Corporate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.14,,Corporate IG,2010-01-04,2010-01-04,2026-09-01,4191,0
-HYG,yahoo,HYG,iShares iBoxx High Yield Corporate ETF,ETF,Bond,US,United States,USD,BlackRock,0.49,,High Yield,2010-01-04,2010-01-04,2026-09-01,4191,0
-TIP,yahoo,TIP,iShares TIPS Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.19,,Inflation Linked,2010-01-04,2010-01-04,2026-09-01,4191,0
-EMB,yahoo,EMB,iShares JP Morgan USD EM Bond ETF,ETF,Bond,Emerging,Emerging,USD,BlackRock,0.39,,EM Debt,2010-01-04,2010-01-04,2026-09-01,4191,0
-BNDX,yahoo,BNDX,Vanguard Total International Bond ETF,ETF,Bond,Global,Global,USD,Vanguard,0.07,,Aggregate Bond,2013-06-04,2013-06-04,2026-09-01,3332,0
-GLD,yahoo,GLD,SPDR Gold Shares,ETF,Commodity,Global,Global,USD,State Street,0.4,,Gold,2010-01-04,2010-01-04,2026-09-01,4191,0
-IAU,yahoo,IAU,iShares Gold Trust,ETF,Commodity,Global,Global,USD,BlackRock,0.25,,Gold,2010-01-04,2010-01-04,2026-09-01,4191,0
-SLV,yahoo,SLV,iShares Silver Trust,ETF,Commodity,Global,Global,USD,BlackRock,0.5,,Silver,2010-01-04,2010-01-04,2026-09-01,4191,0
-DBC,yahoo,DBC,Invesco DB Commodity Index Tracking,ETF,Commodity,Global,Global,USD,Invesco,0.85,,Broad Commodity,2010-01-04,2010-01-04,2026-09-01,4191,0
-USO,yahoo,USO,United States Oil Fund,ETF,Commodity,Global,Global,USD,USCF,0.6,,Energy,2010-01-04,2010-01-04,2026-09-01,4191,0
-4GLD.DE,yahoo,4GLD.DE,Xetra-Gold,ETF,Commodity,Europe,Germany,EUR,Deutsche Boerse,0.0,,Gold,2010-01-04,2010-01-04,2026-09-01,4230,0
-VNQ,yahoo,VNQ,Vanguard Real Estate ETF,ETF,Real Estate,US,United States,USD,Vanguard,0.13,,REIT,2010-01-04,2010-01-04,2026-09-01,4191,0
-VNQI,yahoo,VNQI,Vanguard Global ex-US Real Estate ETF,ETF,Real Estate,Global,Global,USD,Vanguard,0.12,,REIT,2010-11-01,2010-11-01,2026-09-01,3982,0
-IBIT,yahoo,IBIT,iShares Bitcoin Trust ETF,ETF,Crypto,Global,Global,USD,BlackRock,0.25,,Bitcoin,2024-01-11,2024-01-11,2026-09-01,662,0
-BTC-USD,yahoo,BTC-USD,Bitcoin (spot),ETF,Crypto,Global,Global,USD,-,0.0,,Bitcoin,2014-09-17,2014-09-17,2026-09-01,4368,0
+VNINDEX,vndirect,VNINDEX,VN-Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Broad Market,2000-07-28,2017-08-24,2026-08-28,2250,5
+VN30,vndirect,VN30,VN30 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Large Cap,2012-02-06,2017-08-24,2026-08-28,2250,5
+VN100,vndirect,VN100,VN100 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Broad Market,2014-01-24,2017-08-24,2026-08-28,2250,5
+VNMIDCAP,vndirect,VNMIDCAP,VN Midcap Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Mid Cap,2017-10-23,2017-08-24,2026-08-28,2250,5
+VNSMALLCAP,vndirect,VNSMALLCAP,VN Smallcap Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Small Cap,2017-10-23,2017-08-24,2026-08-28,2250,5
+VNX50,vndirect,VNX50,VNX50 Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Large Cap,2017-10-23,2017-08-24,2026-08-28,2250,5
+VNFINLEAD,vndirect,VNFINLEAD,VN Financials Leading,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Sector: Financials,2019-11-18,2019-11-18,2026-08-28,1693,5
+VNFINSELECT,vndirect,VNFINSELECT,VN Financials Select,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Sector: Financials,2019-11-18,2019-11-18,2026-08-28,1693,5
+VNDIAMOND,vndirect,VNDIAMOND,VN Diamond Index,Index,Equity,Vietnam,Vietnam,VND,HOSE,0.0,,Thematic,2019-11-18,2019-11-18,2026-08-28,1693,5
+HNXINDEX,vndirect,HNXINDEX,HNX-Index,Index,Equity,Vietnam,Vietnam,VND,HNX,0.0,,Broad Market,2005-07-14,2017-08-24,2026-08-28,2252,5
+UPCOMINDEX,vndirect,UPCOMINDEX,UPCoM-Index,Index,Equity,Vietnam,Vietnam,VND,UPCOM,0.0,,Broad Market,2009-06-24,2017-08-24,2026-08-28,2252,5
+E1VFVN30,vndirect,E1VFVN30,DCVFM VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.65,VN30,Large Cap,2014-10-06,2014-10-06,2026-08-28,2971,5
+FUEVFVND,vndirect,FUEVFVND,DCVFM VN Diamond ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.8,VNDIAMOND,Thematic,2020-05-12,2020-05-12,2026-08-28,1576,5
+FUEDCMID,vndirect,FUEDCMID,DCVFM VN Midcap ETF,ETF,Equity,Vietnam,Vietnam,VND,Dragon Capital,0.8,VNMIDCAP,Mid Cap,2022-09-29,2022-09-29,2026-08-28,977,5
+FUEIP100,vndirect,FUEIP100,IPAAM VN100 ETF,ETF,Equity,Vietnam,Vietnam,VND,IPAAM,0.7,VN100,Broad Market,2021-09-14,2021-10-12,2026-08-28,1218,5
+FUESSV30,vndirect,FUESSV30,SSIAM VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,SSIAM,0.55,VN30,Large Cap,2020-08-18,2020-08-18,2026-08-28,1506,5
+FUESSVFL,vndirect,FUESSVFL,SSIAM VNFIN LEAD ETF,ETF,Equity,Vietnam,Vietnam,VND,SSIAM,0.65,VNFINLEAD,Sector: Financials,2020-01-14,2020-03-18,2026-08-28,1612,5
+FUESSV50,vndirect,FUESSV50,SSIAM VNX50 ETF,ETF,Equity,Vietnam,Vietnam,VND,SSIAM,0.5,VNX50,Large Cap,2014-11-17,2017-10-24,2026-08-28,2208,5
+FUEVN100,vndirect,FUEVN100,VinaCapital VN100 ETF,ETF,Equity,Vietnam,Vietnam,VND,VinaCapital,0.67,VN100,Broad Market,2020-06-16,2020-07-21,2026-08-28,1526,5
+FUEMAV30,vndirect,FUEMAV30,Mirae Asset VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,Mirae Asset,0.6,VN30,Large Cap,2020-09-22,2020-12-08,2026-08-28,1427,5
+FUEMAVND,vndirect,FUEMAVND,MAFM VN Diamond ETF,ETF,Equity,Vietnam,Vietnam,VND,Mirae Asset,0.7,VNDIAMOND,Thematic,2024-05-15,2023-04-07,2026-08-28,847,5
+FUEKIV30,vndirect,FUEKIV30,KIM Growth VN30 ETF,ETF,Equity,Vietnam,Vietnam,VND,KIM Vietnam,0.55,VN30,Large Cap,2020-12-28,2022-01-07,2026-08-28,1156,5
+FUEKIVFS,vndirect,FUEKIVFS,KIM Growth VNFIN SELECT,ETF,Equity,Vietnam,Vietnam,VND,KIM Vietnam,0.6,VNFINSELECT,Sector: Financials,2021-11-12,2022-11-11,2026-08-28,946,5
+PVBF,fmarket,45,QUỸ ĐẦU TƯ TRÁI PHIẾU PVCOM,Mutual Fund,Equity,Vietnam,Vietnam,VND,PVCB CAPITAL,,VNINDEX,Equity Fund,2020-02-07,2020-02-07,2026-08-27,727,6
+MAFF,fmarket,50,QUỸ ĐẦU TƯ TRÁI PHIẾU LINH HOẠT MIRAE ASSET VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,MIRAE ASSET,,VNINDEX,Equity Fund,2021-11-12,2021-11-12,2026-08-28,827,5
+VCBF-FIF,fmarket,33,QUỸ ĐẦU TƯ TRÁI PHIẾU VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2019-08-09,2019-08-09,2026-08-27,587,6
+ABBF,fmarket,65,QUỸ ĐẦU TƯ TRÁI PHIẾU AN BÌNH,Mutual Fund,Equity,Vietnam,Vietnam,VND,ABF,,VNINDEX,Equity Fund,2020-11-06,2020-11-06,2026-08-28,1168,5
+VFF,fmarket,21,QUỸ ĐẦU TƯ TRÁI PHIẾU NÂNG CAO VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2013-04-01,2013-04-01,2026-08-27,994,6
+LPBF,fmarket,69,QUỸ ĐẦU TƯ TRÁI PHIẾU LP,Mutual Fund,Equity,Vietnam,Vietnam,VND,LPBA,,VNINDEX,Equity Fund,2025-07-21,2025-07-21,2026-08-28,278,5
+VNDBF,fmarket,37,QUỸ ĐẦU TƯ TRÁI PHIẾU VND,Mutual Fund,Equity,Vietnam,Vietnam,VND,IPA PARTNER,,VNINDEX,Equity Fund,2019-07-05,2019-07-05,2026-08-28,1791,5
+MBBOND,fmarket,48,QUỸ ĐẦU TƯ TRÁI PHIẾU MB,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2020-08-04,2020-08-04,2026-08-28,1524,5
+DCBF,fmarket,27,QUỸ ĐẦU TƯ TRÁI PHIẾU DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2013-06-10,2013-06-10,2026-08-28,1152,5
+ASBF,fmarket,51,QUỸ ĐẦU TƯ TRÁI PHIẾU AN TOÀN AMBER,Mutual Fund,Equity,Vietnam,Vietnam,VND,AMBER CAPITAL,,VNINDEX,Equity Fund,2021-08-25,2021-08-25,2026-08-28,1243,5
+LHBF,fmarket,64,QUỸ ĐẦU TƯ TRÁI PHIẾU LIGHTHOUSE,Mutual Fund,Equity,Vietnam,Vietnam,VND,LIGHTHOUSE CAPITAL,,VNINDEX,Equity Fund,2022-12-29,2022-12-29,2026-08-27,245,6
+VNDCF,fmarket,40,QUỸ ĐẦU TƯ TRÁI PHIẾU LINH HOẠT VND,Mutual Fund,Equity,Vietnam,Vietnam,VND,IPA PARTNER,,VNINDEX,Equity Fund,2023-08-18,2023-08-18,2026-08-28,747,5
+VLBF,fmarket,53,QUỸ ĐẦU TƯ TRÁI PHIẾU THANH KHOẢN VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2021-09-07,2021-09-07,2026-08-28,1244,5
+DCIP,fmarket,67,QUỸ ĐẦU TƯ TRÁI PHIẾU GIA TĂNG THU NHẬP CỐ ĐỊNH DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2019-04-03,2019-04-03,2026-08-28,1444,5
+SSIBF,fmarket,8,QUỸ ĐẦU TƯ TRÁI PHIẾU SSI,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2017-08-30,2017-08-30,2026-08-28,1999,5
+BVBF,fmarket,13,QUỸ ĐẦU TƯ TRÁI PHIẾU BẢO VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,BAOVIETFUND,,VNINDEX,Equity Fund,2016-05-16,2016-05-16,2026-08-26,547,7
+LHFCF,fmarket,93,QUỸ ĐẦU TƯ TRÁI PHIẾU DÒNG TIỀN LINH HOẠT LIGHTHOUSE,Mutual Fund,Equity,Vietnam,Vietnam,VND,LIGHTHOUSE CAPITAL,,VNINDEX,Equity Fund,2026-02-11,2026-02-11,2026-08-28,130,5
+DFIX,fmarket,30,QUỸ ĐẦU TƯ TRÁI PHIẾU DFVN,Mutual Fund,Equity,Vietnam,Vietnam,VND,DFVN,,VNINDEX,Equity Fund,2021-02-04,2021-02-04,2026-08-27,334,6
+VCAMFI,fmarket,63,QUỸ ĐẦU TƯ TRÁI PHIẾU BẢN VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,VCAM,,VNINDEX,Equity Fund,2022-09-22,2022-09-22,2026-08-28,975,5
+MBAM,fmarket,88,QUỸ ĐẦU TƯ TRÁI PHIẾU DÒNG TIỀN LINH HOẠT MB,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2024-05-14,2024-05-14,2026-08-28,577,5
+TBLF,fmarket,41,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG BALLAD VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,SGIC,,VNINDEX,Equity Fund,2021-10-01,2021-10-01,2026-08-18,231,15
+HDBOND,fmarket,62,QUỸ ĐẦU TƯ TRÁI PHIẾU LỢI TỨC CAO HD,Mutual Fund,Equity,Vietnam,Vietnam,VND,HDCAPITAL,,VNINDEX,Equity Fund,2022-12-30,2022-12-30,2026-08-28,905,5
+UVDIF,fmarket,78,QUỸ ĐẦU TƯ UNITED THU NHẬP NĂNG ĐỘNG VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,UOBAM VIETNAM,,VNINDEX,Equity Fund,2024-08-09,2024-08-09,2026-08-27,205,6
+BMFF,fmarket,87,QUỸ ĐẦU TƯ TĂNG TRƯỞNG BORDIER - MB FLAGSHIP,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2023-02-14,2023-02-14,2026-08-28,900,5
+EVESG,fmarket,89,QUỸ ĐẦU TƯ CỔ PHIẾU ESG EASTSPRING INVESTMENTS VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,EASTSPRING VIET NAM,,VNINDEX,Equity Fund,2024-11-13,2024-11-13,2026-08-28,182,5
+MBVF,fmarket,47,QUỸ ĐẦU TƯ GIÁ TRỊ MB CAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,MBCAPITAL,,VNINDEX,Equity Fund,2014-04-25,2014-04-25,2026-08-28,1683,5
+VCBF-TBF,fmarket,31,QUỸ ĐẦU TƯ CÂN BẰNG CHIẾN LƯỢC VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2013-12-26,2013-12-26,2026-08-28,1138,5
+BVFED,fmarket,12,QUỸ ĐẦU TƯ CỔ PHIẾU NĂNG ĐỘNG BẢO VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,BAOVIETFUND,,VNINDEX,Equity Fund,2014-01-22,2014-01-22,2026-08-28,997,5
+ENF,fmarket,81,QUỸ ĐẦU TƯ NĂNG ĐỘNG EASTSPRING INVESTMENTS VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,EASTSPRING VIET NAM,,VNINDEX,Equity Fund,2014-03-25,2014-03-25,2026-08-28,880,5
+MAFBAL,fmarket,71,QUỸ ĐẦU TƯ CÂN BẰNG MANULIFE,Mutual Fund,Equity,Vietnam,Vietnam,VND,MANULIFE INVESTMENTS,,VNINDEX,Equity Fund,2017-11-27,2017-11-27,2026-08-27,1089,6
+VCAMBF,fmarket,70,QUỸ ĐẦU TƯ CÂN BẰNG BẢN VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,VCAM,,VNINDEX,Equity Fund,2014-04-11,2014-04-11,2026-08-28,1345,5
+SSI-EF,fmarket,90,QUỸ ĐẦU TƯ KIẾN TẠO TƯƠNG LAI SSI,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2025-10-10,2025-10-10,2026-08-28,218,5
+VIBF,fmarket,22,QUỸ ĐẦU TƯ CÂN BẰNG GẮN KẾT VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2019-07-02,2019-07-02,2026-08-28,1234,5
+MDI,fmarket,77,QUỸ ĐẦU TƯ NĂNG ĐỘNG MANULIFE,Mutual Fund,Equity,Vietnam,Vietnam,VND,MANULIFE INVESTMENTS,,VNINDEX,Equity Fund,2024-01-18,2024-01-18,2026-08-27,477,6
+LHCDF,fmarket,76,QUỸ ĐẦU TƯ NĂNG ĐỘNG LIGHTHOUSE,Mutual Fund,Equity,Vietnam,Vietnam,VND,LIGHTHOUSE CAPITAL,,VNINDEX,Equity Fund,2024-03-25,2024-03-25,2026-08-28,214,5
+BVPF,fmarket,14,QUỸ ĐẦU TƯ CỔ PHIẾU TRIỂN VỌNG BẢO VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,BAOVIETFUND,,VNINDEX,Equity Fund,2017-01-02,2017-01-02,2026-08-28,1244,5
+GDEGF,fmarket,92,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG RỒNG VÀNG,Mutual Fund,Equity,Vietnam,Vietnam,VND,HDCAPITAL,,VNINDEX,Equity Fund,2025-08-05,2025-08-05,2026-08-28,265,5
+PBIF,fmarket,61,QUỸ ĐẦU TƯ CÂN BẰNG PVCOM,Mutual Fund,Equity,Vietnam,Vietnam,VND,PVCB CAPITAL,,VNINDEX,Equity Fund,2023-01-06,2023-01-06,2026-08-26,169,7
+VCBF-AIF,fmarket,82,QUỸ ĐẦU TƯ THU NHẬP CHỦ ĐỘNG VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2025-02-04,2025-02-04,2026-08-28,267,5
+VNDAF,fmarket,38,QUỸ ĐẦU TƯ CHỦ ĐỘNG VND,Mutual Fund,Equity,Vietnam,Vietnam,VND,IPA PARTNER,,VNINDEX,Equity Fund,2018-01-12,2018-01-12,2026-08-28,1447,5
+UVEEF,fmarket,58,QUỸ ĐẦU TƯ CỔ PHIẾU UNITED ESG VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,UOBAM VIETNAM,,VNINDEX,Equity Fund,2022-11-08,2022-11-08,2026-08-28,942,5
+MAGEF,fmarket,35,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG MIRAE ASSET VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,MIRAE ASSET,,VNINDEX,Equity Fund,2019-07-23,2019-07-23,2026-08-28,1111,5
+VCBF-BCF,fmarket,32,QUỸ ĐẦU TƯ CỔ PHIẾU HÀNG ĐẦU VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2014-08-27,2014-08-27,2026-08-28,1069,5
+PHVSF,fmarket,66,QUỸ ĐẦU TƯ CHỌN LỌC PHÚ HƯNG VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,PHFM,,VNINDEX,Equity Fund,2022-11-24,2022-11-24,2026-08-28,641,5
+VDEF,fmarket,80,QUỸ ĐẦU TƯ CỔ PHIẾU CƠ HỘI TIÊN PHONG VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2024-06-28,2024-06-28,2026-08-28,538,5
+MAFEQI,fmarket,72,QUỸ ĐẦU TƯ CỔ PHIẾU MANULIFE,Mutual Fund,Equity,Vietnam,Vietnam,VND,MANULIFE INVESTMENTS,,VNINDEX,Equity Fund,2014-10-21,2014-10-21,2026-08-27,1282,6
+NTPPF,fmarket,52,QUỸ ĐẦU TƯ CỔ PHIẾU TRIỂN VỌNG NTP,Mutual Fund,Equity,Vietnam,Vietnam,VND,NTP AM,,VNINDEX,Equity Fund,2022-07-19,2022-07-19,2026-08-28,1027,5
+VCBF-MGF,fmarket,46,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG VCBF,Mutual Fund,Equity,Vietnam,Vietnam,VND,VIETCOMBANK FUND,,VNINDEX,Equity Fund,2021-09-15,2021-09-15,2026-08-28,559,5
+VCAMDF,fmarket,75,QUỸ ĐẦU TƯ BẢN VIỆT DISCOVERY,Mutual Fund,Equity,Vietnam,Vietnam,VND,VCAM,,VNINDEX,Equity Fund,2024-03-18,2024-03-18,2026-08-28,567,5
+SSISCA,fmarket,11,QUỸ ĐẦU TƯ LỢI THẾ CẠNH TRANH BỀN VỮNG SSI,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2014-09-26,2014-09-26,2026-08-28,2188,5
+RVPIF,fmarket,83,QUỸ ĐẦU TƯ THỊNH VƯỢNG RỒNG VIỆT,Mutual Fund,Equity,Vietnam,Vietnam,VND,VDAM,,VNINDEX,Equity Fund,2025-03-27,2025-03-27,2026-08-28,269,5
+DCDS,fmarket,28,QUỸ ĐẦU TƯ CHỨNG KHOÁN NĂNG ĐỘNG DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2004-05-20,2004-05-20,2026-08-28,3650,5
+TCGF,fmarket,79,QUỸ ĐẦU TƯ TĂNG TRƯỞNG THÀNH CÔNG,Mutual Fund,Equity,Vietnam,Vietnam,VND,TCAM,,VNINDEX,Equity Fund,2024-10-16,2024-10-16,2026-08-27,184,6
+VLGF,fmarket,49,QUỸ ĐẦU TƯ TĂNG TRƯỞNG DÀI HẠN VIỆT NAM,Mutual Fund,Equity,Vietnam,Vietnam,VND,SSIAM,,VNINDEX,Equity Fund,2021-12-09,2021-12-09,2026-08-28,1179,5
+DCAF,fmarket,29,QUỸ ĐẦU TƯ TĂNG TRƯỞNG DFVN,Mutual Fund,Equity,Vietnam,Vietnam,VND,DFVN,,VNINDEX,Equity Fund,2019-01-07,2019-01-07,2026-08-28,476,5
+KDEF,fmarket,86,QUỸ ĐẦU TƯ CỔ PHIẾU CỔ TỨC TĂNG TRƯỞNG KIM,Mutual Fund,Equity,Vietnam,Vietnam,VND,KIM,,VNINDEX,Equity Fund,2025-04-23,2025-04-23,2026-08-28,336,5
+VESAF,fmarket,23,QUỸ ĐẦU TƯ CỔ PHIẾU TĂNG TRƯỞNG CHIẾN LƯỢC VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2017-04-25,2017-04-25,2026-08-28,1493,5
+VEOF,fmarket,20,QUỸ ĐẦU TƯ CỔ PHIẾU DOANH NGHIỆP HÀNG ĐẦU VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2014-07-01,2014-07-01,2026-08-28,1898,5
+VMEEF,fmarket,68,QUỸ ĐẦU TƯ CỔ PHIẾU KINH TẾ HIỆN ĐẠI VINACAPITAL,Mutual Fund,Equity,Vietnam,Vietnam,VND,VINACAPITAL,,VNINDEX,Equity Fund,2023-05-09,2023-05-09,2026-08-28,814,5
+DCDE,fmarket,25,QUỸ ĐẦU TƯ CỔ PHIẾU TẬP TRUNG CỔ TỨC DC,Mutual Fund,Equity,Vietnam,Vietnam,VND,DCVFM,,VNINDEX,Equity Fund,2008-02-29,2008-02-29,2026-08-28,3582,5
+AEIF,fmarket,115,QUỸ ĐẦU TƯ CỔ PHIẾU AMBER,Mutual Fund,Equity,Vietnam,Vietnam,VND,AMBER CAPITAL,,VNINDEX,Equity Fund,2026-07-06,2026-07-06,2026-08-28,40,5
+KSIF,fmarket,114,QUỸ ĐẦU TƯ TRÁI PHIẾU CHIẾN LƯỢC KIM,Mutual Fund,Equity,Vietnam,Vietnam,VND,KIM,,VNINDEX,Equity Fund,2026-07-13,2026-07-13,2026-08-28,33,5
+LPLF,fmarket,97,QUỸ ĐẦU TƯ DOANH NGHIỆP DẪN ĐẦU LP,Mutual Fund,Equity,Vietnam,Vietnam,VND,LPBA,,VNINDEX,Equity Fund,2026-05-12,2026-05-12,2026-08-28,78,5
+ABEF,fmarket,96,QUỸ ĐẦU TƯ CỔ PHIẾU AN BÌNH THỊNH VƯỢNG,Mutual Fund,Equity,Vietnam,Vietnam,VND,ABF,,VNINDEX,Equity Fund,2026-04-01,2026-04-01,2026-08-28,99,5
+USIF,fmarket,91,QUỸ ĐẦU TƯ TRÁI PHIẾU UNITED THU NHẬP ỔN ĐỊNH,Mutual Fund,Equity,Vietnam,Vietnam,VND,UOBAM VIETNAM,,VNINDEX,Equity Fund,2026-04-06,2026-04-06,2026-08-27,39,6
+SP500,yahoo,^GSPC,S&P 500,Index,Equity,US,United States,USD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+NASDAQ,yahoo,^IXIC,Nasdaq Composite,Index,Equity,US,United States,USD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+NASDAQ100,yahoo,^NDX,Nasdaq 100,Index,Equity,US,United States,USD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+DOWJONES,yahoo,^DJI,Dow Jones Industrial Average,Index,Equity,US,United States,USD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+RUSSELL2000,yahoo,^RUT,Russell 2000,Index,Equity,US,United States,USD,-,0.0,,Small Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+VIX,yahoo,^VIX,CBOE Volatility Index,Index,Volatility,US,United States,USD,-,0.0,,Volatility,2010-01-04,2010-01-04,2026-09-01,4192,1
+DAX,yahoo,^GDAXI,DAX 40,Index,Equity,Europe,Germany,EUR,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4229,1
+MDAX,yahoo,^MDAXI,MDAX,Index,Equity,Europe,Germany,EUR,-,0.0,,Mid Cap,2010-01-04,2010-01-04,2026-09-01,4229,1
+TECDAX,yahoo,^TECDAX,TecDAX,Index,Equity,Europe,Germany,EUR,-,0.0,,Sector: Technology,2010-01-04,2010-01-04,2026-09-01,4222,1
+ESTX50,yahoo,^STOXX50E,EURO STOXX 50,Index,Equity,Europe,Eurozone,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4179,1
+STOXX600,yahoo,^STOXX,STOXX Europe 600,Index,Equity,Europe,Europe,EUR,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-08-31,4179,2
+FTSE100,yahoo,^FTSE,FTSE 100,Index,Equity,Europe,United Kingdom,GBP,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4207,1
+CAC40,yahoo,^FCHI,CAC 40,Index,Equity,Europe,France,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4261,1
+SMI,yahoo,^SSMI,Swiss Market Index,Index,Equity,Europe,Switzerland,CHF,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4175,1
+AEX,yahoo,^AEX,AEX Index,Index,Equity,Europe,Netherlands,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4264,1
+IBEX35,yahoo,^IBEX,IBEX 35,Index,Equity,Europe,Spain,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4261,1
+NIKKEI225,yahoo,^N225,Nikkei 225,Index,Equity,Asia-Pacific,Japan,JPY,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-02,4076,0
+HANGSENG,yahoo,^HSI,Hang Seng Index,Index,Equity,Asia-Pacific,Hong Kong,HKD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4101,1
+SHANGHAI,yahoo,000001.SS,SSE Composite,Index,Equity,Asia-Pacific,China,CNY,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4043,1
+KOSPI,yahoo,^KS11,KOSPI,Index,Equity,Asia-Pacific,South Korea,KRW,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-02,4098,0
+TAIEX,yahoo,^TWII,TAIEX,Index,Equity,Asia-Pacific,Taiwan,TWD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4068,1
+NIFTY50,yahoo,^NSEI,NIFTY 50,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4093,1
+SENSEX,yahoo,^BSESN,BSE SENSEX,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4098,1
+STI,yahoo,^STI,Straits Times Index,Index,Equity,Asia-Pacific,Singapore,SGD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4167,1
+SET,yahoo,^SET.BK,SET Index,Index,Equity,Asia-Pacific,Thailand,THB,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4019,1
+KLCI,yahoo,^KLSE,FTSE Bursa Malaysia KLCI,Index,Equity,Asia-Pacific,Malaysia,MYR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-01,4081,1
+JKSE,yahoo,^JKSE,IDX Composite,Index,Equity,Asia-Pacific,Indonesia,IDR,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4040,1
+PSEI,yahoo,PSEI.PS,PSEi Composite,Index,Equity,Asia-Pacific,Philippines,PHP,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4033,1
+ASX200,yahoo,^AXJO,S&P/ASX 200,Index,Equity,Asia-Pacific,Australia,AUD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-02,4207,0
+TSX,yahoo,^GSPTSE,S&P/TSX Composite,Index,Equity,Americas,Canada,CAD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4182,1
+BOVESPA,yahoo,^BVSP,Ibovespa,Index,Equity,Americas,Brazil,BRL,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4132,1
+IPC,yahoo,^MXX,S&P/BMV IPC,Index,Equity,Americas,Mexico,MXN,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4180,1
+SPY,yahoo,SPY,SPDR S&P 500 ETF Trust,ETF,Equity,US,United States,USD,State Street,0.0945,SP500,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+IVV,yahoo,IVV,iShares Core S&P 500 ETF,ETF,Equity,US,United States,USD,BlackRock,0.03,SP500,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+VOO,yahoo,VOO,Vanguard S&P 500 ETF,ETF,Equity,US,United States,USD,Vanguard,0.03,SP500,Broad Market,2010-09-09,2010-09-09,2026-09-01,4019,1
+VTI,yahoo,VTI,Vanguard Total Stock Market ETF,ETF,Equity,US,United States,USD,Vanguard,0.03,SP500,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+QQQ,yahoo,QQQ,Invesco QQQ Trust,ETF,Equity,US,United States,USD,Invesco,0.2,NASDAQ100,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+QQQM,yahoo,QQQM,Invesco NASDAQ 100 ETF,ETF,Equity,US,United States,USD,Invesco,0.15,NASDAQ100,Large Cap,2020-10-13,2020-10-13,2026-09-01,1478,1
+DIA,yahoo,DIA,SPDR Dow Jones Industrial Average ETF,ETF,Equity,US,United States,USD,State Street,0.16,DOWJONES,Large Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+IWM,yahoo,IWM,iShares Russell 2000 ETF,ETF,Equity,US,United States,USD,BlackRock,0.19,RUSSELL2000,Small Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+IJH,yahoo,IJH,iShares Core S&P Mid-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,0.05,SP500,Mid Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+IJR,yahoo,IJR,iShares Core S&P Small-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,0.06,RUSSELL2000,Small Cap,2010-01-04,2010-01-04,2026-09-01,4191,1
+RSP,yahoo,RSP,Invesco S&P 500 Equal Weight ETF,ETF,Equity,US,United States,USD,Invesco,0.2,SP500,Smart Beta,2010-01-04,2010-01-04,2026-09-01,4191,1
+VTV,yahoo,VTV,Vanguard Value ETF,ETF,Equity,US,United States,USD,Vanguard,0.04,SP500,Style: Value,2010-01-04,2010-01-04,2026-09-01,4191,1
+VUG,yahoo,VUG,Vanguard Growth ETF,ETF,Equity,US,United States,USD,Vanguard,0.04,SP500,Style: Growth,2010-01-04,2010-01-04,2026-09-01,4191,1
+MTUM,yahoo,MTUM,iShares MSCI USA Momentum Factor ETF,ETF,Equity,US,United States,USD,BlackRock,0.15,SP500,Smart Beta,2013-04-18,2013-04-18,2026-09-01,3364,1
+QUAL,yahoo,QUAL,iShares MSCI USA Quality Factor ETF,ETF,Equity,US,United States,USD,BlackRock,0.15,SP500,Smart Beta,2013-07-18,2013-07-18,2026-09-01,3301,1
+USMV,yahoo,USMV,iShares MSCI USA Min Vol Factor ETF,ETF,Equity,US,United States,USD,BlackRock,0.15,SP500,Smart Beta,2011-10-20,2011-10-20,2026-09-01,3737,1
+SCHD,yahoo,SCHD,Schwab US Dividend Equity ETF,ETF,Equity,US,United States,USD,Schwab,0.06,SP500,Dividend,2011-10-20,2011-10-20,2026-09-01,3737,1
+VYM,yahoo,VYM,Vanguard High Dividend Yield ETF,ETF,Equity,US,United States,USD,Vanguard,0.06,SP500,Dividend,2010-01-04,2010-01-04,2026-09-01,4191,1
+VIG,yahoo,VIG,Vanguard Dividend Appreciation ETF,ETF,Equity,US,United States,USD,Vanguard,0.05,SP500,Dividend,2010-01-04,2010-01-04,2026-09-01,4191,1
+ARKK,yahoo,ARKK,ARK Innovation ETF,ETF,Equity,US,United States,USD,ARK Invest,0.75,NASDAQ100,Thematic,2014-10-31,2014-10-31,2026-09-01,2975,1
+XLK,yahoo,XLK,Technology Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Technology,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLF,yahoo,XLF,Financial Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Financials,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLV,yahoo,XLV,Health Care Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Health Care,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLE,yahoo,XLE,Energy Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Energy,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLI,yahoo,XLI,Industrial Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Industrials,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLY,yahoo,XLY,Consumer Discretionary Select SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Cons. Discr.,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLP,yahoo,XLP,Consumer Staples Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Cons. Staples,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLU,yahoo,XLU,Utilities Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Utilities,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLB,yahoo,XLB,Materials Select Sector SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Materials,2010-01-04,2010-01-04,2026-09-01,4191,1
+XLRE,yahoo,XLRE,Real Estate Select Sector SPDR,ETF,Real Estate,US,United States,USD,State Street,0.09,SP500,Sector: Real Estate,2015-10-08,2015-10-08,2026-09-01,2740,1
+XLC,yahoo,XLC,Communication Services Select SPDR,ETF,Equity,US,United States,USD,State Street,0.09,SP500,Sector: Comm. Services,2018-06-19,2018-06-19,2026-09-01,2062,1
+SMH,yahoo,SMH,VanEck Semiconductor ETF,ETF,Equity,US,United States,USD,VanEck,0.35,NASDAQ100,Sector: Semiconductors,2010-01-04,2010-01-04,2026-09-01,4191,1
+SOXX,yahoo,SOXX,iShares Semiconductor ETF,ETF,Equity,US,United States,USD,BlackRock,0.35,NASDAQ100,Sector: Semiconductors,2010-01-04,2010-01-04,2026-09-01,4191,1
+IBB,yahoo,IBB,iShares Biotechnology ETF,ETF,Equity,US,United States,USD,BlackRock,0.45,NASDAQ100,Sector: Biotech,2010-01-04,2010-01-04,2026-09-01,4191,1
+IGV,yahoo,IGV,iShares Expanded Tech-Software ETF,ETF,Equity,US,United States,USD,BlackRock,0.41,NASDAQ100,Sector: Software,2010-01-04,2010-01-04,2026-09-01,4191,1
+ICLN,yahoo,ICLN,iShares Global Clean Energy ETF,ETF,Equity,Global,Global,USD,BlackRock,0.41,URTH,Thematic,2010-01-04,2010-01-04,2026-09-01,4191,1
+TAN,yahoo,TAN,Invesco Solar ETF,ETF,Equity,Global,Global,USD,Invesco,0.67,URTH,Thematic,2010-01-04,2010-01-04,2026-09-01,4191,1
+BOTZ,yahoo,BOTZ,Global X Robotics & AI ETF,ETF,Equity,Global,Global,USD,Global X,0.68,URTH,Thematic,2016-09-13,2016-09-13,2026-09-01,2506,1
+LIT,yahoo,LIT,Global X Lithium & Battery Tech ETF,ETF,Equity,Global,Global,USD,Global X,0.75,URTH,Thematic,2010-07-23,2010-07-23,2026-09-01,4052,1
+HACK,yahoo,HACK,Amplify Cybersecurity ETF,ETF,Equity,Global,Global,USD,Amplify,0.6,URTH,Thematic,2014-11-12,2014-11-12,2026-09-01,2967,1
+VT,yahoo,VT,Vanguard Total World Stock ETF,ETF,Equity,Global,Global,USD,Vanguard,0.06,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+ACWI,yahoo,ACWI,iShares MSCI ACWI ETF,ETF,Equity,Global,Global,USD,BlackRock,0.32,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+URTH,yahoo,URTH,iShares MSCI World ETF,ETF,Equity,Global,Developed,USD,BlackRock,0.24,,Broad Market,2012-01-12,2012-01-12,2026-09-01,3680,1
+VEA,yahoo,VEA,Vanguard FTSE Developed Markets ETF,ETF,Equity,Global,Developed ex-US,USD,Vanguard,0.03,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+EFA,yahoo,EFA,iShares MSCI EAFE ETF,ETF,Equity,Global,Developed ex-US,USD,BlackRock,0.33,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+IEFA,yahoo,IEFA,iShares Core MSCI EAFE ETF,ETF,Equity,Global,Developed ex-US,USD,BlackRock,0.07,,Broad Market,2012-10-24,2012-10-24,2026-09-01,3482,1
+VXUS,yahoo,VXUS,Vanguard Total International Stock ETF,ETF,Equity,Global,Ex-US,USD,Vanguard,0.05,,Broad Market,2011-01-28,2011-01-28,2026-09-01,3921,1
+EEM,yahoo,EEM,iShares MSCI Emerging Markets ETF,ETF,Equity,Emerging,Emerging,USD,BlackRock,0.72,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+VWO,yahoo,VWO,Vanguard FTSE Emerging Markets ETF,ETF,Equity,Emerging,Emerging,USD,Vanguard,0.07,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4191,1
+IEMG,yahoo,IEMG,iShares Core MSCI Emerging Markets,ETF,Equity,Emerging,Emerging,USD,BlackRock,0.09,,Broad Market,2012-10-24,2012-10-24,2026-09-01,3482,1
+VNM,yahoo,VNM,VanEck Vietnam ETF,ETF,Equity,Emerging,Vietnam,USD,VanEck,0.66,VNINDEX,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWG,yahoo,EWG,iShares MSCI Germany ETF,ETF,Equity,Europe,Germany,USD,BlackRock,0.5,DAX,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWU,yahoo,EWU,iShares MSCI United Kingdom ETF,ETF,Equity,Europe,United Kingdom,USD,BlackRock,0.5,FTSE100,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWQ,yahoo,EWQ,iShares MSCI France ETF,ETF,Equity,Europe,France,USD,BlackRock,0.5,CAC40,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWL,yahoo,EWL,iShares MSCI Switzerland ETF,ETF,Equity,Europe,Switzerland,USD,BlackRock,0.5,SMI,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWN,yahoo,EWN,iShares MSCI Netherlands ETF,ETF,Equity,Europe,Netherlands,USD,BlackRock,0.5,AEX,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWJ,yahoo,EWJ,iShares MSCI Japan ETF,ETF,Equity,Asia-Pacific,Japan,USD,BlackRock,0.5,NIKKEI225,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWY,yahoo,EWY,iShares MSCI South Korea ETF,ETF,Equity,Asia-Pacific,South Korea,USD,BlackRock,0.59,KOSPI,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWT,yahoo,EWT,iShares MSCI Taiwan ETF,ETF,Equity,Asia-Pacific,Taiwan,USD,BlackRock,0.59,TAIEX,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWA,yahoo,EWA,iShares MSCI Australia ETF,ETF,Equity,Asia-Pacific,Australia,USD,BlackRock,0.5,ASX200,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWS,yahoo,EWS,iShares MSCI Singapore ETF,ETF,Equity,Asia-Pacific,Singapore,USD,BlackRock,0.5,STI,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWM,yahoo,EWM,iShares MSCI Malaysia ETF,ETF,Equity,Asia-Pacific,Malaysia,USD,BlackRock,0.5,KLCI,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+THD,yahoo,THD,iShares MSCI Thailand ETF,ETF,Equity,Asia-Pacific,Thailand,USD,BlackRock,0.59,SET,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EIDO,yahoo,EIDO,iShares MSCI Indonesia ETF,ETF,Equity,Asia-Pacific,Indonesia,USD,BlackRock,0.59,JKSE,Country,2010-05-07,2010-05-07,2026-09-01,4105,1
+EPHE,yahoo,EPHE,iShares MSCI Philippines ETF,ETF,Equity,Asia-Pacific,Philippines,USD,BlackRock,0.59,PSEI,Country,2010-09-29,2010-09-29,2026-09-01,4005,1
+INDA,yahoo,INDA,iShares MSCI India ETF,ETF,Equity,Asia-Pacific,India,USD,BlackRock,0.62,NIFTY50,Country,2012-02-03,2012-02-03,2026-09-01,3665,1
+MCHI,yahoo,MCHI,iShares MSCI China ETF,ETF,Equity,Asia-Pacific,China,USD,BlackRock,0.59,HANGSENG,Country,2011-03-31,2011-03-31,2026-09-01,3878,1
+FXI,yahoo,FXI,iShares China Large-Cap ETF,ETF,Equity,Asia-Pacific,China,USD,BlackRock,0.74,HANGSENG,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+ASHR,yahoo,ASHR,Xtrackers Harvest CSI 300 China A ETF,ETF,Equity,Asia-Pacific,China,USD,DWS,0.65,SHANGHAI,Country,2013-11-06,2013-11-06,2026-09-01,3223,1
+KWEB,yahoo,KWEB,KraneShares CSI China Internet ETF,ETF,Equity,Asia-Pacific,China,USD,KraneShares,0.7,HANGSENG,Sector: Technology,2013-08-01,2013-08-01,2026-09-01,3291,1
+EWC,yahoo,EWC,iShares MSCI Canada ETF,ETF,Equity,Americas,Canada,USD,BlackRock,0.5,TSX,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWZ,yahoo,EWZ,iShares MSCI Brazil ETF,ETF,Equity,Americas,Brazil,USD,BlackRock,0.59,BOVESPA,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EWW,yahoo,EWW,iShares MSCI Mexico ETF,ETF,Equity,Americas,Mexico,USD,BlackRock,0.5,IPC,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EZA,yahoo,EZA,iShares MSCI South Africa ETF,ETF,Equity,Emerging,South Africa,USD,BlackRock,0.59,,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+TUR,yahoo,TUR,iShares MSCI Turkey ETF,ETF,Equity,Emerging,Turkey,USD,BlackRock,0.59,,Country,2010-01-04,2010-01-04,2026-09-01,4191,1
+EUNL.DE,yahoo,EUNL.DE,iShares Core MSCI World UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4232,1
+SXR8.DE,yahoo,SXR8.DE,iShares Core S&P 500 UCITS ETF (Acc),ETF,Equity,Europe,Germany,EUR,BlackRock,0.07,SP500,Broad Market,2010-05-19,2010-05-19,2026-09-01,4137,1
+IUSQ.DE,yahoo,IUSQ.DE,iShares MSCI ACWI UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,,Broad Market,2011-10-21,2011-10-21,2026-09-01,3770,1
+IS3N.DE,yahoo,IS3N.DE,iShares Core MSCI EM IMI UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.18,,Broad Market,2014-06-11,2014-06-11,2026-09-01,3103,1
+EXS1.DE,yahoo,EXS1.DE,iShares Core DAX UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.16,DAX,Country,2010-01-04,2010-01-04,2026-09-01,4231,1
+EXSA.DE,yahoo,EXSA.DE,iShares STOXX Europe 600 UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,STOXX600,Broad Market,2010-01-04,2010-01-04,2026-09-01,4231,1
+EXW1.DE,yahoo,EXW1.DE,iShares EURO STOXX 50 UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.1,ESTX50,Large Cap,2010-01-04,2010-01-04,2026-09-01,4232,1
+EXSI.DE,yahoo,EXSI.DE,iShares STOXX Europe Mid 200 UCITS ETF,ETF,Equity,Europe,Germany,EUR,BlackRock,0.2,STOXX600,Mid Cap,2010-01-04,2010-01-04,2026-09-01,4231,1
+VWCE.DE,yahoo,VWCE.DE,Vanguard FTSE All-World UCITS ETF (Acc),ETF,Equity,Europe,Germany,EUR,Vanguard,0.22,,Broad Market,2019-07-29,2019-07-29,2026-09-01,1803,1
+VGWL.DE,yahoo,VGWL.DE,Vanguard FTSE All-World UCITS ETF (Dist),ETF,Equity,Europe,Germany,EUR,Vanguard,0.22,,Broad Market,2017-10-26,2017-10-26,2026-09-01,2244,1
+XDWD.DE,yahoo,XDWD.DE,Xtrackers MSCI World UCITS ETF,ETF,Equity,Europe,Germany,EUR,DWS,0.19,,Broad Market,2014-08-15,2014-08-15,2026-09-01,3055,1
+XMME.DE,yahoo,XMME.DE,Xtrackers MSCI Emerging Markets UCITS,ETF,Equity,Europe,Germany,EUR,DWS,0.18,,Broad Market,2017-06-21,2017-06-21,2026-09-01,2336,1
+EUNA.DE,yahoo,EUNA.DE,iShares Core Euro Aggregate Bond UCITS,ETF,Bond,Europe,Germany,EUR,BlackRock,0.09,,Aggregate Bond,2017-11-21,2017-11-21,2026-09-01,2227,1
+IBCI.DE,yahoo,IBCI.DE,iShares Euro Infl. Linked Govt Bond,ETF,Bond,Europe,Germany,EUR,BlackRock,0.09,,Inflation Linked,2010-01-04,2010-01-04,2026-09-01,4230,1
+CSPX.L,yahoo,CSPX.L,iShares Core S&P 500 UCITS ETF,ETF,Equity,Europe,United Kingdom,USD,BlackRock,0.07,SP500,Broad Market,2010-09-15,2010-09-15,2026-09-01,4031,1
+VUSA.L,yahoo,VUSA.L,Vanguard S&P 500 UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,Vanguard,0.07,SP500,Broad Market,2012-05-22,2012-05-22,2026-09-01,3605,1
+VWRL.L,yahoo,VWRL.L,Vanguard FTSE All-World UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,Vanguard,0.22,,Broad Market,2012-05-22,2012-05-22,2026-09-01,3605,1
+ISF.L,yahoo,ISF.L,iShares Core FTSE 100 UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,BlackRock,0.07,FTSE100,Country,2010-01-04,2010-01-04,2026-09-01,4208,1
+VUKE.L,yahoo,VUKE.L,Vanguard FTSE 100 UCITS ETF,ETF,Equity,Europe,United Kingdom,GBP,Vanguard,0.09,FTSE100,Country,2012-05-22,2012-05-22,2026-09-01,3607,1
+IWDA.AS,yahoo,IWDA.AS,iShares Core MSCI World UCITS ETF (Acc),ETF,Equity,Europe,Netherlands,EUR,BlackRock,0.2,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4264,1
+CW8.PA,yahoo,CW8.PA,Amundi MSCI World UCITS ETF,ETF,Equity,Europe,France,EUR,Amundi,0.38,,Broad Market,2010-01-04,2010-01-04,2026-09-01,4261,1
+1306.T,yahoo,1306.T,NEXT FUNDS TOPIX ETF,ETF,Equity,Asia-Pacific,Japan,JPY,Nomura,0.06,NIKKEI225,Broad Market,2010-01-04,2010-01-04,2026-09-02,4096,0
+1321.T,yahoo,1321.T,NEXT FUNDS Nikkei 225 ETF,ETF,Equity,Asia-Pacific,Japan,JPY,Nomura,0.19,NIKKEI225,Large Cap,2010-01-04,2010-01-04,2026-09-02,4095,0
+2800.HK,yahoo,2800.HK,Tracker Fund of Hong Kong,ETF,Equity,Asia-Pacific,Hong Kong,HKD,State Street,0.09,HANGSENG,Large Cap,2010-01-04,2010-01-04,2026-09-01,4104,1
+2828.HK,yahoo,2828.HK,Hang Seng China Enterprises Index ETF,ETF,Equity,Asia-Pacific,Hong Kong,HKD,Hang Seng,0.6,HANGSENG,Large Cap,2024-04-24,2024-04-24,2026-09-01,579,1
+069500.KS,yahoo,069500.KS,KODEX 200 ETF,ETF,Equity,Asia-Pacific,South Korea,KRW,Samsung,0.15,KOSPI,Large Cap,2010-01-04,2010-01-04,2026-09-02,4071,0
+102110.KS,yahoo,102110.KS,TIGER 200 ETF,ETF,Equity,Asia-Pacific,South Korea,KRW,Mirae Asset,0.05,KOSPI,Large Cap,2010-01-04,2010-01-04,2026-09-02,4071,0
+0050.TW,yahoo,0050.TW,Yuanta Taiwan Top 50 ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.32,TAIEX,Large Cap,2010-01-04,2010-01-04,2026-09-01,4075,1
+0056.TW,yahoo,0056.TW,Yuanta Taiwan Dividend Plus ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.4,TAIEX,Dividend,2010-01-04,2010-01-04,2026-09-01,4080,1
+NIFTYBEES.NS,yahoo,NIFTYBEES.NS,Nippon India ETF Nifty 50 BeES,ETF,Equity,Asia-Pacific,India,INR,Nippon,0.04,NIFTY50,Large Cap,2010-01-04,2010-01-04,2026-09-01,4115,1
+VAS.AX,yahoo,VAS.AX,Vanguard Australian Shares Index ETF,ETF,Equity,Asia-Pacific,Australia,AUD,Vanguard,0.07,ASX200,Broad Market,2010-01-04,2010-01-04,2026-09-02,4213,0
+STW.AX,yahoo,STW.AX,SPDR S&P/ASX 200 Fund,ETF,Equity,Asia-Pacific,Australia,AUD,State Street,0.05,ASX200,Large Cap,2010-01-04,2010-01-04,2026-09-02,4214,0
+XIU.TO,yahoo,XIU.TO,iShares S&P/TSX 60 Index ETF,ETF,Equity,Americas,Canada,CAD,BlackRock,0.18,TSX,Large Cap,2010-01-04,2010-01-04,2026-09-01,4182,1
+VFV.TO,yahoo,VFV.TO,Vanguard S&P 500 Index ETF,ETF,Equity,Americas,Canada,CAD,Vanguard,0.09,SP500,Broad Market,2012-11-08,2012-11-08,2026-09-01,3466,1
+AGG,yahoo,AGG,iShares Core US Aggregate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.03,,Aggregate Bond,2010-01-04,2010-01-04,2026-09-01,4191,1
+BND,yahoo,BND,Vanguard Total Bond Market ETF,ETF,Bond,US,United States,USD,Vanguard,0.03,,Aggregate Bond,2010-01-04,2010-01-04,2026-09-01,4191,1
+TLT,yahoo,TLT,iShares 20+ Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.15,,Government Long,2010-01-04,2010-01-04,2026-09-01,4191,1
+IEF,yahoo,IEF,iShares 7-10 Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.15,,Government Mid,2010-01-04,2010-01-04,2026-09-01,4191,1
+SHY,yahoo,SHY,iShares 1-3 Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.15,,Government Short,2010-01-04,2010-01-04,2026-09-01,4191,1
+LQD,yahoo,LQD,iShares iBoxx IG Corporate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.14,,Corporate IG,2010-01-04,2010-01-04,2026-09-01,4191,1
+HYG,yahoo,HYG,iShares iBoxx High Yield Corporate ETF,ETF,Bond,US,United States,USD,BlackRock,0.49,,High Yield,2010-01-04,2010-01-04,2026-09-01,4191,1
+TIP,yahoo,TIP,iShares TIPS Bond ETF,ETF,Bond,US,United States,USD,BlackRock,0.19,,Inflation Linked,2010-01-04,2010-01-04,2026-09-01,4191,1
+EMB,yahoo,EMB,iShares JP Morgan USD EM Bond ETF,ETF,Bond,Emerging,Emerging,USD,BlackRock,0.39,,EM Debt,2010-01-04,2010-01-04,2026-09-01,4191,1
+BNDX,yahoo,BNDX,Vanguard Total International Bond ETF,ETF,Bond,Global,Global,USD,Vanguard,0.07,,Aggregate Bond,2013-06-04,2013-06-04,2026-09-01,3332,1
+GLD,yahoo,GLD,SPDR Gold Shares,ETF,Commodity,Global,Global,USD,State Street,0.4,,Gold,2010-01-04,2010-01-04,2026-09-01,4191,1
+IAU,yahoo,IAU,iShares Gold Trust,ETF,Commodity,Global,Global,USD,BlackRock,0.25,,Gold,2010-01-04,2010-01-04,2026-09-01,4191,1
+SLV,yahoo,SLV,iShares Silver Trust,ETF,Commodity,Global,Global,USD,BlackRock,0.5,,Silver,2010-01-04,2010-01-04,2026-09-01,4191,1
+DBC,yahoo,DBC,Invesco DB Commodity Index Tracking,ETF,Commodity,Global,Global,USD,Invesco,0.85,,Broad Commodity,2010-01-04,2010-01-04,2026-09-01,4191,1
+USO,yahoo,USO,United States Oil Fund,ETF,Commodity,Global,Global,USD,USCF,0.6,,Energy,2010-01-04,2010-01-04,2026-09-01,4191,1
+4GLD.DE,yahoo,4GLD.DE,Xetra-Gold,ETF,Commodity,Europe,Germany,EUR,Deutsche Boerse,0.0,,Gold,2010-01-04,2010-01-04,2026-09-01,4230,1
+VNQ,yahoo,VNQ,Vanguard Real Estate ETF,ETF,Real Estate,US,United States,USD,Vanguard,0.13,,REIT,2010-01-04,2010-01-04,2026-09-01,4191,1
+VNQI,yahoo,VNQI,Vanguard Global ex-US Real Estate ETF,ETF,Real Estate,Global,Global,USD,Vanguard,0.12,,REIT,2010-11-01,2010-11-01,2026-09-01,3982,1
+IBIT,yahoo,IBIT,iShares Bitcoin Trust ETF,ETF,Crypto,Global,Global,USD,BlackRock,0.25,,Bitcoin,2024-01-11,2024-01-11,2026-09-01,662,1
+BTC-USD,yahoo,BTC-USD,Bitcoin (spot),ETF,Crypto,Global,Global,USD,-,0.0,,Bitcoin,2014-09-17,2014-09-17,2026-09-02,4369,0
