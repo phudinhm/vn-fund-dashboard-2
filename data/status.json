@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-09-02T00:25:41.452784+00:00",
+  "started_utc": "2026-09-02T14:32:32.701371+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -21,10 +21,10 @@
   "warnings": [
     "dropped, too few observations: VBIF"
   ],
-  "finished_utc": "2026-09-02T00:28:45.765554+00:00",
-  "duration_seconds": 184.3,
+  "finished_utc": "2026-09-02T14:35:36.051204+00:00",
+  "duration_seconds": 183.3,
   "instruments": 249,
-  "observations": 731978,
+  "observations": 732130,
   "first_date": "2004-05-20",
   "last_date": "2026-09-02",
   "by_region": {
