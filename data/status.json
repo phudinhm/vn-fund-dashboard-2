@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-09-04T00:17:07.566740+00:00",
+  "started_utc": "2026-09-04T14:24:19.825683+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -16,20 +16,24 @@
     {
       "ticker": "SSI-PDF",
       "source": "fmarket"
+    },
+    {
+      "ticker": "SHANGHAI",
+      "source": "yahoo/stooq"
     }
   ],
   "warnings": [
     "dropped, too few observations: VBIF"
   ],
-  "finished_utc": "2026-09-04T00:19:58.136586+00:00",
-  "duration_seconds": 170.6,
+  "finished_utc": "2026-09-04T14:27:03.214235+00:00",
+  "duration_seconds": 163.4,
   "instruments": 249,
-  "observations": 732374,
+  "observations": 732612,
   "first_date": "2004-05-20",
   "last_date": "2026-09-04",
   "by_region": {
     "Americas": 8,
-    "Asia-Pacific": 38,
+    "Asia-Pacific": 37,
     "Emerging": 7,
     "Europe": 37,
     "Global": 21,
@@ -38,7 +42,7 @@
   },
   "by_kind": {
     "ETF": 141,
-    "Index": 43,
+    "Index": 42,
     "Mutual Fund": 65
   },
   "currencies": [
@@ -46,7 +50,6 @@
     "BRL",
     "CAD",
     "CHF",
-    "CNY",
     "EUR",
     "GBP",
     "HKD",
@@ -68,16 +71,6 @@
       "ticker": "BVBF",
       "last_date": "2026-08-26",
       "stale_days": 9
-    },
-    {
-      "ticker": "UVDIF",
-      "last_date": "2026-08-27",
-      "stale_days": 8
-    },
-    {
-      "ticker": "USIF",
-      "last_date": "2026-08-27",
-      "stale_days": 8
     }
   ]
 }
