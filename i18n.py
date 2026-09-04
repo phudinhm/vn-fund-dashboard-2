@@ -1209,10 +1209,13 @@ def quality_narrative(lang: str, instruments: int, markets: int, currencies: int
         return (f"Bộ dữ liệu gồm {instruments} công cụ trên {markets} thị trường và {currencies} đồng tiền, "
                 f"cập nhật đến {last_date}; {stale} mã chậm hơn 7 ngày.")
     if lang == "DE":
+        verb = "ist" if stale == 1 else "sind"
+        noun = "Ticker"
         return (f"Der Datensatz umfasst {instruments} Instrumente aus {markets} Märkten und {currencies} Währungen, "
-                f"Stand {last_date}; {stale} Ticker sind älter als 7 Tage.")
+                f"Stand {last_date}; {stale} {noun} {verb} älter als 7 Tage.")
+    noun, verb = ("ticker", "is") if stale == 1 else ("tickers", "are")
     return (f"The dataset covers {instruments} instruments across {markets} markets and {currencies} currencies, "
-            f"updated to {last_date}; {stale} tickers are more than 7 days stale.")
+            f"updated to {last_date}; {stale} {noun} {verb} more than 7 days stale.")
 
 
 # ===========================================================================

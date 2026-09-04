@@ -65,3 +65,13 @@ def test_narrative_handles_missing_numbers():
 def test_fallback_to_english_for_unknown_key():
     assert i18n.t("VI", "does_not_exist") == "does_not_exist"
     assert i18n.t("XX", "tab_summary") == i18n.STRINGS["EN"]["tab_summary"]
+
+
+def test_quality_narrative_agrees_in_number():
+    """"1 tickers are stale" is the kind of thing that makes a report look
+    generated rather than written."""
+    assert "1 ticker is" in i18n.quality_narrative("EN", 500, 30, 20, "04.09.2026", 1)
+    assert "2 tickers are" in i18n.quality_narrative("EN", 500, 30, 20, "04.09.2026", 2)
+    assert "0 tickers are" in i18n.quality_narrative("EN", 500, 30, 20, "04.09.2026", 0)
+    assert "1 Ticker ist" in i18n.quality_narrative("DE", 500, 30, 20, "04.09.2026", 1)
+    assert "3 Ticker sind" in i18n.quality_narrative("DE", 500, 30, 20, "04.09.2026", 3)
