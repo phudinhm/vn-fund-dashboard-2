@@ -140,6 +140,8 @@ def build_facts(window: pd.DataFrame, metrics: pd.DataFrame, benchmark: str,
                 currency: str) -> dict:
     if metrics.empty:
         return {}
+    # only rank instruments that actually span the window (see analytics.comparable)
+    metrics = an.comparable(metrics)
     cagr = metrics["cagr"].dropna()
     if cagr.empty:
         return {}

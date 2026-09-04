@@ -197,11 +197,16 @@ def versus_benchmark(ctx) -> None:
         return
 
     st.markdown(f"### {ctx.t('h_alpha')} — {ctx.benchmark}")
-    cols = ["beta", "alpha", "r_squared", "tracking_error", "information_ratio",
-            "up_capture", "down_capture", "capture_spread", "batting_average"]
+    cols = ["beta", "alpha", "r_squared", "tracking_error", "tracking_difference",
+            "information_ratio", "up_capture", "down_capture", "capture_spread",
+            "batting_average"]
     have = [c for c in cols if c in ctx.metrics.columns]
     relative = ctx.metrics.loc[[t for t in ctx.metrics.index if t != ctx.benchmark], have]
     st.dataframe(relative, width="stretch", column_config=C.metric_columns(ctx, have))
+
+    bench_kind = ctx.profile.set_index("ticker").get("kind", pd.Series(dtype=str))
+    if bench_kind.get(ctx.benchmark) == "Index":
+        st.caption(ctx.t("price_index_caveat"))
 
     if not relative.empty:
         focus = st.selectbox(ctx.t("focus_fund"), list(relative.index),

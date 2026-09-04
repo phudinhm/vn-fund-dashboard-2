@@ -84,6 +84,8 @@ METRIC_FORMAT = {
     "down_capture": ("pct100", "m_down"), "capture_spread": ("pct100", "m_capture_spread"),
     "batting_average": ("pct100", "m_batting"), "rank": ("int", "m_rank"),
     "observations": ("int", "m_obs"),
+    "tracking_difference": ("pct", "m_td"), "time_under_water": ("int", "m_tuw"),
+    "adv": ("money", "m_adv"), "coverage": ("pct100x", "m_coverage"),
 }
 
 
@@ -97,12 +99,19 @@ def metric_columns(ctx, columns: list[str]) -> dict:
             cfg[col] = st.column_config.NumberColumn(label, format="percent", width="small")
         elif kind == "pct100":
             cfg[col] = st.column_config.NumberColumn(label, format="%.1f%%", width="small")
+        elif kind == "pct100x":
+            cfg[col] = st.column_config.ProgressColumn(label, format="percent",
+                                                       min_value=0.0, max_value=1.0,
+                                                       width="small")
         elif kind == "fee":
             cfg[col] = st.column_config.NumberColumn(label, format="%.2f%%", width="small")
         elif kind == "num":
             cfg[col] = st.column_config.NumberColumn(label, format="%.2f", width="small")
         elif kind == "int":
             cfg[col] = st.column_config.NumberColumn(label, format="%d", width="small")
+        elif kind == "money":
+            cfg[col] = st.column_config.NumberColumn(label, format="compact",
+                                                     width="small")
     return cfg
 
 
@@ -121,6 +130,14 @@ def sparkline_series(prices: pd.DataFrame, tickers: list[str],
         base = weekly.iloc[0] if len(weekly) and weekly.iloc[0] else np.nan
         out[ticker] = list((weekly / base * 100).round(2)) if base else []
     return out
+
+
+def column_choice(ctx, key: str, essential: list[str], full: list[str]) -> list[str]:
+    """Let the reader trade width for detail instead of scrolling by default."""
+    choice = st.segmented_control(
+        ctx.t("columns"), [ctx.t("cols_essential"), ctx.t("cols_full")],
+        default=ctx.t("cols_essential"), key=key, label_visibility="collapsed")
+    return full if choice == ctx.t("cols_full") else essential
 
 
 def leaderboard(ctx, scored: pd.DataFrame, prices: pd.DataFrame,

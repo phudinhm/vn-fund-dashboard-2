@@ -20,9 +20,10 @@ streamlit run app.py      # open the report
 
 | | |
 |---|---|
-| **Universe** | ~190 curated instruments: 14 Vietnamese ETFs, 11 Vietnamese indices, 100+ world ETFs (US, Germany/Xetra, London, Euronext, Tokyo, Hong Kong, Seoul, Taipei, Mumbai, Sydney, Toronto…), 32 world benchmark indices, bonds, commodities, REITs and crypto — plus every Vietnamese open-ended fund distributed on fmarket, discovered automatically |
+| **Universe** | **Every US-listed ETF is discovered automatically** from the Nasdaq Trader symbol directory (~3,000 funds); the most liquid ~350 carry a full price history and the rest stay in the catalogue. On top of that: 246 curated instruments — 14 Vietnamese ETFs, 11 Vietnamese indices, 130+ international ETFs (Xetra, London, Euronext, Tokyo, Hong Kong, Seoul, Taipei, Mumbai, Sydney, Toronto, São Paulo…), 43 world benchmark indices, bonds, commodities, REITs and crypto — plus every Vietnamese open-ended fund on fmarket, also discovered automatically |
 | **Currencies** | 20 trading currencies, all convertible to a single reporting currency (USD / EUR / VND) at the **daily** FX rate, so cross-market comparison is honest |
-| **Benchmarks** | any index in the universe can be made the benchmark; beta, alpha, R², tracking error, information ratio, up/down capture and batting average are computed against it |
+| **Benchmarks** | any index in the universe can be made the benchmark; beta, alpha, R², tracking error, tracking difference, information ratio, up/down capture and batting average are computed against it |
+| **Fair comparison** | every instrument carries the share of the window it actually spans; a fund that has existed for two months is listed but left unranked rather than flattering itself with an annualised two-month return |
 | **Languages** | the whole UI *and* the generated commentary exist in VI / EN / DE; a test fails CI if a translation is missing |
 
 ## How the report is organised
@@ -79,11 +80,13 @@ is at a glance.
 
 1. installs dependencies and **runs the test suite**
 2. `python update_data.py` — Vietnam (VNDIRECT) → open-ended funds (fmarket) →
+   **US ETF discovery** (Nasdaq Trader directory, ranked by traded value) →
    world ETFs and indices (Yahoo Finance, Stooq as fallback) → FX rates
    (Yahoo → Frankfurter → open.er-api)
 3. retries three times, then fails the run if the newest date is more than 5
    days old or fewer than 100 instruments came back
 4. writes `data/prices.csv`, `data/volume.csv`, `data/profile.csv`, `data/fx.csv`
+   `data/catalogue.csv` (the whole US ETF market with its liquidity ranking)
    and a machine-readable health report in `data/status.json`
 5. renders `docs/report_VI.md`, `docs/report_EN.md`, `docs/report_DE.md`
 6. commits and pushes
@@ -108,7 +111,7 @@ Any single source failing degrades gracefully: the ticker is recorded in
 | `views/*.py` | one module per section (overview, screener, compare, markets, profile, lab, data) |
 | `.streamlit/config.toml` | the design tokens Streamlit applies to its own widgets |
 | `metrics.py` | thin compatibility shim over `analytics.py` |
-| `tests/` | 75 tests covering analytics, i18n completeness, the pipeline and every view |
+| `tests/` | 87 tests covering analytics, i18n completeness, the pipeline and every view |
 
 ---
 

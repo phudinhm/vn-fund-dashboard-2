@@ -298,3 +298,115 @@ def test_vndirect_walks_the_history_in_windows(monkeypatch):
     assert all(b[0] == a[1] for a, b in zip(windows, windows[1:]))  # no gaps
     assert out.index.is_monotonic_increasing
     assert not out.index.has_duplicates
+
+
+# ---------------------------------------------------------------------------
+# automatic ETF discovery
+# ---------------------------------------------------------------------------
+
+NASDAQ_SAMPLE = """Symbol|Security Name|Market Category|Test Issue|Financial Status|Round Lot Size|ETF|NextShares
+QQQ|Invesco QQQ Trust, Series 1|Q|N|N|100|Y|N
+AAPL|Apple Inc. - Common Stock|Q|N|N|100|N|N
+JUNK|Test Fund ETF|Q|Y|N|100|Y|N
+IBIT|iShares Bitcoin Trust ETF|Q|N|N|100|Y|N
+File Creation Time: 0830202614:00"""
+
+OTHER_SAMPLE = """ACT Symbol|Security Name|Exchange|CQS Symbol|ETF|Round Lot Size|Test Issue|NASDAQ Symbol
+SPY|SPDR S&P 500 ETF Trust|P|SPY|Y|100|N|SPY
+TLT|iShares 20+ Year Treasury Bond ETF|P|TLT|Y|100|N|TLT
+BRK.A|Berkshire Hathaway Inc.|N|BRK.A|N|10|N|BRK/A
+File Creation Time: 0830202614:00"""
+
+
+def test_symbol_directory_parser_keeps_only_real_etfs():
+    rows = sources._parse_symbol_directory(NASDAQ_SAMPLE, "nasdaq")
+    tickers = {r["ticker"] for r in rows}
+    assert tickers == {"QQQ", "IBIT"}          # no common stock, no test issue
+    rows = sources._parse_symbol_directory(OTHER_SAMPLE, "other")
+    assert {r["ticker"] for r in rows} == {"SPY", "TLT"}
+    assert rows[0]["exchange"] == "NYSE Arca"
+
+
+def test_etf_classification_from_the_name():
+    assert sources._classify_etf("iShares 20+ Year Treasury Bond ETF") == (
+        "BlackRock", "Bond", "Bond")
+    assert sources._classify_etf("SPDR Gold Shares") == (
+        "State Street", "Commodity", "Commodity")
+    assert sources._classify_etf("Direxion Daily Semiconductor Bull 3X Shares")[2] == (
+        "Leveraged / Inverse")
+    assert sources._classify_etf("JPMorgan Equity Premium Income ETF")[2] == (
+        "Derivative Income")
+    assert sources._classify_etf("Some Unknown Fund")[0] == "Other"
+
+
+def test_catalogue_merges_both_exchanges(monkeypatch):
+    class Response:
+        def __init__(self, text):
+            self.text = text
+
+        def raise_for_status(self):
+            pass
+
+    def fake_get(url, **kwargs):
+        return Response(NASDAQ_SAMPLE if "nasdaqlisted" in url else OTHER_SAMPLE)
+
+    monkeypatch.setattr(sources._SESSION, "get", fake_get)
+    catalogue = sources.fetch_us_etf_catalogue()
+    tickers = [row["ticker"] for row in catalogue]
+    assert tickers == sorted(tickers)                  # stable order
+    assert set(tickers) == {"IBIT", "QQQ", "SPY", "TLT"}
+    assert all({"issuer", "asset_class", "category"} <= set(row) for row in catalogue)
+
+
+def test_liquidity_ranking_orders_by_traded_value(monkeypatch):
+    import numpy as np
+
+    def fake_batch(symbols, **kwargs):
+        idx = pd.bdate_range("2026-06-01", periods=30)
+        out = {}
+        for i, symbol in enumerate(symbols, start=1):
+            out[symbol] = pd.DataFrame(
+                {"Close": np.full(30, 10.0), "Volume": np.full(30, 1000.0 * i)},
+                index=idx)
+        return out
+
+    monkeypatch.setattr(sources, "fetch_yahoo_batch", fake_batch)
+    ranked = sources.rank_by_liquidity(["A", "B", "C"])
+    assert list(ranked.index) == ["C", "B", "A"]
+    assert ranked.iloc[0] == pytest.approx(30000.0)
+
+
+def test_discovery_promotes_the_most_liquid_and_keeps_curated(monkeypatch):
+    import update_data
+
+    monkeypatch.setenv("MAX_US_ETFS", "2")
+    monkeypatch.setattr(sources, "fetch_us_etf_catalogue", lambda: [
+        {"ticker": "AAA", "name": "Alpha ETF", "exchange": "NYSE Arca",
+         "issuer": "Other", "asset_class": "Equity", "category": "Broad Market"},
+        {"ticker": "BBB", "name": "Beta Bond ETF", "exchange": "Nasdaq",
+         "issuer": "Other", "asset_class": "Bond", "category": "Bond"},
+        {"ticker": "CCC", "name": "Tiny ETF", "exchange": "Nasdaq",
+         "issuer": "Other", "asset_class": "Equity", "category": "Broad Market"},
+        {"ticker": "SPY", "name": "SPDR S&P 500 ETF Trust", "exchange": "NYSE Arca",
+         "issuer": "State Street", "asset_class": "Equity", "category": "Broad Market"},
+    ])
+    monkeypatch.setattr(sources, "rank_by_liquidity",
+                        lambda symbols, **kw: pd.Series(
+                            {"AAA": 9e6, "BBB": 5e6, "CCC": 1e3, "SPY": 4e9}))
+
+    status = {"failed": [], "warnings": []}
+    rows, catalogue = update_data.discover_us_etfs(status, curated={"SPY"})
+    discovered = {row["ticker"] for row in rows}
+    assert discovered == {"AAA", "BBB"}        # top two by traded value
+    assert "SPY" not in discovered             # curated metadata is not overwritten
+    assert "CCC" not in discovered             # too illiquid to carry a history
+    assert set(catalogue[catalogue.tracked].ticker) == {"AAA", "BBB", "SPY"}
+    assert len(catalogue) == 4                 # the whole market is still recorded
+    assert rows[0]["region"] == "US" and rows[0]["currency"] == "USD"
+
+
+def test_discovery_is_skippable(monkeypatch):
+    import update_data
+    monkeypatch.setenv("SKIP_ETF_DISCOVERY", "1")
+    rows, catalogue = update_data.discover_us_etfs({"warnings": []}, curated=set())
+    assert rows == [] and catalogue.empty

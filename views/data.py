@@ -29,13 +29,16 @@ def render(ctx) -> None:
     cols[2].metric(ctx.t("n_currencies"), f"{ds.currencies}")
     cols[3].metric(ctx.t("data_updated"), f"{ds.last_date:%d.%m.%Y}")
 
-    tabs = st.tabs([ctx.t("h_universe"), ctx.t("h_quality"), ctx.t("h_method")])
+    tabs = st.tabs([ctx.t("h_universe"), ctx.t("h_coverage"), ctx.t("h_quality"),
+                    ctx.t("h_method")])
 
     with tabs[0]:
         _universe(ctx)
     with tabs[1]:
-        _quality(ctx, stale)
+        _coverage(ctx)
     with tabs[2]:
+        _quality(ctx, stale)
+    with tabs[3]:
         C.explain(ctx, "x_data")
         st.markdown(ctx.t("x_data"))
         if ds.status:
@@ -78,6 +81,48 @@ def _universe(ctx) -> None:
         S.add_to_selection(picked)
         S.go_to("nav_compare")
         st.rerun()
+
+
+@st.cache_data(show_spinner=False)
+def _load_catalogue(path: str, mtime: float) -> pd.DataFrame:
+    return pd.read_csv(path)
+
+
+def _coverage(ctx) -> None:
+    """How much of the listed ETF market this report actually carries."""
+    import os
+
+    st.caption(ctx.t("coverage_note"))
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        "data", "catalogue.csv")
+    if not os.path.exists(path):
+        st.info(ctx.t("not_enough_data"))
+        return
+    catalogue = _load_catalogue(path, os.path.getmtime(path))
+
+    tracked = int(catalogue.tracked.sum()) if "tracked" in catalogue else 0
+    cols = st.columns(4)
+    cols[0].metric(ctx.t("coverage_listed"), f"{len(catalogue):,}")
+    cols[1].metric(ctx.t("coverage_tracked"), f"{tracked:,}")
+    if "traded_value" in catalogue:
+        total = catalogue.traded_value.sum()
+        covered = catalogue.loc[catalogue.tracked, "traded_value"].sum()
+        share = covered / total * 100 if total else float("nan")
+        cols[2].metric(ctx.t("m_adv"), f"{share:.1f}%")
+    cols[3].metric(ctx.t("n_funds"),
+                   f"{int((ctx.profile.kind == 'ETF').sum()):,}")
+
+    view = catalogue.copy()
+    if "tracked" in view:
+        view["tracked"] = view.tracked.map({True: "✓", False: ""})
+    st.dataframe(view, width="stretch", height=420, hide_index=True,
+                 column_config={
+                     "traded_value": st.column_config.NumberColumn(
+                         ctx.t("m_adv"), format="compact"),
+                     "liquidity_rank": st.column_config.NumberColumn(
+                         ctx.t("m_rank"), format="%d"),
+                     "tracked": st.column_config.TextColumn(
+                         ctx.t("coverage_tracked"), width="small")})
 
 
 def _quality(ctx, stale: list) -> None:
