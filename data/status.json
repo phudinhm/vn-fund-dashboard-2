@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-09-04T07:20:04.738249+00:00",
+  "started_utc": "2026-09-04T07:36:30.465118+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -21,10 +21,10 @@
   "warnings": [
     "dropped, too few observations: VBIF"
   ],
-  "finished_utc": "2026-09-04T07:28:30.606807+00:00",
-  "duration_seconds": 505.9,
+  "finished_utc": "2026-09-04T07:46:13.581989+00:00",
+  "duration_seconds": 583.1,
   "instruments": 586,
-  "observations": 1731452,
+  "observations": 1731457,
   "first_date": "2004-05-20",
   "last_date": "2026-09-04",
   "by_region": {
@@ -41,7 +41,7 @@
     "Index": 43,
     "Mutual Fund": 65
   },
-  "us_etfs_listed": 5654,
+  "us_etfs_listed": 5655,
   "us_etfs_tracked": 371,
   "currencies": [
     "AUD",
