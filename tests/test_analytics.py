@@ -281,3 +281,22 @@ def test_average_daily_value_uses_price_times_volume(data):
     expected = (prices["SPY"] * volume).tail(63).median()
     assert adv == pytest.approx(expected)
     assert np.isnan(an.average_daily_value(prices["SPY"], pd.Series(dtype=float)))
+
+
+def test_rolling_excess_return_is_the_difference_of_windows(data):
+    prices, _, _ = data
+    excess = an.rolling_excess_return(prices["QQQ"], prices["SPY"], window_days=252)
+    assert not excess.empty
+    date = excess.index[-1]
+    q, s = prices["QQQ"].ffill(), prices["SPY"].ffill()
+    pos = q.index.get_loc(date)
+    expected = (q.iloc[pos] / q.iloc[pos - 252] - 1) - (s.iloc[pos] / s.iloc[pos - 252] - 1)
+    assert excess.loc[date] == pytest.approx(expected, abs=1e-9)
+    # a series against itself has no excess at all
+    flat = an.rolling_excess_return(prices["SPY"], prices["SPY"])
+    assert flat.abs().max() == pytest.approx(0.0, abs=1e-12)
+
+
+def test_rolling_excess_return_needs_a_full_window(data):
+    prices, _, _ = data
+    assert an.rolling_excess_return(prices["QQQ"].tail(100), prices["SPY"]).empty

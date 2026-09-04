@@ -183,6 +183,24 @@ def leaderboard(ctx, scored: pd.DataFrame, prices: pd.DataFrame,
 # charts
 # --------------------------------------------------------------------------
 
+def growth_facts(ctx):
+    """Total growth per instrument over the window, comparable rows only.
+
+    A fund that only existed for the last two months of the window would
+    otherwise be read as if its short run were a full-window result.
+    """
+    keep = set(an.comparable(ctx.metrics).index) if not ctx.metrics.empty else set()
+    growth = an.cumulative_growth(ctx.window.ffill())
+    if growth.empty:
+        return None
+    final = (growth.iloc[-1] / 100 - 1).dropna()
+    if keep:
+        final = final[[t for t in final.index if t in keep]]
+    if len(final) < 2 or ctx.benchmark not in final.index:
+        return None
+    return final
+
+
 def growth_chart(ctx, window: pd.DataFrame, log_scale: bool = False,
                  relative: bool = False, height: int = 440):
     """Wealth curves, optionally shown relative to the benchmark."""

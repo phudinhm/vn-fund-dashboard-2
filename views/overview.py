@@ -6,7 +6,6 @@ from __future__ import annotations
 import numpy as np
 import streamlit as st
 
-import analytics as an
 import i18n
 import report as rp
 from ui import components as C
@@ -73,11 +72,8 @@ def _kpis(ctx) -> None:
 
 
 def _performance_readout(ctx) -> None:
-    growth = an.cumulative_growth(ctx.window.ffill())
-    if growth.empty:
-        return
-    final = (growth.iloc[-1] / 100 - 1).dropna()
-    if len(final) < 2 or ctx.benchmark not in final.index:
+    final = C.growth_facts(ctx)
+    if final is None:
         return
     bench = float(final[ctx.benchmark])
     C.readout(ctx, i18n.performance_readout(
