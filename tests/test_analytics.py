@@ -111,10 +111,18 @@ def test_metrics_table_has_every_column(data):
     assert len(m) == prices.shape[1]
 
 
+def _noisy(idx, drift, vol, seed):
+    """A price path with real volatility: a perfectly smooth series is a cash
+    equivalent and the scorer deliberately refuses to rank those."""
+    rng = np.random.default_rng(seed)
+    steps = rng.normal(drift / 252, vol / np.sqrt(252), len(idx))
+    return pd.Series(100 * np.exp(np.cumsum(steps)), index=idx)
+
+
 def test_composite_score_ranks_the_better_fund_higher():
     idx = pd.bdate_range("2018-01-01", periods=252 * 5)
-    good = pd.Series(100 * (1.15 ** (np.arange(len(idx)) / 252)), index=idx)
-    bad = pd.Series(100 * (1.02 ** (np.arange(len(idx)) / 252)), index=idx)
+    good = _noisy(idx, 0.15, 0.15, 1)
+    bad = _noisy(idx, 0.02, 0.20, 2)
     frame = pd.DataFrame({"GOOD": good, "BAD": bad})
     scored = an.composite_score(an.metrics_table(frame))
     assert scored.index[0] == "GOOD"
@@ -237,10 +245,10 @@ def test_coverage_marks_instruments_that_span_the_window(data):
 def test_short_history_is_listed_but_not_ranked():
     """A two-month-old fund must not out-rank a three-year track record."""
     idx = pd.bdate_range("2021-01-01", periods=252 * 4)
-    seasoned = pd.Series(100 * (1.10 ** (np.arange(len(idx)) / 252)), index=idx)
+    seasoned = _noisy(idx, 0.10, 0.15, 3)
     newcomer = pd.Series(np.nan, index=idx)
     tail = idx[-40:]
-    newcomer.loc[tail] = 100 * (1.9 ** (np.arange(len(tail)) / 252))  # 90% annualised
+    newcomer.loc[tail] = _noisy(tail, 0.90, 0.25, 4).values  # 90% annualised
 
     scored = an.composite_score(
         an.metrics_table(pd.DataFrame({"OLD": seasoned, "NEW": newcomer})))
@@ -300,3 +308,28 @@ def test_rolling_excess_return_is_the_difference_of_windows(data):
 def test_rolling_excess_return_needs_a_full_window(data):
     prices, _, _ = data
     assert an.rolling_excess_return(prices["QQQ"].tail(100), prices["SPY"]).empty
+
+
+def test_cash_equivalents_are_listed_but_not_ranked():
+    """A T-bill fund earns a Sharpe of 7 from a near-zero denominator; that is
+    arithmetic, not the best investment on the list."""
+    idx = pd.bdate_range("2022-01-01", periods=252 * 3)
+    steps = np.arange(len(idx)) / 252
+    cash = pd.Series(100 * (1.045 ** steps), index=idx)          # ~0 volatility
+    rng = np.random.default_rng(4)
+    equity = pd.Series(100 * np.exp(np.cumsum(
+        rng.normal(0.10 / 252, 0.16 / np.sqrt(252), len(idx)))), index=idx)
+
+    metrics = an.metrics_table(pd.DataFrame({"CASH": cash, "EQUITY": equity}), rf=0.02)
+    assert metrics.loc["CASH", "sharpe"] > metrics.loc["EQUITY", "sharpe"]
+    scored = an.composite_score(metrics)
+    assert pd.isna(scored.loc["CASH", "score"])
+    assert not pd.isna(scored.loc["EQUITY", "score"])
+    assert "CASH" not in an.comparable(metrics).index
+
+
+def test_zscores_are_clipped_so_one_outlier_cannot_own_the_ranking():
+    values = pd.Series([1.0, 1.1, 1.2, 1.0, 400.0])
+    z = an._zscore(values)
+    assert z.max() <= an.Z_CLIP + 1e-9
+    assert z.min() >= -an.Z_CLIP - 1e-9

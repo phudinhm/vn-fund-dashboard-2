@@ -584,23 +584,37 @@ SCORE_WEIGHTS = {
 _LOWER_IS_BETTER = {"volatility", "ter"}
 
 
-def _zscore(s: pd.Series) -> pd.Series:
+# Z-scores are clipped before they are weighted. Without this a fund with
+# near-zero volatility - a three-month T-bill ETF - scores like an outlier on
+# every risk dimension at once and tops a ranking meant for investments people
+# actually compare.
+Z_CLIP = 3.0
+
+
+def _zscore(s: pd.Series, clip: float = Z_CLIP) -> pd.Series:
     s = pd.to_numeric(s, errors="coerce")
     if s.notna().sum() < 2 or s.std(skipna=True) in (0, np.nan):
         return pd.Series(0.0, index=s.index)
-    return (s - s.mean(skipna=True)) / s.std(skipna=True)
+    z = (s - s.mean(skipna=True)) / s.std(skipna=True)
+    return z.clip(-clip, clip)
 
 
 def composite_score(metrics: pd.DataFrame, weights: dict | None = None,
-                    min_coverage: float = 0.6) -> pd.DataFrame:
+                    min_coverage: float = 0.6,
+                    min_volatility: float = 0.01) -> pd.DataFrame:
     """Weighted z-score ranking across every risk / return dimension.
 
     ``max_drawdown`` is negative, so a shallower drawdown is already a higher
     z-score; ``volatility`` and ``ter`` are inverted explicitly.
 
-    Instruments covering less than ``min_coverage`` of the window are still
-    listed but left unranked: a two-month-old fund cannot honestly be scored
-    against a three-year track record.
+    Two kinds of instrument are listed but left unranked, because scoring them
+    against ordinary funds is a category error rather than a result:
+
+    * those covering less than ``min_coverage`` of the window — a two-month-old
+      fund cannot be scored against a three-year track record;
+    * those below ``min_volatility`` — a three-month T-bill ETF earns a Sharpe
+      of 7 because its denominator is nearly zero, not because it is the best
+      investment on the list.
     """
     weights = weights or SCORE_WEIGHTS
     if metrics.empty:
@@ -622,15 +636,20 @@ def composite_score(metrics: pd.DataFrame, weights: dict | None = None,
     out["score"] = score / used if used else np.nan
     if "coverage" in out.columns:
         out.loc[out["coverage"] < min_coverage, "score"] = np.nan
+    if "volatility" in out.columns:
+        out.loc[out["volatility"] < min_volatility, "score"] = np.nan
     out["rank"] = out["score"].rank(ascending=False, method="min")
     return out.sort_values("score", ascending=False, na_position="last")
 
 
-def comparable(metrics: pd.DataFrame, min_coverage: float = 0.6) -> pd.DataFrame:
-    """The rows whose numbers can be put side by side."""
+def comparable(metrics: pd.DataFrame, min_coverage: float = 0.6,
+               min_volatility: float = 0.01) -> pd.DataFrame:
+    """The rows whose numbers can honestly be put side by side."""
     if metrics.empty or "coverage" not in metrics.columns:
         return metrics
     subset = metrics[metrics["coverage"] >= min_coverage]
+    if "volatility" in subset.columns:
+        subset = subset[subset["volatility"].fillna(0) >= min_volatility]
     return subset if not subset.empty else metrics
 
 

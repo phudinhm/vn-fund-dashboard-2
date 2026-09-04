@@ -65,7 +65,8 @@ def render(ctx) -> None:
 
     _summary(ctx, frame, scored)
 
-    with C.card(f"{ctx.t('screener_results')} · {len(frame)}", ctx.t("screener_hint")):
+    with C.card(f"{ctx.t('screener_results')} · {len(frame)}",
+                f"{ctx.t('screener_hint')} {ctx.t('unranked_note')}"):
         columns = C.column_choice(ctx, "scr_cols", ESSENTIAL_COLUMNS, FULL_COLUMNS)
         top_n = st.session_state.get("screener_top_n", 40)
         picked = C.leaderboard(ctx, frame.head(top_n), window, columns,
@@ -112,6 +113,10 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
         # separates tradable funds from listed-but-dormant ones
         min_adv = st.slider(ctx.t("screener_min_adv"), 0.0, 100.0, 0.0, 1.0,
                             key="scr_adv")
+        # a 2x single-stock fund will always top a return ranking; it belongs in
+        # the universe but not in the default view of it
+        hide_leveraged = st.toggle(ctx.t("exclude_leveraged"), value=True,
+                                   key="scr_leverage")
 
         row3 = st.columns([2, 2, 2])
         sort_by = row3[0].selectbox(
@@ -121,7 +126,8 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
                               value=40, key="screener_top_n")
         if row3[2].button(ctx.t("screener_reset"), width="stretch", key="scr_reset"):
             for key in ["scr_search", "scr_cagr", "scr_vol", "scr_sharpe",
-                        "scr_dd", "scr_ter", "scr_hist", "scr_adv"]:
+                        "scr_dd", "scr_ter", "scr_hist", "scr_adv",
+                        "scr_leverage"]:
                 st.session_state.pop(key, None)
             st.rerun()
 
@@ -138,6 +144,8 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
                     + " " + frame.get("country", pd.Series("", index=frame.index)).astype(str).str.lower())
         frame = frame[haystack.str.contains(needle, na=False)]
 
+    if hide_leveraged and "category" in frame.columns:
+        frame = frame[frame.category != "Leveraged / Inverse"]
     if "adv" in frame.columns and min_adv > 0:
         frame = frame[frame.adv.fillna(0) >= min_adv * 1e6]
     frame = frame[(frame.cagr.fillna(-9) >= min_cagr / 100)
