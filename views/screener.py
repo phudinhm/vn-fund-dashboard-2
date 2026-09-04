@@ -17,12 +17,17 @@ import report as rp
 from ui import components as C
 from ui import state as S
 
-RESULT_COLUMNS = ["name", "kind", "region", "country", "currency", "cagr",
-                  "volatility", "max_drawdown", "sharpe", "sortino", "calmar",
-                  "ter", "observations", "score"]
+ESSENTIAL_COLUMNS = ["name", "kind", "region", "cagr", "volatility",
+                     "max_drawdown", "sharpe", "ter", "adv", "score"]
+FULL_COLUMNS = ["name", "kind", "region", "country", "currency", "category",
+                "issuer", "cagr", "volatility", "max_drawdown",
+                "time_under_water", "sharpe", "sortino", "calmar", "ter", "adv",
+                "observations", "coverage", "score"]
 
-SORT_KEYS = ["score", "cagr", "sharpe", "sortino", "calmar", "volatility",
+SORT_KEYS = ["score", "cagr", "sharpe", "sortino", "calmar", "adv", "volatility",
              "max_drawdown", "ter"]
+# metrics whose leading value reads as a percentage rather than a ratio
+PERCENT_SORTS = {"cagr", "volatility", "max_drawdown", "ter"}
 
 
 @st.cache_data(show_spinner=False, ttl=3600)
@@ -32,7 +37,9 @@ def universe_metrics(_ds, tickers: tuple, currency: str, period: str, rf: float,
     columns = [t for t in tickers if t in _ds.prices.columns]
     prices = an.convert_prices(_ds.prices[columns], _ds.profile, _ds.fx, currency)
     window = rp.slice_window(prices, period).dropna(axis=1, how="all")
-    metrics = an.metrics_table(window, benchmark=None, rf=rf, profile=_ds.profile)
+    volume = _ds.volume if not _ds.volume.empty else None
+    metrics = an.metrics_table(window, benchmark=None, rf=rf, profile=_ds.profile,
+                               volume=volume)
     scored = an.composite_score(metrics)
     scored["history_years"] = [
         (window[t].dropna().index[-1] - window[t].dropna().index[0]).days / 365.25
@@ -59,8 +66,9 @@ def render(ctx) -> None:
     _summary(ctx, frame, scored)
 
     with C.card(f"{ctx.t('screener_results')} · {len(frame)}", ctx.t("screener_hint")):
+        columns = C.column_choice(ctx, "scr_cols", ESSENTIAL_COLUMNS, FULL_COLUMNS)
         top_n = st.session_state.get("screener_top_n", 40)
-        picked = C.leaderboard(ctx, frame.head(top_n), window, RESULT_COLUMNS,
+        picked = C.leaderboard(ctx, frame.head(top_n), window, columns,
                                key="screener_table", height=500)
 
         cols = st.columns([2, 2, 4])
@@ -100,6 +108,10 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
         # screener asks for a year before it will rank anything
         min_hist = row2[5].slider(ctx.t("screener_min_history"), 0.0, 10.0, 1.0, 0.5,
                                   key="scr_hist")
+        # with several hundred ETFs in scope, liquidity is the filter that
+        # separates tradable funds from listed-but-dormant ones
+        min_adv = st.slider(ctx.t("screener_min_adv"), 0.0, 100.0, 0.0, 1.0,
+                            key="scr_adv")
 
         row3 = st.columns([2, 2, 2])
         sort_by = row3[0].selectbox(
@@ -109,7 +121,7 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
                               value=40, key="screener_top_n")
         if row3[2].button(ctx.t("screener_reset"), width="stretch", key="scr_reset"):
             for key in ["scr_search", "scr_cagr", "scr_vol", "scr_sharpe",
-                        "scr_dd", "scr_ter", "scr_hist"]:
+                        "scr_dd", "scr_ter", "scr_hist", "scr_adv"]:
                 st.session_state.pop(key, None)
             st.rerun()
 
@@ -126,6 +138,8 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
                     + " " + frame.get("country", pd.Series("", index=frame.index)).astype(str).str.lower())
         frame = frame[haystack.str.contains(needle, na=False)]
 
+    if "adv" in frame.columns and min_adv > 0:
+        frame = frame[frame.adv.fillna(0) >= min_adv * 1e6]
     frame = frame[(frame.cagr.fillna(-9) >= min_cagr / 100)
                   & (frame.volatility.fillna(9) <= max_vol / 100)
                   & (frame.sharpe.fillna(-9) >= min_sharpe)
@@ -140,11 +154,15 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
 
 def _summary(ctx, frame: pd.DataFrame, everything: pd.DataFrame) -> None:
     if len(frame):
+        sort_by = st.session_state.get("scr_sort", "score")
+        label = ctx.t(C.METRIC_FORMAT.get(sort_by, (None, sort_by))[1] or sort_by)
+        top_value = frame[sort_by].iloc[0] if sort_by in frame.columns else float("nan")
         C.readout(ctx, i18n.screener_readout(
             ctx.lang, len(frame), len(everything), frame.index[0],
-            float(frame.cagr.iloc[0]) if pd.notna(frame.cagr.iloc[0]) else float("nan"),
+            float(top_value) if pd.notna(top_value) else float("nan"), label,
             float(frame.cagr.median()),
-            float(frame.ter.median()) if "ter" in frame else float("nan")))
+            float(frame.ter.median()) if "ter" in frame else float("nan"),
+            as_percent=sort_by in PERCENT_SORTS))
     cols = st.columns(5)
     cols[0].metric(f"{ctx.t('screener_results')} / {len(everything)}", f"{len(frame)}")
     cols[1].metric(ctx.t("median") + " " + ctx.t("m_cagr"),

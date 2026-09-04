@@ -23,6 +23,22 @@ FLAGS = {"VI": "🇻🇳", "EN": "🇬🇧", "DE": "🇩🇪"}
 STRINGS: dict[str, dict[str, str]] = {}
 
 STRINGS["VI"] = {
+    "m_coverage": "Độ phủ kỳ",
+    # --- v4: coverage, liquidity, column presets ---
+    "m_adv": "Thanh khoản (giá trị/ngày)",
+    "m_tuw": "Thời gian dưới đỉnh (ngày)",
+    "m_td": "Chênh lệch bám (năm)",
+    "screener_min_adv": "Thanh khoản tối thiểu (triệu/ngày)",
+    "h_coverage": "Độ phủ thị trường",
+    "coverage_tracked": "Đang theo dõi",
+    "coverage_listed": "Đang niêm yết",
+    "coverage_note": "Toàn bộ ETF niêm yết tại Mỹ được lấy tự động từ danh bạ mã của Nasdaq Trader. Những mã thanh khoản nhất được tải lịch sử đầy đủ; phần còn lại vẫn được liệt kê ở đây.",
+    "catalogue": "Danh bạ ETF",
+    "price_index_caveat": "Lưu ý: giá ETF đã điều chỉnh cổ tức, còn điểm chỉ số là giá thuần (chưa cộng cổ tức). Vì vậy chênh lệch bám dương so với một chỉ số thường chính là phần cổ tức, không phải quỹ vượt trội.",
+    "cols_essential": "Cột chính",
+    "cols_full": "Toàn bộ cột",
+    "columns": "Cột hiển thị",
+    "sorted_by": "sắp xếp theo",
     "edit_selection": "Sửa danh sách",
     # --- v3 UI: dock, scope filters, readouts ---
     "group_sections": "Phần",
@@ -354,6 +370,22 @@ STRINGS["VI"] = {
 }
 
 STRINGS["EN"] = {
+    "m_coverage": "Window coverage",
+    # --- v4: coverage, liquidity, column presets ---
+    "m_adv": "Liquidity (traded/day)",
+    "m_tuw": "Time under water (days)",
+    "m_td": "Tracking difference (ann.)",
+    "screener_min_adv": "Minimum liquidity (m/day)",
+    "h_coverage": "Market coverage",
+    "coverage_tracked": "Tracked",
+    "coverage_listed": "Listed",
+    "coverage_note": "Every US-listed ETF is discovered automatically from the Nasdaq Trader symbol directory. The most liquid ones get a full price history; the rest are still listed here.",
+    "catalogue": "ETF catalogue",
+    "price_index_caveat": "Note: ETF prices are adjusted for dividends, index levels are not. A positive tracking difference against an index is usually the dividend yield, not outperformance.",
+    "cols_essential": "Key columns",
+    "cols_full": "All columns",
+    "columns": "Columns",
+    "sorted_by": "sorted by",
     "edit_selection": "Edit list",
     # --- v3 UI: dock, scope filters, readouts ---
     "group_sections": "Sections",
@@ -677,6 +709,22 @@ STRINGS["EN"] = {
 }
 
 STRINGS["DE"] = {
+    "m_coverage": "Zeitraumabdeckung",
+    # --- v4: coverage, liquidity, column presets ---
+    "m_adv": "Liquidität (Umsatz/Tag)",
+    "m_tuw": "Zeit unter Wasser (Tage)",
+    "m_td": "Tracking-Differenz (p.a.)",
+    "screener_min_adv": "Mindestliquidität (Mio./Tag)",
+    "h_coverage": "Marktabdeckung",
+    "coverage_tracked": "Verfolgt",
+    "coverage_listed": "Gelistet",
+    "coverage_note": "Jeder in den USA gelistete ETF wird automatisch aus dem Symbolverzeichnis von Nasdaq Trader ermittelt. Die liquidesten erhalten eine vollständige Kurshistorie, die übrigen stehen trotzdem hier.",
+    "catalogue": "ETF-Verzeichnis",
+    "price_index_caveat": "Hinweis: ETF-Kurse sind dividendenbereinigt, Indexstände nicht. Eine positive Tracking-Differenz gegenüber einem Index ist meist die Dividendenrendite, keine Mehrleistung.",
+    "cols_essential": "Kernspalten",
+    "cols_full": "Alle Spalten",
+    "columns": "Spalten",
+    "sorted_by": "sortiert nach",
     "edit_selection": "Liste ändern",
     # --- v3 UI: dock, scope filters, readouts ---
     "group_sections": "Bereiche",
@@ -1306,15 +1354,23 @@ def rolling_readout(lang, ticker, years, win_rate, median, worst):
         f"{_pct(worst)}.")
 
 
-def screener_readout(lang, shown, total, top, top_cagr, median_cagr, median_ter):
+def screener_readout(lang, shown, total, top, top_value, sort_label, median_cagr,
+                     median_ter, as_percent: bool = True):
+    """Names the sort it actually used, so "leads" cannot mean the wrong column.
+
+    Whether the leading value is a percentage or a ratio is the caller's to say:
+    guessing from the magnitude turns a Sharpe of 1.82 into "182%".
+    """
+    value = _pct(top_value) if as_percent else _num(top_value)
     return _pick(
         lang,
-        f"{shown}/{total} công cụ qua bộ lọc. Dẫn đầu là **{top}** ({_pct(top_cagr)}); "
-        f"trung vị nhóm {_pct(median_cagr)} với phí {_num(median_ter)}%/năm.",
-        f"{shown} of {total} instruments pass. **{top}** leads at {_pct(top_cagr)}; the median "
-        f"of the group is {_pct(median_cagr)} at {_num(median_ter)}% a year in fees.",
-        f"{shown} von {total} Instrumenten passen. **{top}** führt mit {_pct(top_cagr)}; der "
-        f"Median der Gruppe liegt bei {_pct(median_cagr)} bei {_num(median_ter)}% Kosten p.a.")
+        f"{shown}/{total} công cụ qua bộ lọc. Đứng đầu theo **{sort_label}** là **{top}** "
+        f"({value}); trung vị nhóm: CAGR {_pct(median_cagr)}, phí {_num(median_ter)}%/năm.",
+        f"{shown} of {total} instruments pass. Top by **{sort_label}** is **{top}** ({value}); "
+        f"the group median is {_pct(median_cagr)} CAGR at {_num(median_ter)}% a year in fees.",
+        f"{shown} von {total} Instrumenten passen. Spitzenreiter nach **{sort_label}** ist "
+        f"**{top}** ({value}); Median der Gruppe: {_pct(median_cagr)} CAGR bei "
+        f"{_num(median_ter)}% Kosten p.a.")
 
 
 def portfolio_readout(lang, cagr, volatility, drawdown, top_risk, top_risk_share,

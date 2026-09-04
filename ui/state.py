@@ -248,7 +248,9 @@ def _compute(_ds, tickers: tuple, benchmark: str, currency: str, period: str,
     cols = [t for t in dict.fromkeys(list(tickers) + [benchmark]) if t in _ds.prices.columns]
     prices = an.convert_prices(_ds.prices[cols], _ds.profile, _ds.fx, currency)
     window = rp.slice_window(prices, period).dropna(axis=1, how="all")
-    metrics = an.metrics_table(window, benchmark=benchmark, rf=rf, profile=_ds.profile)
+    volume = _ds.volume if not _ds.volume.empty else None
+    metrics = an.metrics_table(window, benchmark=benchmark, rf=rf,
+                               profile=_ds.profile, volume=volume)
     scored = an.composite_score(metrics)
     facts = rp.build_facts(window, metrics, benchmark, currency)
     return prices, window, metrics, scored, facts

@@ -351,3 +351,143 @@ def fetch_fx_latest_erapi(base: str = "USD") -> dict[str, float]:
         return {c: 1.0 / v for c, v in rates.items() if v}
     except Exception:
         return {}
+
+
+# --------------------------------------------------- US ETF catalogue (all) --
+
+NASDAQ_LISTED = "https://www.nasdaqtrader.com/dynamic/symdir/nasdaqlisted.txt"
+OTHER_LISTED = "https://www.nasdaqtrader.com/dynamic/symdir/otherlisted.txt"
+
+# Nasdaq Trader publishes the official symbol directory for every US listing,
+# with an ETF flag. It needs no key, so the report can know the whole US ETF
+# market rather than a list somebody typed by hand.
+_EXCHANGE = {"A": "NYSE American", "N": "NYSE", "P": "NYSE Arca",
+             "Z": "Cboe BZX", "V": "IEXG"}
+
+_ISSUER_PREFIX = [
+    ("iShares", "BlackRock"), ("SPDR", "State Street"), ("Vanguard", "Vanguard"),
+    ("Invesco", "Invesco"), ("Schwab", "Schwab"), ("Fidelity", "Fidelity"),
+    ("JPMorgan", "J.P. Morgan"), ("First Trust", "First Trust"),
+    ("VanEck", "VanEck"), ("WisdomTree", "WisdomTree"), ("ProShares", "ProShares"),
+    ("Direxion", "Direxion"), ("Global X", "Global X"), ("ARK", "ARK Invest"),
+    ("Xtrackers", "DWS"), ("Amplify", "Amplify"), ("KraneShares", "KraneShares"),
+    ("Pacer", "Pacer"), ("Janus", "Janus Henderson"), ("PIMCO", "PIMCO"),
+    ("Goldman Sachs", "Goldman Sachs"), ("Franklin", "Franklin Templeton"),
+    ("Dimensional", "Dimensional"), ("American Century", "American Century"),
+    ("Roundhill", "Roundhill"), ("YieldMax", "YieldMax"), ("Simplify", "Simplify"),
+    ("Innovator", "Innovator"), ("Alpha Architect", "Alpha Architect"),
+    ("Grayscale", "Grayscale"), ("Bitwise", "Bitwise"), ("Defiance", "Defiance"),
+    ("Tidal", "Tidal"), ("Sprott", "Sprott"), ("abrdn", "abrdn"),
+]
+
+_CLASS_RULES = [
+    ("Crypto", ("bitcoin", "ether", "crypto", "blockchain")),
+    ("Bond", ("bond", "treasury", "municipal", "aggregate", "credit", "yield curve",
+              "duration", "tips", "fixed income", "t-bill", "ultrashort")),
+    ("Commodity", ("gold", "silver", "platinum", "palladium", "commodity", "oil",
+                   "natural gas", "copper", "uranium", "agriculture")),
+    ("Real Estate", ("real estate", "reit", "residential", "mortgage")),
+    ("Multi-Asset", ("allocation", "balanced", "target risk", "multi-asset")),
+]
+
+_CATEGORY_RULES = [
+    ("Leveraged / Inverse", ("2x", "3x", "ultra", "inverse", "bear", "-1x",
+                             "leveraged", "short ")),
+    ("Derivative Income", ("covered call", "buywrite", "premium income",
+                           "option income", "buffer", "yieldmax")),
+    ("Dividend", ("dividend", "income equity", "high yield equity")),
+    ("Smart Beta", ("equal weight", "momentum", "quality", "minimum volatility",
+                    "low volatility", "value factor", "multifactor")),
+    ("Thematic", ("innovation", "robotic", "clean energy", "solar", "cyber",
+                  "cloud", "semiconductor", "lithium", "space", "artificial")),
+    ("Sector", ("sector", "financials", "technology", "health care", "energy",
+                "utilities", "industrials", "materials", "staples", "discretionary")),
+    ("Country", ("msci ", "ftse ", "japan", "china", "india", "brazil", "europe",
+                 "emerging", "developed")),
+]
+
+
+def _classify_etf(name: str) -> tuple[str, str, str]:
+    """(issuer, asset_class, category) inferred from the fund's own name."""
+    lower = name.lower()
+    issuer = next((house for prefix, house in _ISSUER_PREFIX
+                   if lower.startswith(prefix.lower()) or f" {prefix.lower()} " in lower),
+                  "Other")
+    asset_class = next((cls for cls, words in _CLASS_RULES
+                        if any(w in lower for w in words)), "Equity")
+    category = next((cat for cat, words in _CATEGORY_RULES
+                     if any(w in lower for w in words)), "")
+    if not category:
+        # a bond or commodity fund is better described by its asset class than
+        # by a default of "Broad Market"
+        category = "Broad Market" if asset_class == "Equity" else asset_class
+    return issuer, asset_class, category
+
+
+def _parse_symbol_directory(text: str, layout: str) -> list[dict]:
+    rows = []
+    lines = [ln for ln in text.splitlines() if ln and not ln.startswith("File Creation")]
+    if not lines:
+        return rows
+    header = [h.strip() for h in lines[0].split("|")]
+    for line in lines[1:]:
+        parts = line.split("|")
+        if len(parts) != len(header):
+            continue
+        record = dict(zip(header, (p.strip() for p in parts)))
+        if record.get("ETF") != "Y" or record.get("Test Issue") == "Y":
+            continue
+        symbol = record.get("Symbol") or record.get("ACT Symbol") or ""
+        name = record.get("Security Name", "")
+        # units, warrants and rights carry punctuation Yahoo does not serve
+        if not symbol or not symbol.isalpha() or len(symbol) > 5:
+            continue
+        rows.append({
+            "ticker": symbol, "name": name.split(" - ")[-1].strip() or symbol,
+            "exchange": _EXCHANGE.get(record.get("Exchange", ""),
+                                      "Nasdaq" if layout == "nasdaq" else "US"),
+        })
+    return rows
+
+
+def fetch_us_etf_catalogue() -> list[dict]:
+    """Every ETF listed in the United States, from the official symbol directory."""
+    out: list[dict] = []
+    for url, layout in ((NASDAQ_LISTED, "nasdaq"), (OTHER_LISTED, "other")):
+        try:
+            response = _SESSION.get(url, timeout=60)
+            response.raise_for_status()
+            out += _parse_symbol_directory(response.text, layout)
+        except Exception:
+            continue
+
+    seen, unique = set(), []
+    for row in out:
+        if row["ticker"] in seen:
+            continue
+        seen.add(row["ticker"])
+        issuer, asset_class, category = _classify_etf(row["name"])
+        row.update(issuer=issuer, asset_class=asset_class, category=category)
+        unique.append(row)
+    return sorted(unique, key=lambda r: r["ticker"])
+
+
+def rank_by_liquidity(symbols: list[str], days: int = 90,
+                      chunk: int = 60) -> pd.Series:
+    """Median daily traded value over a short window, most liquid first.
+
+    One cheap pass over the whole catalogue decides which ETFs are worth a full
+    history download; it is what keeps "every ETF" from meaning "every dead
+    ETF with three trades a week".
+    """
+    start = (datetime.now(timezone.utc) - pd.Timedelta(days=days)).strftime("%Y-%m-%d")
+    frames = fetch_yahoo_batch(symbols, start=start, chunk=chunk, pause=0.4)
+    values = {}
+    for symbol, frame in frames.items():
+        if frame.empty or "Volume" not in frame:
+            continue
+        traded = (frame["Close"] * frame["Volume"]).replace(0, pd.NA).dropna()
+        if len(traded) < 5:
+            continue
+        values[symbol] = float(traded.median())
+    return pd.Series(values, dtype="float64").sort_values(ascending=False)

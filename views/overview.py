@@ -12,9 +12,12 @@ import report as rp
 from ui import components as C
 from ui import state as S
 
-BOARD_COLUMNS = ["rank", "name", "region", "currency", "cagr", "volatility",
-                 "max_drawdown", "sharpe", "sortino", "calmar", "beta", "alpha",
-                 "tracking_error", "ter", "score"]
+ESSENTIAL_COLUMNS = ["rank", "name", "region", "cagr", "volatility",
+                     "max_drawdown", "sharpe", "ter", "score"]
+FULL_COLUMNS = ["rank", "name", "region", "currency", "cagr", "volatility",
+                "max_drawdown", "time_under_water", "sharpe", "sortino", "calmar",
+                "beta", "alpha", "tracking_error", "tracking_difference",
+                "up_capture", "down_capture", "adv", "ter", "coverage", "score"]
 
 
 def render(ctx) -> None:
@@ -36,7 +39,8 @@ def render(ctx) -> None:
             C.growth_heatmap(ctx, ctx.prices[focus], focus, height=380)
 
     with C.card(ctx.t("h_leaderboard"), ctx.t("screener_hint")):
-        picked = C.leaderboard(ctx, ctx.scored, ctx.prices, BOARD_COLUMNS,
+        columns = C.column_choice(ctx, "ov_cols", ESSENTIAL_COLUMNS, FULL_COLUMNS)
+        picked = C.leaderboard(ctx, ctx.scored, ctx.prices, columns,
                                key="overview_board",
                                height=min(120 + 36 * len(ctx.scored), 420))
         if len(picked) == 1 and st.button(f"{ctx.t('open_profile')}: {picked[0]}",
