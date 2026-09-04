@@ -236,6 +236,22 @@ def versus_benchmark(ctx) -> None:
             st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("m_beta")),
                             width="stretch")
 
+    with C.card(ctx.t("h_excess")):
+        excess = pd.DataFrame({
+            t: an.rolling_excess_return(ctx.window[t], ctx.window[ctx.benchmark])
+            for t in others}).dropna(how="all") * 100
+        if excess.empty:
+            st.info(ctx.t("not_enough_data"))
+        else:
+            fig = px.line(excess, height=340)
+            fig.add_hline(y=0, line_dash="dot", line_color=BENCH)
+            st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("y_return")),
+                            width="stretch")
+            leader = excess.mean().idxmax()
+            C.readout(ctx, i18n.excess_readout(
+                ctx.lang, leader, float(excess[leader].mean() / 100),
+                float((excess[leader] > 0).mean() * 100), ctx.benchmark))
+
     st.markdown("#### " + ctx.t("h_capture"))
     capture = ctx.metrics.loc[others, ["up_capture", "down_capture"]].dropna(how="all")
     if not capture.empty:
@@ -280,11 +296,8 @@ def correlation(ctx) -> None:
 
 # ---------------------------------------------------------------- readouts
 def _growth_readout(ctx) -> None:
-    growth = an.cumulative_growth(ctx.window.ffill())
-    if growth.empty:
-        return
-    final = (growth.iloc[-1] / 100 - 1).dropna()
-    if len(final) < 2 or ctx.benchmark not in final.index:
+    final = C.growth_facts(ctx)
+    if final is None:
         return
     bench = float(final[ctx.benchmark])
     C.readout(ctx, i18n.performance_readout(

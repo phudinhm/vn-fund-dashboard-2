@@ -23,6 +23,7 @@ FLAGS = {"VI": "🇻🇳", "EN": "🇬🇧", "DE": "🇩🇪"}
 STRINGS: dict[str, dict[str, str]] = {}
 
 STRINGS["VI"] = {
+    "h_excess": "Lợi nhuận vượt trội trượt (1 năm)",
     "m_coverage": "Độ phủ kỳ",
     # --- v4: coverage, liquidity, column presets ---
     "m_adv": "Thanh khoản (giá trị/ngày)",
@@ -370,6 +371,7 @@ STRINGS["VI"] = {
 }
 
 STRINGS["EN"] = {
+    "h_excess": "Rolling excess return (1 year)",
     "m_coverage": "Window coverage",
     # --- v4: coverage, liquidity, column presets ---
     "m_adv": "Liquidity (traded/day)",
@@ -709,6 +711,7 @@ STRINGS["EN"] = {
 }
 
 STRINGS["DE"] = {
+    "h_excess": "Rollierende Überrendite (1 Jahr)",
     "m_coverage": "Zeitraumabdeckung",
     # --- v4: coverage, liquidity, column presets ---
     "m_adv": "Liquidität (Umsatz/Tag)",
@@ -1423,3 +1426,17 @@ def freshness_label(lang: str, days: int) -> tuple[str, str]:
     if days <= 4:
         return t(lang, "fresh_days").format(n=days), "fresh-warn"
     return t(lang, "fresh_stale").format(n=days), "fresh-old"
+
+
+def excess_readout(lang, ticker, average, share_ahead, benchmark):
+    return _pick(
+        lang,
+        f"Tính trên mọi cửa sổ 12 tháng, **{ticker}** vượt **{benchmark}** trung bình "
+        f"{_pct(average)} và đi trước trong {_num(share_ahead, 0)}% thời gian. Khoảng thời "
+        f"gian dưới vạch 0 là lúc nắm giữ nó khó chịu nhất, dù kết quả cuối kỳ có đẹp.",
+        f"Across every 12-month window, **{ticker}** beat **{benchmark}** by {_pct(average)} "
+        f"on average and was ahead {_num(share_ahead, 0)}% of the time. The stretches below "
+        f"zero are when holding it hurt, whatever the final total says.",
+        f"Über alle 12-Monats-Fenster schlug **{ticker}** die Benchmark **{benchmark}** um "
+        f"durchschnittlich {_pct(average)} und lag {_num(share_ahead, 0)}% der Zeit vorn. Die "
+        f"Phasen unter null sind die, in denen das Halten wehtat — unabhängig vom Endergebnis.")

@@ -455,6 +455,23 @@ def rolling_return_stats(prices: pd.Series, years: float = 1.0) -> dict:
     }
 
 
+def rolling_excess_return(asset_prices: pd.Series, bench_prices: pd.Series,
+                          window_days: int = 252) -> pd.Series:
+    """Rolling annual return of the fund minus the same window of the benchmark.
+
+    Cumulative charts hide *when* a fund earned its lead. This shows the lead
+    itself, period by period: above zero it was ahead over the last year, below
+    zero it was behind, whatever the total picture says.
+    """
+    df = pd.concat([asset_prices.rename("a"), bench_prices.rename("b")],
+                   axis=1, sort=True).ffill().dropna()
+    if len(df) <= window_days:
+        return pd.Series(dtype=float)
+    asset = df["a"] / df["a"].shift(window_days) - 1
+    bench = df["b"] / df["b"].shift(window_days) - 1
+    return (asset - bench).dropna()
+
+
 def rolling_volatility(ret: pd.Series, window: int = 63) -> pd.Series:
     return ret.rolling(window).std() * np.sqrt(TRADING_DAYS) * 100
 
