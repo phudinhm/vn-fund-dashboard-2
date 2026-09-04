@@ -20,6 +20,7 @@ Frankfurter / open.er-api  FX fallbacks
 from __future__ import annotations
 
 import io
+import re
 import time
 from datetime import datetime, timezone
 
@@ -383,16 +384,29 @@ _ISSUER_PREFIX = [
 _CLASS_RULES = [
     ("Crypto", ("bitcoin", "ether", "crypto", "blockchain")),
     ("Bond", ("bond", "treasury", "municipal", "aggregate", "credit", "yield curve",
-              "duration", "tips", "fixed income", "t-bill", "ultrashort")),
+              "duration", "tips", "fixed income", "t-bill", "ultrashort",
+              "short maturity", "ultra-short", "ultra short", "money market",
+              "floating rate", "short duration", "short income")),
     ("Commodity", ("gold", "silver", "platinum", "palladium", "commodity", "oil",
                    "natural gas", "copper", "uranium", "agriculture")),
     ("Real Estate", ("real estate", "reit", "residential", "mortgage")),
     ("Multi-Asset", ("allocation", "balanced", "target risk", "multi-asset")),
 ]
 
+# "Ultra Short Bond" is a maturity, not leverage, and "Short Maturity" is not a
+# short position: leverage is matched on explicit multipliers and direction
+# words instead of loose substrings.
+_LEVERAGE_PATTERN = re.compile(
+    r"(?:\b[-+]?[123](?:\.5)?x\b|\bultrapro\b|\bultrashort\b|\binverse\b"
+    r"|\bleveraged\b|\bbull\b|\bbear\b)", re.IGNORECASE)
+
+# "Short" alone means an inverse fund only when the name is not talking about
+# maturity: "ProShares Short QQQ" is a short position, "Ultra Short Bond" is not.
+_SHORT_PATTERN = re.compile(r"\bshort\b", re.IGNORECASE)
+_MATURITY_WORDS = ("maturity", "duration", "bond", "treasury", "income", "term",
+                   "credit", "bill")
+
 _CATEGORY_RULES = [
-    ("Leveraged / Inverse", ("2x", "3x", "ultra", "inverse", "bear", "-1x",
-                             "leveraged", "short ")),
     ("Derivative Income", ("covered call", "buywrite", "premium income",
                            "option income", "buffer", "yieldmax")),
     ("Dividend", ("dividend", "income equity", "high yield equity")),
@@ -410,6 +424,12 @@ _CATEGORY_RULES = [
 def _classify_etf(name: str) -> tuple[str, str, str]:
     """(issuer, asset_class, category) inferred from the fund's own name."""
     lower = name.lower()
+    is_short_fund = (_SHORT_PATTERN.search(name)
+                     and not any(w in lower for w in _MATURITY_WORDS))
+    if _LEVERAGE_PATTERN.search(name) or is_short_fund:
+        issuer = next((house for prefix, house in _ISSUER_PREFIX
+                       if lower.startswith(prefix.lower())), "Other")
+        return issuer, "Equity", "Leveraged / Inverse"
     issuer = next((house for prefix, house in _ISSUER_PREFIX
                    if lower.startswith(prefix.lower()) or f" {prefix.lower()} " in lower),
                   "Other")

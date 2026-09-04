@@ -23,6 +23,8 @@ FLAGS = {"VI": "🇻🇳", "EN": "🇬🇧", "DE": "🇩🇪"}
 STRINGS: dict[str, dict[str, str]] = {}
 
 STRINGS["VI"] = {
+    "exclude_leveraged": "Ẩn quỹ đòn bẩy / nghịch đảo",
+    "unranked_note": "Quỹ có lịch sử quá ngắn hoặc biến động gần bằng 0 (tương đương tiền mặt) vẫn được liệt kê nhưng không xếp hạng — chấm điểm chúng cạnh quỹ thường là so sai nhóm.",
     "h_excess": "Lợi nhuận vượt trội trượt (1 năm)",
     "m_coverage": "Độ phủ kỳ",
     # --- v4: coverage, liquidity, column presets ---
@@ -371,6 +373,8 @@ STRINGS["VI"] = {
 }
 
 STRINGS["EN"] = {
+    "exclude_leveraged": "Hide leveraged / inverse",
+    "unranked_note": "Funds with too little history, or with near-zero volatility (cash equivalents), are listed but left unranked — scoring them beside ordinary funds compares different things.",
     "h_excess": "Rolling excess return (1 year)",
     "m_coverage": "Window coverage",
     # --- v4: coverage, liquidity, column presets ---
@@ -711,6 +715,8 @@ STRINGS["EN"] = {
 }
 
 STRINGS["DE"] = {
+    "exclude_leveraged": "Gehebelte / inverse ausblenden",
+    "unranked_note": "Fonds mit zu kurzer Historie oder nahezu null Volatilität (Geldmarktnähe) werden gelistet, aber nicht bewertet — sie neben gewöhnlichen Fonds zu benoten vergleicht Verschiedenes.",
     "h_excess": "Rollierende Überrendite (1 Jahr)",
     "m_coverage": "Zeitraumabdeckung",
     # --- v4: coverage, liquidity, column presets ---
