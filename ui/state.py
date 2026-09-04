@@ -19,7 +19,7 @@ import i18n
 import report as rp
 
 DEFAULTS = {
-    "lang": "VI",
+    "lang": "EN",
     "view": "nav_overview",
     "period": "3Y",
     "currency": "USD",

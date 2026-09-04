@@ -209,3 +209,39 @@ def test_region_filter_prunes_the_comparison():
     european = set(ds.profile[ds.profile.region == "Europe"].ticker)
     assert set(at.session_state["selection"]) <= european
     assert at.session_state["selection"]  # never left empty
+
+
+def test_css_never_overrides_the_material_icon_font():
+    """Streamlit draws its icons as ligatures in Material Symbols.
+
+    A font-family rule broad enough to hit the icon spans (the old
+    ``[class*="st-"]``, which matches ``st-emotion-cache-…``) replaces that font
+    and the browser renders the ligature *name*: a "keyboard_double_arrow_left"
+    where the sidebar's collapse arrow should be.
+    """
+    import re
+
+    from ui import theme
+
+    # the selector may still be named in a comment explaining why it is gone
+    rules = re.sub(r"/\*.*?\*/", "", theme.CSS, flags=re.DOTALL)
+    assert '[class*="st-"]' not in rules, (
+        "this selector matches Streamlit's icon spans and breaks their ligatures")
+    # and the icon font is restored explicitly, so a future rule cannot eat it
+    assert "stIconMaterial" in theme.CSS
+    assert "Material Symbols Rounded" in theme.CSS
+
+
+def test_english_is_the_default_language():
+    import i18n
+
+    assert S.DEFAULTS["lang"] == "EN"
+    assert list(i18n.LANGUAGES)[0] == "EN"
+
+
+@needs_data
+def test_report_opens_in_english():
+    at = AppTest.from_file(APP, default_timeout=600)
+    at.run()
+    assert at.session_state["lang"] == "EN"
+    assert not at.exception, [str(e.value) for e in at.exception]

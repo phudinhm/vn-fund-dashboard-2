@@ -324,8 +324,11 @@ def growth_heatmap(ctx, prices: pd.Series, ticker: str, height: int | None = Non
         # empty string, not "NaN", for months a fund did not yet exist
         text=[["" if np.isnan(v) else f"{v:.1f}" for v in row] for row in heat.values],
         texttemplate="%{text}", textfont=dict(size=10)))
-    fig.update_yaxes(autorange="reversed")
-    fig.update_xaxes(side="top", tickangle=0)
+    fig.update_yaxes(autorange="reversed", tickfont=dict(size=10))
+    # month labels sit in a narrow card; without a forced tick per column and a
+    # smaller face they run into each other as "JanFebMar"
+    fig.update_xaxes(side="top", tickangle=0, tickfont=dict(size=10),
+                     dtick=1, automargin=True)
     st.plotly_chart(
         style_fig(fig, "", "", "",
                   height=height or max(240, 30 * len(heat) + 90),
