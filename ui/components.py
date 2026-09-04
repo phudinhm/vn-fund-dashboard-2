@@ -152,7 +152,12 @@ def leaderboard(ctx, scored: pd.DataFrame, prices: pd.DataFrame,
     frame.insert(0, "spark", pd.Series(sparkline_series(prices, list(frame.index)),
                                        index=frame.index))
     keep = ["spark"] + [c for c in columns if c in frame.columns]
-    frame = frame[keep]
+    frame = frame[keep].copy()
+    # a metric column that arrived as object dtype renders its gaps as the word
+    # "None"; numeric dtype renders them as an empty cell, which is the truth
+    for col in keep:
+        if col in METRIC_FORMAT and frame[col].dtype == object:
+            frame[col] = pd.to_numeric(frame[col], errors="coerce")
 
     cfg = metric_columns(ctx, keep)
     cfg["spark"] = st.column_config.LineChartColumn(ctx.t("sparkline"), width="small")

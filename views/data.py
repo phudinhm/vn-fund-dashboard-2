@@ -48,7 +48,11 @@ def render(ctx) -> None:
 
 def _universe(ctx) -> None:
     frame = ctx.profile[ctx.profile.ticker.isin(ctx.ds.prices.columns)]
-    frame = frame[[c for c in UNIVERSE_COLUMNS if c in frame.columns]]
+    frame = frame[[c for c in UNIVERSE_COLUMNS if c in frame.columns]].copy()
+    # an index has no benchmark of its own; an em dash says that, "None" does not
+    for col in ("benchmark", "category", "issuer", "inception"):
+        if col in frame.columns:
+            frame[col] = frame[col].fillna("").replace("", "—")
 
     cols = st.columns([2, 2, 2])
     search = cols[0].text_input(ctx.t("search_ticker"), key="data_search")
