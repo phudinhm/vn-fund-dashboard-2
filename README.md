@@ -24,7 +24,7 @@ streamlit run app.py      # open the report
 | **Currencies** | 20 trading currencies, all convertible to a single reporting currency (USD / EUR / VND) at the **daily** FX rate, so cross-market comparison is honest |
 | **Benchmarks** | any index in the universe can be made the benchmark; beta, alpha, R², tracking error, tracking difference, information ratio, up/down capture and batting average are computed against it |
 | **Fair comparison** | every instrument carries the share of the window it actually spans. Two kinds of fund are listed but left unranked, because scoring them beside ordinary funds compares different things: those with too little history, and cash equivalents whose near-zero volatility manufactures a Sharpe of 7 |
-| **Languages** | the whole UI *and* the generated commentary exist in VI / EN / DE; a test fails CI if a translation is missing |
+| **Languages** | the whole UI *and* the generated commentary exist in EN / VI / DE, English by default; a test fails CI if a translation is missing |
 
 ## How the report is organised
 
@@ -111,7 +111,7 @@ Any single source failing degrades gracefully: the ticker is recorded in
 | `views/*.py` | one module per section (overview, screener, compare, markets, profile, lab, data) |
 | `.streamlit/config.toml` | the design tokens Streamlit applies to its own widgets |
 | `metrics.py` | thin compatibility shim over `analytics.py` |
-| `tests/` | 91 tests covering analytics, i18n completeness, the pipeline and every view |
+| `tests/` | 95 tests covering analytics, i18n completeness, the pipeline and every view |
 
 ---
 

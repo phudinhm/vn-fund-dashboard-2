@@ -271,7 +271,7 @@ def markdown_report(lang: str, ds: Dataset, tickers: list[str], period: str,
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Render the ETF report as Markdown")
-    ap.add_argument("--lang", default="EN", choices=list(i18n.STRINGS))
+    ap.add_argument("--lang", default="EN", choices=list(i18n.LANGUAGES))
     ap.add_argument("--period", default="3Y", choices=RANGES)
     ap.add_argument("--currency", default="USD")
     ap.add_argument("--benchmark", default=None)

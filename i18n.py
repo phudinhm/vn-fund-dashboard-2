@@ -17,8 +17,9 @@ from __future__ import annotations
 
 import math
 
-LANGUAGES = {"VI": "Tiếng Việt", "EN": "English", "DE": "Deutsch"}
-FLAGS = {"VI": "🇻🇳", "EN": "🇬🇧", "DE": "🇩🇪"}
+# English leads: it is the report's default and the order the switch shows.
+LANGUAGES = {"EN": "English", "VI": "Tiếng Việt", "DE": "Deutsch"}
+FLAGS = {"EN": "🇬🇧", "VI": "🇻🇳", "DE": "🇩🇪"}
 
 STRINGS: dict[str, dict[str, str]] = {}
 

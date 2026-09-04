@@ -58,7 +58,7 @@ def dock(ds, T) -> str:
                     unsafe_allow_html=True)
 
         cols = st.columns(3)
-        for col, code in zip(cols, ["VI", "EN", "DE"]):
+        for col, code in zip(cols, list(i18n.LANGUAGES)):
             active = st.session_state.get("lang") == code
             if col.button(code, width="stretch", key=f"lang_{code}",
                           type="primary" if active else "secondary"):
