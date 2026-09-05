@@ -105,7 +105,7 @@ AEX,yahoo,^AEX,AEX Index,Index,Equity,Europe,Netherlands,EUR,-,0.0,,Large Cap,20
 IBEX35,yahoo,^IBEX,IBEX 35,Index,Equity,Europe,Spain,EUR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-04,4264,1
 NIKKEI225,yahoo,^N225,Nikkei 225,Index,Equity,Asia-Pacific,Japan,JPY,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-04,4078,1
 HANGSENG,yahoo,^HSI,Hang Seng Index,Index,Equity,Asia-Pacific,Hong Kong,HKD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-04,4104,1
-SHANGHAI,yahoo,000001.SS,SSE Composite,Index,Equity,Asia-Pacific,China,CNY,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-03,4045,2
+SHANGHAI,yahoo,000001.SS,SSE Composite,Index,Equity,Asia-Pacific,China,CNY,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4046,1
 KOSPI,yahoo,^KS11,KOSPI,Index,Equity,Asia-Pacific,South Korea,KRW,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4100,1
 TAIEX,yahoo,^TWII,TAIEX,Index,Equity,Asia-Pacific,Taiwan,TWD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4071,1
 NIFTY50,yahoo,^NSEI,NIFTY 50,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-04,4096,1
@@ -115,7 +115,7 @@ SET,yahoo,^SET.BK,SET Index,Index,Equity,Asia-Pacific,Thailand,THB,-,0.0,,Broad 
 KLCI,yahoo,^KLSE,FTSE Bursa Malaysia KLCI,Index,Equity,Asia-Pacific,Malaysia,MYR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-04,4084,1
 JKSE,yahoo,^JKSE,IDX Composite,Index,Equity,Asia-Pacific,Indonesia,IDR,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4043,1
 PSEI,yahoo,PSEI.PS,PSEi Composite,Index,Equity,Asia-Pacific,Philippines,PHP,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4036,1
-ASX200,yahoo,^AXJO,S&P/ASX 200,Index,Equity,Asia-Pacific,Australia,AUD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-03,4208,2
+ASX200,yahoo,^AXJO,S&P/ASX 200,Index,Equity,Asia-Pacific,Australia,AUD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-04,4209,1
 TSX,yahoo,^GSPTSE,S&P/TSX Composite,Index,Equity,Americas,Canada,CAD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4185,1
 BOVESPA,yahoo,^BVSP,Ibovespa,Index,Equity,Americas,Brazil,BRL,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4135,1
 IPC,yahoo,^MXX,S&P/BMV IPC,Index,Equity,Americas,Mexico,MXN,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-04,4183,1
