@@ -107,7 +107,7 @@ NIKKEI225,yahoo,^N225,Nikkei 225,Index,Equity,Asia-Pacific,Japan,JPY,-,0.0,,Larg
 HANGSENG,yahoo,^HSI,Hang Seng Index,Index,Equity,Asia-Pacific,Hong Kong,HKD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-18,4114,2
 SHANGHAI,yahoo,000001.SS,SSE Composite,Index,Equity,Asia-Pacific,China,CNY,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-18,4056,2
 KOSPI,yahoo,^KS11,KOSPI,Index,Equity,Asia-Pacific,South Korea,KRW,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-18,4110,2
-TAIEX,yahoo,^TWII,TAIEX,Index,Equity,Asia-Pacific,Taiwan,TWD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-18,4081,2
+TAIEX,yahoo,^TWII,TAIEX,Index,Equity,Asia-Pacific,Taiwan,TWD,-,0.0,,Broad Market,2010-01-04,2010-01-04,2026-09-20,4082,0
 NIFTY50,yahoo,^NSEI,NIFTY 50,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-18,4105,2
 SENSEX,yahoo,^BSESN,BSE SENSEX,Index,Equity,Asia-Pacific,India,INR,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-18,4110,2
 STI,yahoo,^STI,Straits Times Index,Index,Equity,Asia-Pacific,Singapore,SGD,-,0.0,,Large Cap,2010-01-04,2010-01-04,2026-09-18,4180,2
@@ -221,8 +221,8 @@ CW8.PA,yahoo,CW8.PA,Amundi MSCI World UCITS ETF,ETF,Equity,Europe,France,EUR,Amu
 2828.HK,yahoo,2828.HK,Hang Seng China Enterprises Index ETF,ETF,Equity,Asia-Pacific,Hong Kong,HKD,Hang Seng,0.6,HANGSENG,Large Cap,2024-04-24,2024-04-24,2026-09-18,592,2
 069500.KS,yahoo,069500.KS,KODEX 200 ETF,ETF,Equity,Asia-Pacific,South Korea,KRW,Samsung,0.15,KOSPI,Large Cap,2010-01-04,2010-01-04,2026-09-18,4083,2
 102110.KS,yahoo,102110.KS,TIGER 200 ETF,ETF,Equity,Asia-Pacific,South Korea,KRW,Mirae Asset,0.05,KOSPI,Large Cap,2010-01-04,2010-01-04,2026-09-18,4083,2
-0050.TW,yahoo,0050.TW,Yuanta Taiwan Top 50 ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.32,TAIEX,Large Cap,2010-01-04,2010-01-04,2026-09-18,4088,2
-0056.TW,yahoo,0056.TW,Yuanta Taiwan Dividend Plus ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.4,TAIEX,Dividend,2010-01-04,2010-01-04,2026-09-18,4093,2
+0050.TW,yahoo,0050.TW,Yuanta Taiwan Top 50 ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.32,TAIEX,Large Cap,2010-01-04,2010-01-04,2026-09-20,4089,0
+0056.TW,yahoo,0056.TW,Yuanta Taiwan Dividend Plus ETF,ETF,Equity,Asia-Pacific,Taiwan,TWD,Yuanta,0.4,TAIEX,Dividend,2010-01-04,2010-01-04,2026-09-20,4094,0
 NIFTYBEES.NS,yahoo,NIFTYBEES.NS,Nippon India ETF Nifty 50 BeES,ETF,Equity,Asia-Pacific,India,INR,Nippon,0.04,NIFTY50,Large Cap,2010-01-04,2010-01-04,2026-09-18,4128,2
 VAS.AX,yahoo,VAS.AX,Vanguard Australian Shares Index ETF,ETF,Equity,Asia-Pacific,Australia,AUD,Vanguard,0.07,ASX200,Broad Market,2010-01-04,2010-01-04,2026-09-18,4225,2
 STW.AX,yahoo,STW.AX,SPDR S&P/ASX 200 Fund,ETF,Equity,Asia-Pacific,Australia,AUD,State Street,0.05,ASX200,Large Cap,2010-01-04,2010-01-04,2026-09-18,4226,2
