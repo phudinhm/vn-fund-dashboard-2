@@ -1,38 +1,38 @@
 # Global ETF Report
 *Comprehensive comparison of ETFs and mutual funds across every market, against their benchmarks*
 
-- Data updated to: **19.09.2026**
-- Time range: **3Y** (19.09.2023 → 19.09.2026)
+- Data updated to: **20.09.2026**
+- Time range: **3Y** (20.09.2023 → 20.09.2026)
 - Reporting currency: **USD** · Benchmark: **SP500**
 - Instruments: **7** · Markets: **32** · Currencies: **20**
 
 ## Commentary
 
-Over the selected window (19.09.2023 → 19.09.2026, converted to USD), **SPY** leads with a CAGR of 21.3%, while **FUEVFVND** trails at 7.2%. 2 of 7 instruments beat the **SP500** benchmark (19.9%). The best risk-adjusted result belongs to **SPY** (Sharpe 1.39), and **VNM** carries the deepest drawdown at -28.4%. Average pairwise correlation is 0.39, enough for a real diversification benefit.
+Over the selected window (20.09.2023 → 20.09.2026, converted to USD), **SPY** leads with a CAGR of 21.7%, while **FUEVFVND** trails at 5.0%. 1 of 7 instruments beat the **SP500** benchmark (20.3%). The best risk-adjusted result belongs to **SPY** (Sharpe 1.42), and **VNM** carries the deepest drawdown at -28.4%. Average pairwise correlation is 0.40, enough for a real diversification benefit.
 
 ## Composite leaderboard
 
 | Ticker | Rank | Name | CAGR | Volatility (ann.) | Max drawdown | Sharpe | Sortino | Calmar | Beta | Alpha (ann.) | Tracking error | Composite score |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| **SPY** | 1 | SPDR S&P 500 ETF Trust | 21.30% | 15.33% | -18.76% | 1.39 | 1.85 | 1.14 | 1.02 | -0.23% | 1.20% | 0.83 |
-| **EUNL.DE** | 2 | iShares Core MSCI World UCITS ETF | 20.25% | 14.67% | -17.78% | 1.38 | 1.90 | 1.14 | 0.35 | 11.04% | 17.29% | 0.82 |
-| **SP500** | 3 | S&P 500 | 19.87% | 15.05% | -18.90% | 1.32 | 1.75 | 1.05 | n/a | n/a | n/a | 0.78 |
-| **E1VFVN30** | 4 | DCVFM VN30 ETF | 16.20% | 17.91% | -18.12% | 0.90 | 1.15 | 0.89 | 0.18 | 22.29% | 22.02% | 0.16 |
-| **VNINDEX** | 5 | VN-Index | 11.98% | 19.19% | -20.01% | 0.62 | 0.74 | 0.60 | 0.11 | 23.65% | 23.16% | -0.29 |
-| **FUEVFVND** | 6 | DCVFM VN Diamond ETF | 7.21% | 21.37% | -28.27% | 0.34 | 0.45 | 0.25 | 0.08 | 26.55% | 25.64% | -1.09 |
-| **VNM** | 7 | VanEck Vietnam ETF | 8.18% | 25.89% | -28.44% | 0.32 | 0.44 | 0.29 | 0.81 | 9.20% | 22.75% | -1.20 |
+| **SPY** | 1 | SPDR S&P 500 ETF Trust | 21.70% | 15.33% | -18.76% | 1.42 | 1.88 | 1.16 | 1.02 | -0.25% | 1.20% | 0.84 |
+| **SP500** | 2 | S&P 500 | 20.26% | 15.05% | -18.90% | 1.35 | 1.79 | 1.07 | n/a | n/a | n/a | 0.79 |
+| **EUNL.DE** | 3 | iShares Core MSCI World UCITS ETF | 20.18% | 14.68% | -17.78% | 1.37 | 1.89 | 1.14 | 0.35 | 10.81% | 17.29% | 0.78 |
+| **E1VFVN30** | 4 | DCVFM VN30 ETF | 16.12% | 17.93% | -18.12% | 0.90 | 1.14 | 0.89 | 0.18 | 22.14% | 22.03% | 0.18 |
+| **VNINDEX** | 5 | VN-Index | 11.54% | 19.19% | -20.01% | 0.60 | 0.71 | 0.58 | 0.11 | 23.07% | 23.14% | -0.26 |
+| **VNM** | 6 | VanEck Vietnam ETF | 7.68% | 25.89% | -28.44% | 0.30 | 0.41 | 0.27 | 0.81 | 8.21% | 22.71% | -1.15 |
+| **FUEVFVND** | 7 | DCVFM VN Diamond ETF | 5.02% | 21.06% | -28.27% | 0.24 | 0.31 | 0.18 | 0.09 | 23.53% | 25.20% | -1.17 |
 
 ## Returns by period
 
 | Ticker | 1M | 3M | 6M | YTD | 1Y | 3Y | 5Y | 10Y | MAX |
 |---|---|---|---|---|---|---|---|---|---|
-| **SP500** | -0.7% | 2.4% | 15.8% | 11.5% | 14.8% | 19.9% | 11.9% | 13.6% | 12.1% |
-| **VNINDEX** | 5.8% | 0.5% | 8.0% | 2.6% | 10.9% | 12.0% | 3.3% | 8.1% | 8.1% |
-| **E1VFVN30** | 5.7% | 1.5% | 9.4% | -0.3% | 9.0% | 16.2% | 4.5% | 11.1% | 8.8% |
-| **FUEVFVND** | 3.1% | -5.1% | -6.8% | -9.8% | -14.1% | 7.2% | 2.7% | n/a | 18.4% |
-| **SPY** | -0.7% | 2.6% | 16.3% | 12.4% | 16.0% | 21.3% | 13.4% | 15.4% | 14.1% |
-| **EUNL.DE** | -0.7% | 2.1% | 15.9% | 11.6% | 15.7% | 20.2% | 11.8% | 13.1% | 10.8% |
-| **VNM** | 3.2% | -5.5% | 3.8% | -7.7% | -0.1% | 8.2% | -0.5% | 3.3% | -1.0% |
+| **SP500** | 0.1% | 2.4% | 17.6% | 11.5% | 14.3% | 20.3% | 11.9% | 13.6% | 12.1% |
+| **VNINDEX** | 5.3% | -1.4% | 11.2% | 2.6% | 12.5% | 11.5% | 3.3% | 8.1% | 8.1% |
+| **E1VFVN30** | 5.7% | 1.0% | 12.0% | -0.3% | 11.7% | 16.1% | 4.5% | 11.2% | 8.8% |
+| **FUEVFVND** | 2.7% | -3.6% | -5.6% | -9.8% | -10.5% | 5.0% | 2.7% | n/a | 18.4% |
+| **SPY** | 0.1% | 2.6% | 18.0% | 12.4% | 15.5% | 21.7% | 13.4% | 15.4% | 14.1% |
+| **EUNL.DE** | -0.9% | 1.8% | 16.0% | 11.6% | 16.0% | 20.2% | 11.8% | 13.0% | 10.8% |
+| **VNM** | 2.8% | -5.5% | 7.3% | -7.7% | 0.8% | 7.7% | -0.5% | 3.1% | -1.0% |
 
 ## Calendar-year returns
 
