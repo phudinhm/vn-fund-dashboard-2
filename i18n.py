@@ -275,6 +275,7 @@ STRINGS["VI"] = {
     "c_annually": "Hàng năm",
     "c_download_csv": "Tải bảng chỉ số (CSV)",
     "c_download_report": "Tải báo cáo (Markdown)",
+    "c_download_prices": "Tải lịch sử giá (CSV)",
     # --- axis / misc ------------------------------------------------------
     "x_date": "Ngày",
     "x_vol": "Biến động năm (%)",
@@ -619,6 +620,7 @@ STRINGS["EN"] = {
     "c_annually": "Annually",
     "c_download_csv": "Download metrics (CSV)",
     "c_download_report": "Download report (Markdown)",
+    "c_download_prices": "Download price history (CSV)",
     "x_date": "Date",
     "x_vol": "Annual volatility (%)",
     "y_return": "Return (%)",
@@ -961,6 +963,7 @@ STRINGS["DE"] = {
     "c_annually": "Jährlich",
     "c_download_csv": "Kennzahlen herunterladen (CSV)",
     "c_download_report": "Bericht herunterladen (Markdown)",
+    "c_download_prices": "Kurshistorie herunterladen (CSV)",
     "x_date": "Datum",
     "x_vol": "Jahresvolatilität (%)",
     "y_return": "Rendite (%)",
@@ -1450,3 +1453,68 @@ def excess_readout(lang, ticker, average, share_ahead, benchmark):
         f"Über alle 12-Monats-Fenster schlug **{ticker}** die Benchmark **{benchmark}** um "
         f"durchschnittlich {_pct(average)} und lag {_num(share_ahead, 0)}% der Zeit vorn. Die "
         f"Phasen unter null sind die, in denen das Halten wehtat — unabhängig vom Endergebnis.")
+
+
+def trend_readout(lang, ticker, above_short, above_long, cross_direction, cross_days_ago):
+    """States the MA50/MA200 picture already on the chart, in words.
+
+    A golden cross (MA50 above MA200) read as bullish and a death cross read
+    as bearish are standard technical-analysis shorthand; naming which one
+    just happened, and how long ago, turns the two lines on the chart into an
+    actual sentence instead of something the reader has to eyeball.
+    """
+    since = "" if cross_days_ago is None else str(cross_days_ago)
+    if lang == "VI":
+        position = ("trên cả MA50 và MA200" if above_short and above_long else
+                   "dưới cả MA50 và MA200" if not above_short and not above_long else
+                   "giữa hai đường MA")
+        cross = ("giao cắt vàng (MA50 vượt lên MA200)" if cross_direction == "golden"
+                else "giao cắt tử thần (MA50 rơi xuống dưới MA200)")
+        tail = f", xảy ra {since} ngày trước" if since else ""
+        return (f"**{ticker}** hiện đang ở vị trí {position}. Lần gần nhất là {cross}{tail} — "
+                f"xu hướng trung hạn đang {'tăng' if cross_direction == 'golden' else 'giảm'}.")
+    if lang == "DE":
+        position = ("über MA50 und MA200" if above_short and above_long else
+                   "unter MA50 und MA200" if not above_short and not above_long else
+                   "zwischen den beiden Durchschnitten")
+        cross = ("goldenes Kreuz (MA50 über MA200)" if cross_direction == "golden"
+                else "Todeskreuz (MA50 unter MA200)")
+        tail = f", vor {since} Tagen" if since else ""
+        return (f"**{ticker}** notiert derzeit {position}. Zuletzt gab es ein {cross}{tail} — "
+                f"der mittelfristige Trend ist {'aufwärts' if cross_direction == 'golden' else 'abwärts'} gerichtet.")
+    position = ("above both MA50 and MA200" if above_short and above_long else
+               "below both MA50 and MA200" if not above_short and not above_long else
+               "between the two averages")
+    cross = ("a golden cross (MA50 above MA200)" if cross_direction == "golden"
+            else "a death cross (MA50 below MA200)")
+    tail = f", {since} days ago" if since else ""
+    return (f"**{ticker}** currently sits {position}. The most recent signal was {cross}{tail} — "
+            f"the medium-term trend reads {'upward' if cross_direction == 'golden' else 'downward'}.")
+
+
+def dca_readout(lang, ticker, invested, value, contributions, return_pct):
+    """What a plain monthly (or weekly) buying plan would actually show today."""
+    if lang == "VI":
+        return (f"Rải {contributions} lần vào **{ticker}**, tổng cộng {invested:,.0f} đã đầu tư "
+                f"nay có giá trị {value:,.0f} — lãi/lỗ {_pct(return_pct)}. Đây là kết quả thực tế "
+                f"của một kế hoạch mua đều đặn, không cố chọn thời điểm.")
+    if lang == "DE":
+        return (f"Mit {contributions} Raten in **{ticker}** sind {invested:,.0f} investiert und "
+                f"heute {value:,.0f} wert — ein Ergebnis von {_pct(return_pct)}. Das ist, was ein "
+                f"stures, regelmäßiges Kaufen liefert, ohne den Einstieg timen zu wollen.")
+    return (f"{contributions} contributions into **{ticker}** put in {invested:,.0f} and it is "
+            f"worth {value:,.0f} today — a {_pct(return_pct)} result. That is what a plain, "
+            f"regular buying plan delivers, with no attempt to time the entry.")
+
+
+def var_readout(lang, ticker, var95, cvar95):
+    """VaR/CVaR in a sentence rather than two unlabeled percentages."""
+    if lang == "VI":
+        return (f"Trong 5% ngày tệ nhất, **{ticker}** thường mất ít nhất {_pct(abs(var95))}; "
+                f"khi rơi vào nhóm đó, mức lỗ trung bình còn sâu hơn, khoảng {_pct(abs(cvar95))}.")
+    if lang == "DE":
+        return (f"An den schlechtesten 5% der Tage verliert **{ticker}** typischerweise "
+                f"mindestens {_pct(abs(var95))}; innerhalb dieser Tage liegt der "
+                f"Durchschnittsverlust tiefer, bei etwa {_pct(abs(cvar95))}.")
+    return (f"On the worst 5% of days, **{ticker}** typically loses at least {_pct(abs(var95))}; "
+            f"within that group, the average loss runs deeper, around {_pct(abs(cvar95))}.")

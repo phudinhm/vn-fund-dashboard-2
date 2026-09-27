@@ -89,30 +89,57 @@ METRIC_FORMAT = {
 }
 
 
+def _width_for(label: str) -> str:
+    """Pick a column width from its header text, not a blanket guess.
+
+    ``st.column_config`` only offers three fixed widths (roughly 75 / 200 /
+    300px), and every numeric column here used to hard-code "small" — fine for
+    "CAGR", but it clips "Volatility (ann.)" or "Composite score" into
+    "Volatility (an" with no way to see the rest. Longer headers get more
+    room instead.
+    """
+    if len(label) > 16:
+        return "medium"
+    return "small"
+
+
 def metric_columns(ctx, columns: list[str]) -> dict:
     """``column_config`` for a metric frame, in the current language."""
     cfg = {}
     for col in columns:
         kind, label_key = METRIC_FORMAT.get(col, (None, None))
         label = ctx.t(label_key) if label_key else col
+        width = _width_for(label)
         if kind == "pct":
-            cfg[col] = st.column_config.NumberColumn(label, format="percent", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="percent", width=width)
         elif kind == "pct100":
-            cfg[col] = st.column_config.NumberColumn(label, format="%.1f%%", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%.1f%%", width=width)
         elif kind == "pct100x":
             cfg[col] = st.column_config.ProgressColumn(label, format="percent",
                                                        min_value=0.0, max_value=1.0,
-                                                       width="small")
+                                                       width=width)
         elif kind == "fee":
-            cfg[col] = st.column_config.NumberColumn(label, format="%.2f%%", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%.2f%%", width=width)
         elif kind == "num":
-            cfg[col] = st.column_config.NumberColumn(label, format="%.2f", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%.2f", width=width)
         elif kind == "int":
-            cfg[col] = st.column_config.NumberColumn(label, format="%d", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%d", width=width)
         elif kind == "money":
             cfg[col] = st.column_config.NumberColumn(label, format="compact",
-                                                     width="small")
+                                                     width=width)
     return cfg
+
+
+def table_height(n_rows: int, max_height: int = 420,
+                 row_px: int = 35, header_px: int = 38) -> int:
+    """A dataframe height sized to its rows, not a flat guess.
+
+    A fixed ``120 + 36 * n`` estimate overshoots Streamlit's actual per-row
+    height and leaves 1-2 visibly empty rows dangling under real data. This
+    matches the grid's real metrics: one header row plus ``n`` body rows, a
+    couple of pixels of border, capped so a long result list still scrolls.
+    """
+    return min(header_px + row_px * max(n_rows, 1) + 3, max_height)
 
 
 def sparkline_series(prices: pd.DataFrame, tickers: list[str],
@@ -160,19 +187,21 @@ def leaderboard(ctx, scored: pd.DataFrame, prices: pd.DataFrame,
             frame[col] = pd.to_numeric(frame[col], errors="coerce")
 
     cfg = metric_columns(ctx, keep)
-    cfg["spark"] = st.column_config.LineChartColumn(ctx.t("sparkline"), width="small")
+    cfg["spark"] = st.column_config.LineChartColumn(
+        ctx.t("sparkline"), width=_width_for(ctx.t("sparkline")))
     if "name" in keep:
         cfg["name"] = st.column_config.TextColumn(ctx.t("m_name"), width="medium")
     for col, label in (("region", "region"), ("currency", "ccy"),
                        ("country", "market"), ("issuer", "issuer"),
                        ("category", "category"), ("kind", "kind")):
         if col in keep:
-            cfg[col] = st.column_config.TextColumn(ctx.t(label), width="small")
+            cfg[col] = st.column_config.TextColumn(ctx.t(label), width=_width_for(ctx.t(label)))
     if "score" in keep:
         lo, hi = float(frame["score"].min()), float(frame["score"].max())
         cfg["score"] = st.column_config.ProgressColumn(
             ctx.t("m_score"), format="%.2f",
-            min_value=lo - 0.01, max_value=hi + 0.01, width="small")
+            min_value=lo - 0.01, max_value=hi + 0.01,
+            width=_width_for(ctx.t("m_score")))
 
     event = st.dataframe(
         frame, column_config=cfg, width="stretch", height=height,

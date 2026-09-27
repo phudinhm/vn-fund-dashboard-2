@@ -54,37 +54,39 @@ def _universe(ctx) -> None:
         if col in frame.columns:
             frame[col] = frame[col].fillna("").replace("", "—")
 
-    cols = st.columns([2, 2, 2])
-    search = cols[0].text_input(ctx.t("search_ticker"), key="data_search")
-    regions = sorted(frame.region.dropna().unique()) if "region" in frame else []
-    chosen = cols[1].multiselect(ctx.t("region"), regions, key="data_regions")
-    kinds = sorted(frame.kind.dropna().unique()) if "kind" in frame else []
-    chosen_kinds = cols[2].multiselect(ctx.t("kind"), kinds, key="data_kinds")
+    # no heading here: the tab strip above already says "Investment universe"
+    with C.card():
+        cols = st.columns([2, 2, 2])
+        search = cols[0].text_input(ctx.t("search_ticker"), key="data_search")
+        regions = sorted(frame.region.dropna().unique()) if "region" in frame else []
+        chosen = cols[1].multiselect(ctx.t("region"), regions, key="data_regions")
+        kinds = sorted(frame.kind.dropna().unique()) if "kind" in frame else []
+        chosen_kinds = cols[2].multiselect(ctx.t("kind"), kinds, key="data_kinds")
 
-    if search:
-        needle = search.lower()
-        mask = frame.apply(
-            lambda row: needle in " ".join(str(v).lower() for v in row.values), axis=1)
-        frame = frame[mask]
-    if chosen:
-        frame = frame[frame.region.isin(chosen)]
-    if chosen_kinds:
-        frame = frame[frame.kind.isin(chosen_kinds)]
+        if search:
+            needle = search.lower()
+            mask = frame.apply(
+                lambda row: needle in " ".join(str(v).lower() for v in row.values), axis=1)
+            frame = frame[mask]
+        if chosen:
+            frame = frame[frame.region.isin(chosen)]
+        if chosen_kinds:
+            frame = frame[frame.kind.isin(chosen_kinds)]
 
-    event = st.dataframe(
-        frame, width="stretch", height=460, hide_index=True,
-        key="data_universe", on_select="rerun", selection_mode="multi-row",
-        column_config={
-            "ter": st.column_config.NumberColumn(ctx.t("m_ter"), format="%.2f%%"),
-            "observations": st.column_config.NumberColumn(ctx.t("m_obs"), format="%d"),
-        })
-    rows = event.selection.rows if hasattr(event, "selection") else []
-    picked = [frame.iloc[i]["ticker"] for i in rows if i < len(frame)]
-    if st.button(f"{ctx.t('add_to_compare')} ({len(picked)})", disabled=not picked,
-                 key="data_add"):
-        S.add_to_selection(picked)
-        S.go_to("nav_compare")
-        st.rerun()
+        event = st.dataframe(
+            frame, width="stretch", height=460, hide_index=True,
+            key="data_universe", on_select="rerun", selection_mode="multi-row",
+            column_config={
+                "ter": st.column_config.NumberColumn(ctx.t("m_ter"), format="%.2f%%"),
+                "observations": st.column_config.NumberColumn(ctx.t("m_obs"), format="%d"),
+            })
+        rows = event.selection.rows if hasattr(event, "selection") else []
+        picked = [frame.iloc[i]["ticker"] for i in rows if i < len(frame)]
+        if st.button(f"{ctx.t('add_to_compare')} ({len(picked)})", disabled=not picked,
+                     key="data_add", icon=":material/add:"):
+            S.add_to_selection(picked)
+            S.go_to("nav_compare")
+            st.rerun()
 
 
 @st.cache_data(show_spinner=False)

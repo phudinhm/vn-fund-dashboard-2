@@ -157,6 +157,12 @@ def _performance(ctx, ticker: str, prices: pd.Series) -> None:
     right.plotly_chart(style_fig(fig, "", ctx.t("x_date"),
                                  f"{ctx.t('y_value')} ({ctx.currency})",
                                  height=420, log_y=log_scale), width="stretch")
+    if show_ma:
+        trend = an.trend_state(series)
+        if trend:
+            C.readout(ctx, i18n.trend_readout(
+                ctx.lang, ticker, trend["above_short"], trend["above_long"],
+                trend["cross_direction"], trend["cross_days_ago"]))
 
     with C.card(ctx.t("h_period_returns")):
         periods = an.period_returns(prices.to_frame(ticker))
@@ -201,15 +207,17 @@ def _risk(ctx, ticker: str, prices: pd.Series) -> None:
                                                            format="%d")})
 
     returns = an.daily_returns(series).dropna()
+    var95, cvar95 = an.value_at_risk(returns, .95), an.conditional_var(returns, .95)
     left, right = st.columns(2)
     with left:
         st.markdown("##### " + ctx.t("m_var"))
         fig = px.histogram(returns * 100, nbins=80, height=320)
-        for level, color in ((an.value_at_risk(returns, .95) * 100, "#B45309"),
-                             (an.conditional_var(returns, .95) * 100, LOSS)):
+        for level, color in ((var95 * 100, "#B45309"), (cvar95 * 100, LOSS)):
             fig.add_vline(x=level, line_dash="dot", line_color=color)
         st.plotly_chart(style_fig(fig, "", ctx.t("y_return"), "", hover="closest",
                                   legend=False), width="stretch")
+        if pd.notna(var95) and pd.notna(cvar95):
+            C.readout(ctx, i18n.var_readout(ctx.lang, ticker, float(var95), float(cvar95)))
     with right:
         st.markdown("##### " + ctx.t("h_rolling"))
         vol = an.rolling_volatility(returns).dropna()

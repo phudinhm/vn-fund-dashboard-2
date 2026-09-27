@@ -28,16 +28,24 @@ def render(ctx) -> None:
         _costs(ctx)
 
 
-def _fund_picker(ctx, key: str) -> str:
+def _fund_picker(ctx, key: str, container=None) -> str:
+    """The fund selector for a Lab tab.
+
+    Takes the column/container it belongs in, so the picker actually sits
+    inside the row it was laid out for instead of falling to a naked
+    full-width widget below it (``st.selectbox`` called without a target
+    always appends to the enclosing block, not to a column reserved earlier).
+    """
+    target = container if container is not None else st
     options = list(ctx.window.columns)
     index = options.index(ctx.focus) if ctx.focus in options else 0
-    return st.selectbox(ctx.t("focus_fund"), options, index=index,
-                        format_func=ctx.label, key=key)
+    return target.selectbox(ctx.t("focus_fund"), options, index=index,
+                            format_func=ctx.label, key=key)
 
 
 def _dca(ctx) -> None:
     cols = st.columns([2, 1, 1])
-    fund = _fund_picker(ctx, "lab_dca_fund")
+    fund = _fund_picker(ctx, "lab_dca_fund", cols[0])
     amount = cols[1].number_input(ctx.t("c_contribution"), 100.0, 1e9, 1000.0, 100.0,
                                   key="lab_amount")
     freq_label = cols[2].selectbox(ctx.t("c_frequency"),
@@ -63,11 +71,16 @@ def _dca(ctx) -> None:
     metrics[1].metric(ctx.t("value"), f"{plan.value.iloc[-1]:,.0f}")
     metrics[2].metric(ctx.t("profit"), f"{plan.profit.iloc[-1]:,.0f}",
                       f"{plan['return'].iloc[-1] * 100:.1f}%")
+    if plan.invested.iloc[-1] > 0:
+        contributions = round(plan.invested.iloc[-1] / amount)
+        C.readout(ctx, i18n.dca_readout(
+            ctx.lang, fund, float(plan.invested.iloc[-1]), float(plan.value.iloc[-1]),
+            contributions, float(plan["return"].iloc[-1])))
 
 
 def _lump_vs_dca(ctx) -> None:
     cols = st.columns([2, 1, 1])
-    fund = _fund_picker(ctx, "lab_ls_fund")
+    fund = _fund_picker(ctx, "lab_ls_fund", cols[0])
     hold = cols[1].slider(ctx.t("c_hold_years"), 1, 15, 5, key="lab_hold")
     spread = cols[2].slider(ctx.t("c_spread_months"), 3, 36, 12, key="lab_spread")
 
@@ -171,7 +184,7 @@ def _portfolio(ctx) -> None:
 
 def _costs(ctx) -> None:
     cols = st.columns(4)
-    fund = _fund_picker(ctx, "lab_fee_fund")
+    fund = _fund_picker(ctx, "lab_fee_fund", cols[0])
     default_ter = 0.5
     if "ter" in ctx.metrics.columns and fund in ctx.metrics.index:
         value = ctx.metrics.loc[fund, "ter"]

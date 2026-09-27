@@ -476,6 +476,44 @@ def rolling_volatility(ret: pd.Series, window: int = 63) -> pd.Series:
     return ret.rolling(window).std() * np.sqrt(TRADING_DAYS) * 100
 
 
+def trend_state(prices: pd.Series, short: int = 50, long: int = 200) -> dict:
+    """Where a price sits relative to its own moving averages, and since when.
+
+    The fund profile already draws MA50/MA200 on the price chart; this is the
+    same picture in words — trend direction, whether the two averages are
+    stacked in the bullish or bearish order, and how many days ago they last
+    crossed (a golden or death cross). Returns an empty dict when there is not
+    enough history for a 200-day average.
+    """
+    s = prices.dropna()
+    if len(s) < long + 5:
+        return {}
+    ma_short = s.rolling(short).mean()
+    ma_long = s.rolling(long).mean()
+    valid = ma_short.notna() & ma_long.notna()
+    if valid.sum() < 5:
+        return {}
+    ma_short, ma_long = ma_short[valid], ma_long[valid]
+    price = float(s.iloc[-1])
+    above_short = bool(price > ma_short.iloc[-1])
+    above_long = bool(price > ma_long.iloc[-1])
+    bullish_stack = bool(ma_short.iloc[-1] > ma_long.iloc[-1])
+
+    diff_sign = np.sign(ma_short - ma_long)
+    crosses = diff_sign[diff_sign.diff().fillna(0) != 0]
+    cross_date = crosses.index[-1] if len(crosses) else None
+    cross_days_ago = int((s.index[-1] - cross_date).days) if cross_date is not None else None
+
+    return {
+        "price": price,
+        "ma_short": float(ma_short.iloc[-1]), "ma_long": float(ma_long.iloc[-1]),
+        "above_short": above_short, "above_long": above_long,
+        "bullish_stack": bullish_stack,
+        "cross_direction": "golden" if bullish_stack else "death",
+        "cross_days_ago": cross_days_ago,
+    }
+
+
 def rolling_correlation(a: pd.Series, b: pd.Series, window: int = 126) -> pd.Series:
     df = _aligned(a, b)
     return df["a"].rolling(window).corr(df["b"])

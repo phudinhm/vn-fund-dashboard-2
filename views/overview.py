@@ -41,7 +41,7 @@ def render(ctx) -> None:
         columns = C.column_choice(ctx, "ov_cols", ESSENTIAL_COLUMNS, FULL_COLUMNS)
         picked = C.leaderboard(ctx, ctx.scored, ctx.prices, columns,
                                key="overview_board",
-                               height=min(120 + 36 * len(ctx.scored), 420))
+                               height=C.table_height(len(ctx.scored)))
         if len(picked) == 1 and st.button(f"{ctx.t('open_profile')}: {picked[0]}",
                                           key="ov_profile"):
             S.set_focus(picked[0])
@@ -88,14 +88,14 @@ def _exports(ctx) -> None:
         cols[0].download_button(
             ctx.t("c_download_csv"), ctx.scored.to_csv().encode("utf-8"),
             file_name=f"etf_metrics_{ctx.period}_{ctx.currency}.csv",
-            mime="text/csv", width="stretch")
+            mime="text/csv", width="stretch", icon=":material/download:")
         markdown = rp.markdown_report(ctx.lang, ctx.ds, ctx.tickers, ctx.period,
                                       ctx.benchmark, ctx.currency, ctx.rf)
         cols[1].download_button(
             ctx.t("c_download_report"), markdown.encode("utf-8"),
             file_name=f"etf_report_{ctx.lang}_{ctx.period}.md",
-            mime="text/markdown", width="stretch")
+            mime="text/markdown", width="stretch", icon=":material/download:")
         cols[2].download_button(
-            ctx.t("y_value") + " (CSV)", ctx.window.to_csv().encode("utf-8"),
+            ctx.t("c_download_prices"), ctx.window.to_csv().encode("utf-8"),
             file_name=f"prices_{ctx.currency}_{ctx.period}.csv",
-            mime="text/csv", width="stretch")
+            mime="text/csv", width="stretch", icon=":material/download:")

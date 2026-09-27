@@ -99,6 +99,11 @@ div[data-testid="stMetric"] {{
 div[data-testid="stMetric"] label p {{
     color: {MUTED} !important; font-size: .75rem; font-weight: 500;
     text-transform: uppercase; letter-spacing: .05em;
+    /* Streamlit's own metric label truncates long text with an ellipsis and
+       no title attribute, so "Max drawdown · FUEVFVND" silently loses the
+       ticker. A tile is free to grow a line taller; a hidden ticker is not. */
+    white-space: normal !important; overflow: visible !important;
+    text-overflow: clip !important; line-height: 1.3;
 }}
 div[data-testid="stMetricValue"] {{ font-size: 1.4rem; font-weight: 500; color: {INK}; }}
 div[data-testid="stMetricDelta"] {{ font-size: .78rem; }}

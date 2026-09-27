@@ -70,17 +70,20 @@ def render(ctx) -> None:
         columns = C.column_choice(ctx, "scr_cols", ESSENTIAL_COLUMNS, FULL_COLUMNS)
         top_n = st.session_state.get("screener_top_n", 40)
         picked = C.leaderboard(ctx, frame.head(top_n), window, columns,
-                               key="screener_table", height=500)
+                               key="screener_table",
+                               height=C.table_height(min(len(frame), top_n), max_height=500))
 
         cols = st.columns([2, 2, 4])
         if cols[0].button(f"{ctx.t('add_to_compare')} ({len(picked)})",
-                          disabled=not picked, width="stretch", key="scr_add"):
+                          disabled=not picked, width="stretch", key="scr_add",
+                          icon=":material/add:"):
             added = S.add_to_selection(picked)
             S.go_to("nav_compare")
             st.toast(f"{ctx.t('added')}: {added}")
             st.rerun()
         if cols[1].button(ctx.t("open_profile"), disabled=len(picked) != 1,
-                          width="stretch", key="scr_profile"):
+                          width="stretch", key="scr_profile",
+                          icon=":material/open_in_new:"):
             S.set_focus(picked[0])
             S.go_to("nav_profile")
             st.rerun()
@@ -124,7 +127,8 @@ def _filters(ctx, scored: pd.DataFrame) -> pd.DataFrame:
             format_func=lambda k: ctx.t(C.METRIC_FORMAT.get(k, (None, k))[1] or k))
         row3[1].select_slider(ctx.t("top_n"), options=[20, 40, 80, 150, 300],
                               value=40, key="screener_top_n")
-        if row3[2].button(ctx.t("screener_reset"), width="stretch", key="scr_reset"):
+        if row3[2].button(ctx.t("screener_reset"), width="stretch", key="scr_reset",
+                          icon=":material/filter_alt_off:"):
             for key in ["scr_search", "scr_cagr", "scr_vol", "scr_sharpe",
                         "scr_dd", "scr_ter", "scr_hist", "scr_adv",
                         "scr_leverage"]:
