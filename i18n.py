@@ -17,12 +17,32 @@ from __future__ import annotations
 
 import math
 
-LANGUAGES = {"VI": "Tiếng Việt", "EN": "English", "DE": "Deutsch"}
-FLAGS = {"VI": "🇻🇳", "EN": "🇬🇧", "DE": "🇩🇪"}
+# English leads: it is the report's default and the order the switch shows.
+LANGUAGES = {"EN": "English", "VI": "Tiếng Việt", "DE": "Deutsch"}
+FLAGS = {"EN": "🇬🇧", "VI": "🇻🇳", "DE": "🇩🇪"}
 
 STRINGS: dict[str, dict[str, str]] = {}
 
 STRINGS["VI"] = {
+    "exclude_leveraged": "Ẩn quỹ đòn bẩy / nghịch đảo",
+    "unranked_note": "Quỹ có lịch sử quá ngắn hoặc biến động gần bằng 0 (tương đương tiền mặt) vẫn được liệt kê nhưng không xếp hạng — chấm điểm chúng cạnh quỹ thường là so sai nhóm.",
+    "h_excess": "Lợi nhuận vượt trội trượt (1 năm)",
+    "m_coverage": "Độ phủ kỳ",
+    # --- v4: coverage, liquidity, column presets ---
+    "m_adv": "Thanh khoản (giá trị/ngày)",
+    "m_tuw": "Thời gian dưới đỉnh (ngày)",
+    "m_td": "Chênh lệch bám (năm)",
+    "screener_min_adv": "Thanh khoản tối thiểu (triệu/ngày)",
+    "h_coverage": "Độ phủ thị trường",
+    "coverage_tracked": "Đang theo dõi",
+    "coverage_listed": "Đang niêm yết",
+    "coverage_note": "Toàn bộ ETF niêm yết tại Mỹ được lấy tự động từ danh bạ mã của Nasdaq Trader. Những mã thanh khoản nhất được tải lịch sử đầy đủ; phần còn lại vẫn được liệt kê ở đây.",
+    "catalogue": "Danh bạ ETF",
+    "price_index_caveat": "Lưu ý: giá ETF đã điều chỉnh cổ tức, còn điểm chỉ số là giá thuần (chưa cộng cổ tức). Vì vậy chênh lệch bám dương so với một chỉ số thường chính là phần cổ tức, không phải quỹ vượt trội.",
+    "cols_essential": "Cột chính",
+    "cols_full": "Toàn bộ cột",
+    "columns": "Cột hiển thị",
+    "sorted_by": "sắp xếp theo",
     "edit_selection": "Sửa danh sách",
     # --- v3 UI: dock, scope filters, readouts ---
     "group_sections": "Phần",
@@ -255,6 +275,7 @@ STRINGS["VI"] = {
     "c_annually": "Hàng năm",
     "c_download_csv": "Tải bảng chỉ số (CSV)",
     "c_download_report": "Tải báo cáo (Markdown)",
+    "c_download_prices": "Tải lịch sử giá (CSV)",
     # --- axis / misc ------------------------------------------------------
     "x_date": "Ngày",
     "x_vol": "Biến động năm (%)",
@@ -354,6 +375,25 @@ STRINGS["VI"] = {
 }
 
 STRINGS["EN"] = {
+    "exclude_leveraged": "Hide leveraged / inverse",
+    "unranked_note": "Funds with too little history, or with near-zero volatility (cash equivalents), are listed but left unranked — scoring them beside ordinary funds compares different things.",
+    "h_excess": "Rolling excess return (1 year)",
+    "m_coverage": "Window coverage",
+    # --- v4: coverage, liquidity, column presets ---
+    "m_adv": "Liquidity (traded/day)",
+    "m_tuw": "Time under water (days)",
+    "m_td": "Tracking difference (ann.)",
+    "screener_min_adv": "Minimum liquidity (m/day)",
+    "h_coverage": "Market coverage",
+    "coverage_tracked": "Tracked",
+    "coverage_listed": "Listed",
+    "coverage_note": "Every US-listed ETF is discovered automatically from the Nasdaq Trader symbol directory. The most liquid ones get a full price history; the rest are still listed here.",
+    "catalogue": "ETF catalogue",
+    "price_index_caveat": "Note: ETF prices are adjusted for dividends, index levels are not. A positive tracking difference against an index is usually the dividend yield, not outperformance.",
+    "cols_essential": "Key columns",
+    "cols_full": "All columns",
+    "columns": "Columns",
+    "sorted_by": "sorted by",
     "edit_selection": "Edit list",
     # --- v3 UI: dock, scope filters, readouts ---
     "group_sections": "Sections",
@@ -580,6 +620,7 @@ STRINGS["EN"] = {
     "c_annually": "Annually",
     "c_download_csv": "Download metrics (CSV)",
     "c_download_report": "Download report (Markdown)",
+    "c_download_prices": "Download price history (CSV)",
     "x_date": "Date",
     "x_vol": "Annual volatility (%)",
     "y_return": "Return (%)",
@@ -677,6 +718,25 @@ STRINGS["EN"] = {
 }
 
 STRINGS["DE"] = {
+    "exclude_leveraged": "Gehebelte / inverse ausblenden",
+    "unranked_note": "Fonds mit zu kurzer Historie oder nahezu null Volatilität (Geldmarktnähe) werden gelistet, aber nicht bewertet — sie neben gewöhnlichen Fonds zu benoten vergleicht Verschiedenes.",
+    "h_excess": "Rollierende Überrendite (1 Jahr)",
+    "m_coverage": "Zeitraumabdeckung",
+    # --- v4: coverage, liquidity, column presets ---
+    "m_adv": "Liquidität (Umsatz/Tag)",
+    "m_tuw": "Zeit unter Wasser (Tage)",
+    "m_td": "Tracking-Differenz (p.a.)",
+    "screener_min_adv": "Mindestliquidität (Mio./Tag)",
+    "h_coverage": "Marktabdeckung",
+    "coverage_tracked": "Verfolgt",
+    "coverage_listed": "Gelistet",
+    "coverage_note": "Jeder in den USA gelistete ETF wird automatisch aus dem Symbolverzeichnis von Nasdaq Trader ermittelt. Die liquidesten erhalten eine vollständige Kurshistorie, die übrigen stehen trotzdem hier.",
+    "catalogue": "ETF-Verzeichnis",
+    "price_index_caveat": "Hinweis: ETF-Kurse sind dividendenbereinigt, Indexstände nicht. Eine positive Tracking-Differenz gegenüber einem Index ist meist die Dividendenrendite, keine Mehrleistung.",
+    "cols_essential": "Kernspalten",
+    "cols_full": "Alle Spalten",
+    "columns": "Spalten",
+    "sorted_by": "sortiert nach",
     "edit_selection": "Liste ändern",
     # --- v3 UI: dock, scope filters, readouts ---
     "group_sections": "Bereiche",
@@ -903,6 +963,7 @@ STRINGS["DE"] = {
     "c_annually": "Jährlich",
     "c_download_csv": "Kennzahlen herunterladen (CSV)",
     "c_download_report": "Bericht herunterladen (Markdown)",
+    "c_download_prices": "Kurshistorie herunterladen (CSV)",
     "x_date": "Datum",
     "x_vol": "Jahresvolatilität (%)",
     "y_return": "Rendite (%)",
@@ -1152,10 +1213,13 @@ def quality_narrative(lang: str, instruments: int, markets: int, currencies: int
         return (f"Bộ dữ liệu gồm {instruments} công cụ trên {markets} thị trường và {currencies} đồng tiền, "
                 f"cập nhật đến {last_date}; {stale} mã chậm hơn 7 ngày.")
     if lang == "DE":
+        verb = "ist" if stale == 1 else "sind"
+        noun = "Ticker"
         return (f"Der Datensatz umfasst {instruments} Instrumente aus {markets} Märkten und {currencies} Währungen, "
-                f"Stand {last_date}; {stale} Ticker sind älter als 7 Tage.")
+                f"Stand {last_date}; {stale} {noun} {verb} älter als 7 Tage.")
+    noun, verb = ("ticker", "is") if stale == 1 else ("tickers", "are")
     return (f"The dataset covers {instruments} instruments across {markets} markets and {currencies} currencies, "
-            f"updated to {last_date}; {stale} tickers are more than 7 days stale.")
+            f"updated to {last_date}; {stale} {noun} {verb} more than 7 days stale.")
 
 
 # ===========================================================================
@@ -1306,15 +1370,23 @@ def rolling_readout(lang, ticker, years, win_rate, median, worst):
         f"{_pct(worst)}.")
 
 
-def screener_readout(lang, shown, total, top, top_cagr, median_cagr, median_ter):
+def screener_readout(lang, shown, total, top, top_value, sort_label, median_cagr,
+                     median_ter, as_percent: bool = True):
+    """Names the sort it actually used, so "leads" cannot mean the wrong column.
+
+    Whether the leading value is a percentage or a ratio is the caller's to say:
+    guessing from the magnitude turns a Sharpe of 1.82 into "182%".
+    """
+    value = _pct(top_value) if as_percent else _num(top_value)
     return _pick(
         lang,
-        f"{shown}/{total} công cụ qua bộ lọc. Dẫn đầu là **{top}** ({_pct(top_cagr)}); "
-        f"trung vị nhóm {_pct(median_cagr)} với phí {_num(median_ter)}%/năm.",
-        f"{shown} of {total} instruments pass. **{top}** leads at {_pct(top_cagr)}; the median "
-        f"of the group is {_pct(median_cagr)} at {_num(median_ter)}% a year in fees.",
-        f"{shown} von {total} Instrumenten passen. **{top}** führt mit {_pct(top_cagr)}; der "
-        f"Median der Gruppe liegt bei {_pct(median_cagr)} bei {_num(median_ter)}% Kosten p.a.")
+        f"{shown}/{total} công cụ qua bộ lọc. Đứng đầu theo **{sort_label}** là **{top}** "
+        f"({value}); trung vị nhóm: CAGR {_pct(median_cagr)}, phí {_num(median_ter)}%/năm.",
+        f"{shown} of {total} instruments pass. Top by **{sort_label}** is **{top}** ({value}); "
+        f"the group median is {_pct(median_cagr)} CAGR at {_num(median_ter)}% a year in fees.",
+        f"{shown} von {total} Instrumenten passen. Spitzenreiter nach **{sort_label}** ist "
+        f"**{top}** ({value}); Median der Gruppe: {_pct(median_cagr)} CAGR bei "
+        f"{_num(median_ter)}% Kosten p.a.")
 
 
 def portfolio_readout(lang, cagr, volatility, drawdown, top_risk, top_risk_share,
@@ -1367,3 +1439,82 @@ def freshness_label(lang: str, days: int) -> tuple[str, str]:
     if days <= 4:
         return t(lang, "fresh_days").format(n=days), "fresh-warn"
     return t(lang, "fresh_stale").format(n=days), "fresh-old"
+
+
+def excess_readout(lang, ticker, average, share_ahead, benchmark):
+    return _pick(
+        lang,
+        f"Tính trên mọi cửa sổ 12 tháng, **{ticker}** vượt **{benchmark}** trung bình "
+        f"{_pct(average)} và đi trước trong {_num(share_ahead, 0)}% thời gian. Khoảng thời "
+        f"gian dưới vạch 0 là lúc nắm giữ nó khó chịu nhất, dù kết quả cuối kỳ có đẹp.",
+        f"Across every 12-month window, **{ticker}** beat **{benchmark}** by {_pct(average)} "
+        f"on average and was ahead {_num(share_ahead, 0)}% of the time. The stretches below "
+        f"zero are when holding it hurt, whatever the final total says.",
+        f"Über alle 12-Monats-Fenster schlug **{ticker}** die Benchmark **{benchmark}** um "
+        f"durchschnittlich {_pct(average)} und lag {_num(share_ahead, 0)}% der Zeit vorn. Die "
+        f"Phasen unter null sind die, in denen das Halten wehtat — unabhängig vom Endergebnis.")
+
+
+def trend_readout(lang, ticker, above_short, above_long, cross_direction, cross_days_ago):
+    """States the MA50/MA200 picture already on the chart, in words.
+
+    A golden cross (MA50 above MA200) read as bullish and a death cross read
+    as bearish are standard technical-analysis shorthand; naming which one
+    just happened, and how long ago, turns the two lines on the chart into an
+    actual sentence instead of something the reader has to eyeball.
+    """
+    since = "" if cross_days_ago is None else str(cross_days_ago)
+    if lang == "VI":
+        position = ("trên cả MA50 và MA200" if above_short and above_long else
+                   "dưới cả MA50 và MA200" if not above_short and not above_long else
+                   "giữa hai đường MA")
+        cross = ("giao cắt vàng (MA50 vượt lên MA200)" if cross_direction == "golden"
+                else "giao cắt tử thần (MA50 rơi xuống dưới MA200)")
+        tail = f", xảy ra {since} ngày trước" if since else ""
+        return (f"**{ticker}** hiện đang ở vị trí {position}. Lần gần nhất là {cross}{tail} — "
+                f"xu hướng trung hạn đang {'tăng' if cross_direction == 'golden' else 'giảm'}.")
+    if lang == "DE":
+        position = ("über MA50 und MA200" if above_short and above_long else
+                   "unter MA50 und MA200" if not above_short and not above_long else
+                   "zwischen den beiden Durchschnitten")
+        cross = ("goldenes Kreuz (MA50 über MA200)" if cross_direction == "golden"
+                else "Todeskreuz (MA50 unter MA200)")
+        tail = f", vor {since} Tagen" if since else ""
+        return (f"**{ticker}** notiert derzeit {position}. Zuletzt gab es ein {cross}{tail} — "
+                f"der mittelfristige Trend ist {'aufwärts' if cross_direction == 'golden' else 'abwärts'} gerichtet.")
+    position = ("above both MA50 and MA200" if above_short and above_long else
+               "below both MA50 and MA200" if not above_short and not above_long else
+               "between the two averages")
+    cross = ("a golden cross (MA50 above MA200)" if cross_direction == "golden"
+            else "a death cross (MA50 below MA200)")
+    tail = f", {since} days ago" if since else ""
+    return (f"**{ticker}** currently sits {position}. The most recent signal was {cross}{tail} — "
+            f"the medium-term trend reads {'upward' if cross_direction == 'golden' else 'downward'}.")
+
+
+def dca_readout(lang, ticker, invested, value, contributions, return_pct):
+    """What a plain monthly (or weekly) buying plan would actually show today."""
+    if lang == "VI":
+        return (f"Rải {contributions} lần vào **{ticker}**, tổng cộng {invested:,.0f} đã đầu tư "
+                f"nay có giá trị {value:,.0f} — lãi/lỗ {_pct(return_pct)}. Đây là kết quả thực tế "
+                f"của một kế hoạch mua đều đặn, không cố chọn thời điểm.")
+    if lang == "DE":
+        return (f"Mit {contributions} Raten in **{ticker}** sind {invested:,.0f} investiert und "
+                f"heute {value:,.0f} wert — ein Ergebnis von {_pct(return_pct)}. Das ist, was ein "
+                f"stures, regelmäßiges Kaufen liefert, ohne den Einstieg timen zu wollen.")
+    return (f"{contributions} contributions into **{ticker}** put in {invested:,.0f} and it is "
+            f"worth {value:,.0f} today — a {_pct(return_pct)} result. That is what a plain, "
+            f"regular buying plan delivers, with no attempt to time the entry.")
+
+
+def var_readout(lang, ticker, var95, cvar95):
+    """VaR/CVaR in a sentence rather than two unlabeled percentages."""
+    if lang == "VI":
+        return (f"Trong 5% ngày tệ nhất, **{ticker}** thường mất ít nhất {_pct(abs(var95))}; "
+                f"khi rơi vào nhóm đó, mức lỗ trung bình còn sâu hơn, khoảng {_pct(abs(cvar95))}.")
+    if lang == "DE":
+        return (f"An den schlechtesten 5% der Tage verliert **{ticker}** typischerweise "
+                f"mindestens {_pct(abs(var95))}; innerhalb dieser Tage liegt der "
+                f"Durchschnittsverlust tiefer, bei etwa {_pct(abs(cvar95))}.")
+    return (f"On the worst 5% of days, **{ticker}** typically loses at least {_pct(abs(var95))}; "
+            f"within that group, the average loss runs deeper, around {_pct(abs(cvar95))}.")

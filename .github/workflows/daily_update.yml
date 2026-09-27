@@ -18,6 +18,10 @@ on:
         description: 'Skip fmarket open-ended funds'
         type: boolean
         default: false
+      skip_etf_discovery:
+        description: 'Skip US ETF discovery (curated universe only)'
+        type: boolean
+        default: false
 
 concurrency:
   group: daily-data-update
@@ -26,7 +30,7 @@ concurrency:
 jobs:
   update_data:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     permissions:
       contents: write
 
@@ -50,6 +54,7 @@ jobs:
         env:
           SKIP_WORLD: ${{ inputs.skip_world && '1' || '0' }}
           SKIP_MUTUAL_FUNDS: ${{ inputs.skip_mutual_funds && '1' || '0' }}
+          SKIP_ETF_DISCOVERY: ${{ inputs.skip_etf_discovery && '1' || '0' }}
         run: |
           for attempt in 1 2 3; do
             echo "::group::update attempt $attempt"
@@ -90,6 +95,7 @@ jobs:
           print('instruments:', s.get('instruments'))
           print('range:', s.get('first_date'), '->', s.get('last_date'))
           print('by region:', s.get('by_region'))
+          print('US ETFs:', s.get('us_etfs_tracked'), 'tracked of', s.get('us_etfs_listed'), 'listed')
           print('failures:', len(s.get('failed', [])))
           [print('warning:', w) for w in s.get('warnings', [])]
           "

@@ -15,6 +15,8 @@ Outputs (all committed by the workflow):
     data/volume.csv        traded volume where available
     data/profile.csv       one metadata row per instrument + coverage stats
     data/fx.csv            USD value of one unit of each currency, per day
+    data/catalogue.csv     every US-listed ETF with its traded value and whether
+                           the report tracks it
     data/status.json       machine readable health report of the run
     funds_data.csv         legacy Vietnam-only price file (kept for compatibility)
     funds_volume.csv       legacy Vietnam-only volume file
@@ -45,6 +47,15 @@ def skip_mutual_funds() -> bool:
 
 def max_mutual_funds() -> int:
     return int(os.environ.get("MAX_MUTUAL_FUNDS", "120"))
+
+
+def max_us_etfs() -> int:
+    """How many discovered US ETFs get a full history, most liquid first."""
+    return int(os.environ.get("MAX_US_ETFS", "350"))
+
+
+def skip_discovery() -> bool:
+    return os.environ.get("SKIP_ETF_DISCOVERY") == "1"
 
 
 def log(msg: str) -> None:
@@ -105,11 +116,61 @@ def collect_mutual_funds(status: dict) -> tuple[dict, list[dict]]:
     return prices, rows
 
 
-def collect_world(status: dict) -> tuple[dict, dict, list[dict]]:
+def discover_us_etfs(status: dict, curated: set[str]) -> tuple[list[dict], pd.DataFrame]:
+    """Find every US-listed ETF, then keep the ones worth tracking.
+
+    The catalogue is the whole market (~3,000 funds). Downloading a full history
+    for all of them would bloat the repository with funds that trade a few
+    hundred dollars a day, so one cheap pass ranks them by traded value and the
+    most liquid ``MAX_US_ETFS`` are promoted to the tracked universe. The full
+    catalogue is written out either way, so the report can say what it does and
+    does not cover.
+    """
+    if skip_discovery() or skip_world():
+        return [], pd.DataFrame()
+
+    catalogue = sources.fetch_us_etf_catalogue()
+    if not catalogue:
+        status["warnings"].append("US ETF catalogue unavailable")
+        log("Discovery: catalogue unavailable, using the curated list only")
+        return [], pd.DataFrame()
+    log(f"Discovery: {len(catalogue)} US-listed ETFs in the symbol directory")
+
+    frame = pd.DataFrame(catalogue).set_index("ticker")
+    log("Discovery: ranking them by traded value ...")
+    liquidity = sources.rank_by_liquidity(list(frame.index))
+    frame["traded_value"] = liquidity
+    frame["liquidity_rank"] = liquidity.rank(ascending=False, method="min")
+
+    ranked = liquidity.index.tolist()
+    chosen = [t for t in ranked[:max_us_etfs()]]
+    chosen += [t for t in frame.index if t in curated and t not in chosen]
+    frame["tracked"] = frame.index.isin(chosen)
+    log(f"Discovery: {len(chosen)} tracked, {len(frame) - len(chosen)} catalogued only")
+
+    rows = []
+    for ticker in chosen:
+        if ticker in curated:
+            continue                      # the curated entry already has richer metadata
+        meta = frame.loc[ticker]
+        rows.append(dict(
+            ticker=ticker, source="yahoo", symbol=ticker, name=meta["name"],
+            kind="ETF", asset_class=meta["asset_class"], region="US",
+            country="United States", currency="USD", issuer=meta["issuer"],
+            ter=float("nan"), benchmark="SP500", category=meta["category"],
+            inception="",
+        ))
+    return rows, frame.reset_index()
+
+
+def collect_world(status: dict, extra: list[dict] | None = None) -> tuple[dict, dict, list[dict]]:
     if skip_world():
         return {}, {}, []
     static = uni.static_universe()
     world = static[static.source == "yahoo"]
+    if extra:
+        world = pd.concat([world, pd.DataFrame(extra)], ignore_index=True)
+        world = world.drop_duplicates(subset="ticker")
     symbols = world.symbol.tolist()
     log(f"World: downloading {len(symbols)} symbols from Yahoo Finance ...")
     got = sources.fetch_yahoo_batch(symbols)
@@ -278,7 +339,9 @@ def main(root: str | None = None, data_dir: str | None = None) -> int:
     mf_p, mf_rows = collect_mutual_funds(status)
     price_map.update(mf_p); rows += mf_rows
 
-    w_p, w_v, w_rows = collect_world(status)
+    curated = set(uni.static_universe().ticker)
+    discovered, catalogue = discover_us_etfs(status, curated)
+    w_p, w_v, w_rows = collect_world(status, extra=discovered)
     price_map.update(w_p); vol_map.update(w_v); rows += w_rows
 
     if not price_map:
@@ -321,6 +384,8 @@ def main(root: str | None = None, data_dir: str | None = None) -> int:
     profile.to_csv(os.path.join(data_dir, "profile.csv"), index=False)
     if not fx.empty:
         fx.to_csv(os.path.join(data_dir, "fx.csv"))
+    if not catalogue.empty:
+        catalogue.to_csv(os.path.join(data_dir, "catalogue.csv"), index=False)
 
     write_legacy_files(prices, volume, profile, root)
 
@@ -333,6 +398,8 @@ def main(root: str | None = None, data_dir: str | None = None) -> int:
         "last_date": prices.index.max().strftime("%Y-%m-%d"),
         "by_region": profile.groupby("region").size().to_dict(),
         "by_kind": profile.groupby("kind").size().to_dict(),
+        "us_etfs_listed": int(len(catalogue)) if not catalogue.empty else 0,
+        "us_etfs_tracked": int(catalogue.tracked.sum()) if not catalogue.empty else 0,
         "currencies": [c for c in fx.columns] if not fx.empty else [],
         "stale": cov[cov.stale_days > 7][["ticker", "last_date", "stale_days"]]
                     .to_dict(orient="records"),

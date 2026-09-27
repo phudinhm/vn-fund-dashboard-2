@@ -197,11 +197,16 @@ def versus_benchmark(ctx) -> None:
         return
 
     st.markdown(f"### {ctx.t('h_alpha')} — {ctx.benchmark}")
-    cols = ["beta", "alpha", "r_squared", "tracking_error", "information_ratio",
-            "up_capture", "down_capture", "capture_spread", "batting_average"]
+    cols = ["beta", "alpha", "r_squared", "tracking_error", "tracking_difference",
+            "information_ratio", "up_capture", "down_capture", "capture_spread",
+            "batting_average"]
     have = [c for c in cols if c in ctx.metrics.columns]
     relative = ctx.metrics.loc[[t for t in ctx.metrics.index if t != ctx.benchmark], have]
     st.dataframe(relative, width="stretch", column_config=C.metric_columns(ctx, have))
+
+    bench_kind = ctx.profile.set_index("ticker").get("kind", pd.Series(dtype=str))
+    if bench_kind.get(ctx.benchmark) == "Index":
+        st.caption(ctx.t("price_index_caveat"))
 
     if not relative.empty:
         focus = st.selectbox(ctx.t("focus_fund"), list(relative.index),
@@ -230,6 +235,22 @@ def versus_benchmark(ctx) -> None:
             fig.add_hline(y=1.0, line_dash="dot", line_color=BENCH)
             st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("m_beta")),
                             width="stretch")
+
+    with C.card(ctx.t("h_excess")):
+        excess = pd.DataFrame({
+            t: an.rolling_excess_return(ctx.window[t], ctx.window[ctx.benchmark])
+            for t in others}).dropna(how="all") * 100
+        if excess.empty:
+            st.info(ctx.t("not_enough_data"))
+        else:
+            fig = px.line(excess, height=340)
+            fig.add_hline(y=0, line_dash="dot", line_color=BENCH)
+            st.plotly_chart(style_fig(fig, "", ctx.t("x_date"), ctx.t("y_return")),
+                            width="stretch")
+            leader = excess.mean().idxmax()
+            C.readout(ctx, i18n.excess_readout(
+                ctx.lang, leader, float(excess[leader].mean() / 100),
+                float((excess[leader] > 0).mean() * 100), ctx.benchmark))
 
     st.markdown("#### " + ctx.t("h_capture"))
     capture = ctx.metrics.loc[others, ["up_capture", "down_capture"]].dropna(how="all")
@@ -275,11 +296,8 @@ def correlation(ctx) -> None:
 
 # ---------------------------------------------------------------- readouts
 def _growth_readout(ctx) -> None:
-    growth = an.cumulative_growth(ctx.window.ffill())
-    if growth.empty:
-        return
-    final = (growth.iloc[-1] / 100 - 1).dropna()
-    if len(final) < 2 or ctx.benchmark not in final.index:
+    final = C.growth_facts(ctx)
+    if final is None:
         return
     bench = float(final[ctx.benchmark])
     C.readout(ctx, i18n.performance_readout(

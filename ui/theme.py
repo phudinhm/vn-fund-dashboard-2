@@ -50,7 +50,27 @@ CSS = f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
 
-html, body, .stApp, [class*="st-"] {{ font-family: {FONT}; }}
+/* Typography is set on the document, not on every Streamlit class. The old
+   selector [class*="st-"] also matched the icon spans (st-emotion-cache-*),
+   overrode their Material Symbols font and left ligature names rendering as
+   literal text: "keyboard_double_arrow_left" instead of an arrow. */
+html, body, .stApp {{ font-family: {FONT}; }}
+.stApp button, .stApp input, .stApp select, .stApp textarea,
+.stApp p, .stApp label, .stApp span:not([data-testid*="Icon"]),
+.stApp div, .stApp li, .stApp td, .stApp th {{ font-family: {FONT}; }}
+
+/* ...and the icon font is restored explicitly, so no future rule can eat it. */
+span[data-testid="stIconMaterial"],
+[data-testid*="stIconMaterial"],
+.material-symbols-rounded, .material-symbols-outlined,
+[class*="material-symbols"], .stApp [class*="material-symbols"] {{
+    font-family: "Material Symbols Rounded", "Material Symbols Outlined" !important;
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    letter-spacing: normal !important; text-transform: none !important;
+    white-space: nowrap; word-wrap: normal; direction: ltr;
+    -webkit-font-feature-settings: "liga"; font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+}}
 .stApp {{ background: {BG}; color: {INK}; }}
 
 h1, h2, h3, h4 {{ color: {INK}; font-weight: 500; letter-spacing: -.011em; }}
@@ -79,6 +99,11 @@ div[data-testid="stMetric"] {{
 div[data-testid="stMetric"] label p {{
     color: {MUTED} !important; font-size: .75rem; font-weight: 500;
     text-transform: uppercase; letter-spacing: .05em;
+    /* Streamlit's own metric label truncates long text with an ellipsis and
+       no title attribute, so "Max drawdown · FUEVFVND" silently loses the
+       ticker. A tile is free to grow a line taller; a hidden ticker is not. */
+    white-space: normal !important; overflow: visible !important;
+    text-overflow: clip !important; line-height: 1.3;
 }}
 div[data-testid="stMetricValue"] {{ font-size: 1.4rem; font-weight: 500; color: {INK}; }}
 div[data-testid="stMetricDelta"] {{ font-size: .78rem; }}

@@ -65,7 +65,9 @@ def render(ctx) -> None:
         with C.card(ctx.t("h_region")):
             C.bar_compare(ctx, by_region.cagr, y_title=ctx.t("y_cagr"), height=340)
     with right:
-        with C.card(ctx.t("h_region")):
+        # no repeated heading: the chart to its left already names the section,
+        # this is the same numbers as a table rather than a second topic
+        with C.card():
             st.dataframe(by_region, width="stretch", column_config={
                 "cagr": st.column_config.NumberColumn(ctx.t("m_cagr"), format="percent"),
                 "volatility": st.column_config.NumberColumn(ctx.t("m_volatility"),

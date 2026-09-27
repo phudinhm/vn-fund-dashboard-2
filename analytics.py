@@ -202,6 +202,56 @@ def tail_ratio(ret: pd.Series) -> float:
     return float(right / left) if left > 0 else np.nan
 
 
+def time_under_water(prices: pd.Series) -> int:
+    """Longest run of days spent below a previous peak, in calendar days.
+
+    Max drawdown says how deep the hole was; this says how long you sat in it,
+    which is what actually makes people sell.
+    """
+    s = prices.dropna()
+    if len(s) < 3:
+        return 0
+    dd = drawdown(s)
+    longest, start = 0, None
+    for date, value in dd.items():
+        if value < 0 and start is None:
+            start = date
+        elif value >= 0 and start is not None:
+            longest = max(longest, (date - start).days)
+            start = None
+    if start is not None:
+        longest = max(longest, (s.index[-1] - start).days)
+    return int(longest)
+
+
+def tracking_difference(asset_prices: pd.Series, bench_prices: pd.Series) -> float:
+    """Annualised return gap to the benchmark.
+
+    Tracking *error* measures how noisily a fund follows its index; tracking
+    *difference* measures how much return the fund actually kept or lost along
+    the way — the number that shows up in an investor's account.
+    """
+    df = pd.concat([asset_prices.rename("a"), bench_prices.rename("b")],
+                   axis=1, sort=True).dropna()
+    if len(df) < 60:
+        return np.nan
+    asset, bench = cagr(df["a"]), cagr(df["b"])
+    if np.isnan(asset) or np.isnan(bench):
+        return np.nan
+    return float(asset - bench)
+
+
+def average_daily_value(prices: pd.Series, volume: pd.Series,
+                        window: int = 63) -> float:
+    """Median traded value over the recent window, in the price's currency."""
+    df = pd.concat([prices.rename("p"), volume.rename("v")], axis=1, sort=True).dropna()
+    if df.empty:
+        return np.nan
+    recent = (df["p"] * df["v"]).tail(window)
+    recent = recent[recent > 0]
+    return float(recent.median()) if len(recent) >= 5 else np.nan
+
+
 def drawdown_episodes(prices: pd.Series, top: int = 5) -> pd.DataFrame:
     """The deepest drawdown episodes with peak / trough / recovery dates."""
     s = prices.dropna()
@@ -405,8 +455,63 @@ def rolling_return_stats(prices: pd.Series, years: float = 1.0) -> dict:
     }
 
 
+def rolling_excess_return(asset_prices: pd.Series, bench_prices: pd.Series,
+                          window_days: int = 252) -> pd.Series:
+    """Rolling annual return of the fund minus the same window of the benchmark.
+
+    Cumulative charts hide *when* a fund earned its lead. This shows the lead
+    itself, period by period: above zero it was ahead over the last year, below
+    zero it was behind, whatever the total picture says.
+    """
+    df = pd.concat([asset_prices.rename("a"), bench_prices.rename("b")],
+                   axis=1, sort=True).ffill().dropna()
+    if len(df) <= window_days:
+        return pd.Series(dtype=float)
+    asset = df["a"] / df["a"].shift(window_days) - 1
+    bench = df["b"] / df["b"].shift(window_days) - 1
+    return (asset - bench).dropna()
+
+
 def rolling_volatility(ret: pd.Series, window: int = 63) -> pd.Series:
     return ret.rolling(window).std() * np.sqrt(TRADING_DAYS) * 100
+
+
+def trend_state(prices: pd.Series, short: int = 50, long: int = 200) -> dict:
+    """Where a price sits relative to its own moving averages, and since when.
+
+    The fund profile already draws MA50/MA200 on the price chart; this is the
+    same picture in words — trend direction, whether the two averages are
+    stacked in the bullish or bearish order, and how many days ago they last
+    crossed (a golden or death cross). Returns an empty dict when there is not
+    enough history for a 200-day average.
+    """
+    s = prices.dropna()
+    if len(s) < long + 5:
+        return {}
+    ma_short = s.rolling(short).mean()
+    ma_long = s.rolling(long).mean()
+    valid = ma_short.notna() & ma_long.notna()
+    if valid.sum() < 5:
+        return {}
+    ma_short, ma_long = ma_short[valid], ma_long[valid]
+    price = float(s.iloc[-1])
+    above_short = bool(price > ma_short.iloc[-1])
+    above_long = bool(price > ma_long.iloc[-1])
+    bullish_stack = bool(ma_short.iloc[-1] > ma_long.iloc[-1])
+
+    diff_sign = np.sign(ma_short - ma_long)
+    crosses = diff_sign[diff_sign.diff().fillna(0) != 0]
+    cross_date = crosses.index[-1] if len(crosses) else None
+    cross_days_ago = int((s.index[-1] - cross_date).days) if cross_date is not None else None
+
+    return {
+        "price": price,
+        "ma_short": float(ma_short.iloc[-1]), "ma_long": float(ma_long.iloc[-1]),
+        "above_short": above_short, "above_long": above_long,
+        "bullish_stack": bullish_stack,
+        "cross_direction": "golden" if bullish_stack else "death",
+        "cross_days_ago": cross_days_ago,
+    }
 
 
 def rolling_correlation(a: pd.Series, b: pd.Series, window: int = 126) -> pd.Series:
@@ -419,18 +524,26 @@ def rolling_correlation(a: pd.Series, b: pd.Series, window: int = 126) -> pd.Ser
 # ===========================================================================
 
 def metrics_table(prices: pd.DataFrame, benchmark: str | None = None,
-                  rf: float = 0.0, profile: pd.DataFrame | None = None) -> pd.DataFrame:
+                  rf: float = 0.0, profile: pd.DataFrame | None = None,
+                  volume: pd.DataFrame | None = None) -> pd.DataFrame:
     """One row per instrument with the full metric set."""
     bench_ret = None
     if benchmark and benchmark in prices.columns:
         bench_ret = daily_returns(prices[benchmark])
 
     meta = profile.set_index("ticker") if profile is not None and not profile.empty else None
+    # an empty frame has no index range to measure
+    window_days = (max((prices.index.max() - prices.index.min()).days, 1)
+                   if len(prices.index) else 1)
     rows = []
     for ticker in prices.columns:
         s = prices[ticker].dropna()
         if len(s) < 5:
             continue
+        # a fund present for two months of a three-year window has its return
+        # annualised from two months; comparing that with a full track record is
+        # meaningless, so the share of the window it covers travels with it
+        coverage = min((s.index[-1] - s.index[0]).days / window_days, 1.0)
         r = daily_returns(s)
         row = {
             "ticker": ticker,
@@ -454,10 +567,16 @@ def metrics_table(prices: pd.DataFrame, benchmark: str | None = None,
             "hit_rate": float((r.dropna() > 0).mean() * 100) if r.notna().any() else np.nan,
             "best_day": float(r.max()) if r.notna().any() else np.nan,
             "worst_day": float(r.min()) if r.notna().any() else np.nan,
+            "time_under_water": time_under_water(s),
+            "coverage": float(coverage),
             "observations": int(len(s)),
             "first_date": s.index.min(),
             "last_date": s.index.max(),
         }
+        if volume is not None and ticker in volume.columns:
+            row["adv"] = average_daily_value(s, volume[ticker])
+        else:
+            row["adv"] = np.nan
         if bench_ret is not None and ticker != benchmark:
             b, a, r2 = beta_alpha(r, bench_ret, rf)
             up, down = capture_ratios(r, bench_ret)
@@ -468,12 +587,14 @@ def metrics_table(prices: pd.DataFrame, benchmark: str | None = None,
                 "up_capture": up, "down_capture": down,
                 "capture_spread": (up - down) if not (np.isnan(up) or np.isnan(down)) else np.nan,
                 "batting_average": batting_average(r, bench_ret),
+                "tracking_difference": tracking_difference(s, prices[benchmark]),
             })
         else:
             row.update({"beta": np.nan, "alpha": np.nan, "r_squared": np.nan,
                         "tracking_error": np.nan, "information_ratio": np.nan,
                         "up_capture": np.nan, "down_capture": np.nan,
-                        "capture_spread": np.nan, "batting_average": np.nan})
+                        "capture_spread": np.nan, "batting_average": np.nan,
+                        "tracking_difference": np.nan})
         if meta is not None and ticker in meta.index:
             m = meta.loc[ticker]
             row.update({
@@ -501,19 +622,37 @@ SCORE_WEIGHTS = {
 _LOWER_IS_BETTER = {"volatility", "ter"}
 
 
-def _zscore(s: pd.Series) -> pd.Series:
+# Z-scores are clipped before they are weighted. Without this a fund with
+# near-zero volatility - a three-month T-bill ETF - scores like an outlier on
+# every risk dimension at once and tops a ranking meant for investments people
+# actually compare.
+Z_CLIP = 3.0
+
+
+def _zscore(s: pd.Series, clip: float = Z_CLIP) -> pd.Series:
     s = pd.to_numeric(s, errors="coerce")
     if s.notna().sum() < 2 or s.std(skipna=True) in (0, np.nan):
         return pd.Series(0.0, index=s.index)
-    return (s - s.mean(skipna=True)) / s.std(skipna=True)
+    z = (s - s.mean(skipna=True)) / s.std(skipna=True)
+    return z.clip(-clip, clip)
 
 
-def composite_score(metrics: pd.DataFrame,
-                    weights: dict | None = None) -> pd.DataFrame:
+def composite_score(metrics: pd.DataFrame, weights: dict | None = None,
+                    min_coverage: float = 0.6,
+                    min_volatility: float = 0.01) -> pd.DataFrame:
     """Weighted z-score ranking across every risk / return dimension.
 
     ``max_drawdown`` is negative, so a shallower drawdown is already a higher
     z-score; ``volatility`` and ``ter`` are inverted explicitly.
+
+    Two kinds of instrument are listed but left unranked, because scoring them
+    against ordinary funds is a category error rather than a result:
+
+    * those covering less than ``min_coverage`` of the window — a two-month-old
+      fund cannot be scored against a three-year track record;
+    * those below ``min_volatility`` — a three-month T-bill ETF earns a Sharpe
+      of 7 because its denominator is nearly zero, not because it is the best
+      investment on the list.
     """
     weights = weights or SCORE_WEIGHTS
     if metrics.empty:
@@ -533,8 +672,23 @@ def composite_score(metrics: pd.DataFrame,
         used += weight
     out = metrics.copy()
     out["score"] = score / used if used else np.nan
+    if "coverage" in out.columns:
+        out.loc[out["coverage"] < min_coverage, "score"] = np.nan
+    if "volatility" in out.columns:
+        out.loc[out["volatility"] < min_volatility, "score"] = np.nan
     out["rank"] = out["score"].rank(ascending=False, method="min")
-    return out.sort_values("score", ascending=False)
+    return out.sort_values("score", ascending=False, na_position="last")
+
+
+def comparable(metrics: pd.DataFrame, min_coverage: float = 0.6,
+               min_volatility: float = 0.01) -> pd.DataFrame:
+    """The rows whose numbers can honestly be put side by side."""
+    if metrics.empty or "coverage" not in metrics.columns:
+        return metrics
+    subset = metrics[metrics["coverage"] >= min_coverage]
+    if "volatility" in subset.columns:
+        subset = subset[subset["volatility"].fillna(0) >= min_volatility]
+    return subset if not subset.empty else metrics
 
 
 # ===========================================================================

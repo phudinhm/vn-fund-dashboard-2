@@ -6,15 +6,17 @@ from __future__ import annotations
 import numpy as np
 import streamlit as st
 
-import analytics as an
 import i18n
 import report as rp
 from ui import components as C
 from ui import state as S
 
-BOARD_COLUMNS = ["rank", "name", "region", "currency", "cagr", "volatility",
-                 "max_drawdown", "sharpe", "sortino", "calmar", "beta", "alpha",
-                 "tracking_error", "ter", "score"]
+ESSENTIAL_COLUMNS = ["rank", "name", "region", "cagr", "volatility",
+                     "max_drawdown", "sharpe", "ter", "score"]
+FULL_COLUMNS = ["rank", "name", "region", "currency", "cagr", "volatility",
+                "max_drawdown", "time_under_water", "sharpe", "sortino", "calmar",
+                "beta", "alpha", "tracking_error", "tracking_difference",
+                "up_capture", "down_capture", "adv", "ter", "coverage", "score"]
 
 
 def render(ctx) -> None:
@@ -36,9 +38,10 @@ def render(ctx) -> None:
             C.growth_heatmap(ctx, ctx.prices[focus], focus, height=380)
 
     with C.card(ctx.t("h_leaderboard"), ctx.t("screener_hint")):
-        picked = C.leaderboard(ctx, ctx.scored, ctx.prices, BOARD_COLUMNS,
+        columns = C.column_choice(ctx, "ov_cols", ESSENTIAL_COLUMNS, FULL_COLUMNS)
+        picked = C.leaderboard(ctx, ctx.scored, ctx.prices, columns,
                                key="overview_board",
-                               height=min(120 + 36 * len(ctx.scored), 420))
+                               height=C.table_height(len(ctx.scored)))
         if len(picked) == 1 and st.button(f"{ctx.t('open_profile')}: {picked[0]}",
                                           key="ov_profile"):
             S.set_focus(picked[0])
@@ -69,11 +72,8 @@ def _kpis(ctx) -> None:
 
 
 def _performance_readout(ctx) -> None:
-    growth = an.cumulative_growth(ctx.window.ffill())
-    if growth.empty:
-        return
-    final = (growth.iloc[-1] / 100 - 1).dropna()
-    if len(final) < 2 or ctx.benchmark not in final.index:
+    final = C.growth_facts(ctx)
+    if final is None:
         return
     bench = float(final[ctx.benchmark])
     C.readout(ctx, i18n.performance_readout(
@@ -88,14 +88,14 @@ def _exports(ctx) -> None:
         cols[0].download_button(
             ctx.t("c_download_csv"), ctx.scored.to_csv().encode("utf-8"),
             file_name=f"etf_metrics_{ctx.period}_{ctx.currency}.csv",
-            mime="text/csv", width="stretch")
+            mime="text/csv", width="stretch", icon=":material/download:")
         markdown = rp.markdown_report(ctx.lang, ctx.ds, ctx.tickers, ctx.period,
                                       ctx.benchmark, ctx.currency, ctx.rf)
         cols[1].download_button(
             ctx.t("c_download_report"), markdown.encode("utf-8"),
             file_name=f"etf_report_{ctx.lang}_{ctx.period}.md",
-            mime="text/markdown", width="stretch")
+            mime="text/markdown", width="stretch", icon=":material/download:")
         cols[2].download_button(
-            ctx.t("y_value") + " (CSV)", ctx.window.to_csv().encode("utf-8"),
+            ctx.t("c_download_prices"), ctx.window.to_csv().encode("utf-8"),
             file_name=f"prices_{ctx.currency}_{ctx.period}.csv",
-            mime="text/csv", width="stretch")
+            mime="text/csv", width="stretch", icon=":material/download:")

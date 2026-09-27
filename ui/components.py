@@ -84,7 +84,23 @@ METRIC_FORMAT = {
     "down_capture": ("pct100", "m_down"), "capture_spread": ("pct100", "m_capture_spread"),
     "batting_average": ("pct100", "m_batting"), "rank": ("int", "m_rank"),
     "observations": ("int", "m_obs"),
+    "tracking_difference": ("pct", "m_td"), "time_under_water": ("int", "m_tuw"),
+    "adv": ("money", "m_adv"), "coverage": ("pct100x", "m_coverage"),
 }
+
+
+def _width_for(label: str) -> str:
+    """Pick a column width from its header text, not a blanket guess.
+
+    ``st.column_config`` only offers three fixed widths (roughly 75 / 200 /
+    300px), and every numeric column here used to hard-code "small" — fine for
+    "CAGR", but it clips "Volatility (ann.)" or "Composite score" into
+    "Volatility (an" with no way to see the rest. Longer headers get more
+    room instead.
+    """
+    if len(label) > 16:
+        return "medium"
+    return "small"
 
 
 def metric_columns(ctx, columns: list[str]) -> dict:
@@ -93,17 +109,37 @@ def metric_columns(ctx, columns: list[str]) -> dict:
     for col in columns:
         kind, label_key = METRIC_FORMAT.get(col, (None, None))
         label = ctx.t(label_key) if label_key else col
+        width = _width_for(label)
         if kind == "pct":
-            cfg[col] = st.column_config.NumberColumn(label, format="percent", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="percent", width=width)
         elif kind == "pct100":
-            cfg[col] = st.column_config.NumberColumn(label, format="%.1f%%", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%.1f%%", width=width)
+        elif kind == "pct100x":
+            cfg[col] = st.column_config.ProgressColumn(label, format="percent",
+                                                       min_value=0.0, max_value=1.0,
+                                                       width=width)
         elif kind == "fee":
-            cfg[col] = st.column_config.NumberColumn(label, format="%.2f%%", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%.2f%%", width=width)
         elif kind == "num":
-            cfg[col] = st.column_config.NumberColumn(label, format="%.2f", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%.2f", width=width)
         elif kind == "int":
-            cfg[col] = st.column_config.NumberColumn(label, format="%d", width="small")
+            cfg[col] = st.column_config.NumberColumn(label, format="%d", width=width)
+        elif kind == "money":
+            cfg[col] = st.column_config.NumberColumn(label, format="compact",
+                                                     width=width)
     return cfg
+
+
+def table_height(n_rows: int, max_height: int = 420,
+                 row_px: int = 35, header_px: int = 38) -> int:
+    """A dataframe height sized to its rows, not a flat guess.
+
+    A fixed ``120 + 36 * n`` estimate overshoots Streamlit's actual per-row
+    height and leaves 1-2 visibly empty rows dangling under real data. This
+    matches the grid's real metrics: one header row plus ``n`` body rows, a
+    couple of pixels of border, capped so a long result list still scrolls.
+    """
+    return min(header_px + row_px * max(n_rows, 1) + 3, max_height)
 
 
 def sparkline_series(prices: pd.DataFrame, tickers: list[str],
@@ -123,6 +159,14 @@ def sparkline_series(prices: pd.DataFrame, tickers: list[str],
     return out
 
 
+def column_choice(ctx, key: str, essential: list[str], full: list[str]) -> list[str]:
+    """Let the reader trade width for detail instead of scrolling by default."""
+    choice = st.segmented_control(
+        ctx.t("columns"), [ctx.t("cols_essential"), ctx.t("cols_full")],
+        default=ctx.t("cols_essential"), key=key, label_visibility="collapsed")
+    return full if choice == ctx.t("cols_full") else essential
+
+
 def leaderboard(ctx, scored: pd.DataFrame, prices: pd.DataFrame,
                 columns: list[str], key: str, height: int | None = None,
                 selectable: bool = True):
@@ -135,22 +179,29 @@ def leaderboard(ctx, scored: pd.DataFrame, prices: pd.DataFrame,
     frame.insert(0, "spark", pd.Series(sparkline_series(prices, list(frame.index)),
                                        index=frame.index))
     keep = ["spark"] + [c for c in columns if c in frame.columns]
-    frame = frame[keep]
+    frame = frame[keep].copy()
+    # a metric column that arrived as object dtype renders its gaps as the word
+    # "None"; numeric dtype renders them as an empty cell, which is the truth
+    for col in keep:
+        if col in METRIC_FORMAT and frame[col].dtype == object:
+            frame[col] = pd.to_numeric(frame[col], errors="coerce")
 
     cfg = metric_columns(ctx, keep)
-    cfg["spark"] = st.column_config.LineChartColumn(ctx.t("sparkline"), width="small")
+    cfg["spark"] = st.column_config.LineChartColumn(
+        ctx.t("sparkline"), width=_width_for(ctx.t("sparkline")))
     if "name" in keep:
         cfg["name"] = st.column_config.TextColumn(ctx.t("m_name"), width="medium")
     for col, label in (("region", "region"), ("currency", "ccy"),
                        ("country", "market"), ("issuer", "issuer"),
                        ("category", "category"), ("kind", "kind")):
         if col in keep:
-            cfg[col] = st.column_config.TextColumn(ctx.t(label), width="small")
+            cfg[col] = st.column_config.TextColumn(ctx.t(label), width=_width_for(ctx.t(label)))
     if "score" in keep:
         lo, hi = float(frame["score"].min()), float(frame["score"].max())
         cfg["score"] = st.column_config.ProgressColumn(
             ctx.t("m_score"), format="%.2f",
-            min_value=lo - 0.01, max_value=hi + 0.01, width="small")
+            min_value=lo - 0.01, max_value=hi + 0.01,
+            width=_width_for(ctx.t("m_score")))
 
     event = st.dataframe(
         frame, column_config=cfg, width="stretch", height=height,
@@ -165,6 +216,24 @@ def leaderboard(ctx, scored: pd.DataFrame, prices: pd.DataFrame,
 # --------------------------------------------------------------------------
 # charts
 # --------------------------------------------------------------------------
+
+def growth_facts(ctx):
+    """Total growth per instrument over the window, comparable rows only.
+
+    A fund that only existed for the last two months of the window would
+    otherwise be read as if its short run were a full-window result.
+    """
+    keep = set(an.comparable(ctx.metrics).index) if not ctx.metrics.empty else set()
+    growth = an.cumulative_growth(ctx.window.ffill())
+    if growth.empty:
+        return None
+    final = (growth.iloc[-1] / 100 - 1).dropna()
+    if keep:
+        final = final[[t for t in final.index if t in keep]]
+    if len(final) < 2 or ctx.benchmark not in final.index:
+        return None
+    return final
+
 
 def growth_chart(ctx, window: pd.DataFrame, log_scale: bool = False,
                  relative: bool = False, height: int = 440):
@@ -284,8 +353,11 @@ def growth_heatmap(ctx, prices: pd.Series, ticker: str, height: int | None = Non
         # empty string, not "NaN", for months a fund did not yet exist
         text=[["" if np.isnan(v) else f"{v:.1f}" for v in row] for row in heat.values],
         texttemplate="%{text}", textfont=dict(size=10)))
-    fig.update_yaxes(autorange="reversed")
-    fig.update_xaxes(side="top", tickangle=0)
+    fig.update_yaxes(autorange="reversed", tickfont=dict(size=10))
+    # month labels sit in a narrow card; without a forced tick per column and a
+    # smaller face they run into each other as "JanFebMar"
+    fig.update_xaxes(side="top", tickangle=0, tickfont=dict(size=10),
+                     dtick=1, automargin=True)
     st.plotly_chart(
         style_fig(fig, "", "", "",
                   height=height or max(240, 30 * len(heat) + 90),

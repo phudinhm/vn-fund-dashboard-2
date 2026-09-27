@@ -37,6 +37,18 @@ SECTIONS = [
     ("nav_data", data.render),
 ]
 
+# One Material Symbol per section, the same glyph set already loaded for the
+# sidebar's own collapse arrow — simple, monochrome, and never an emoji.
+NAV_ICONS = {
+    "nav_overview": ":material/dashboard:",
+    "nav_screener": ":material/filter_alt:",
+    "nav_compare": ":material/bar_chart:",
+    "nav_markets": ":material/public:",
+    "nav_profile": ":material/insights:",
+    "nav_lab": ":material/science:",
+    "nav_data": ":material/database:",
+}
+
 
 @st.cache_data(show_spinner=False)
 def load_dataset():
@@ -58,7 +70,7 @@ def dock(ds, T) -> str:
                     unsafe_allow_html=True)
 
         cols = st.columns(3)
-        for col, code in zip(cols, ["VI", "EN", "DE"]):
+        for col, code in zip(cols, list(i18n.LANGUAGES)):
             active = st.session_state.get("lang") == code
             if col.button(code, width="stretch", key=f"lang_{code}",
                           type="primary" if active else "secondary"):
@@ -71,6 +83,7 @@ def dock(ds, T) -> str:
         view_key = st.session_state.get("view", "nav_overview")
         for key, _ in SECTIONS:
             if st.button(T(key), key=f"nav_{key}", width="stretch",
+                         icon=NAV_ICONS.get(key),
                          type="primary" if key == view_key else "tertiary"):
                 pending["view"] = key
 
@@ -105,7 +118,8 @@ def _scope_filters(ds, T, pending: dict) -> None:
     universe = S.filtered_universe(ds.profile, ds.prices)
     st.caption(f"{T('universe_size')}: **{len(universe)}** / {ds.prices.shape[1]}")
     if S.filters_active() and st.button(T("filter_reset"), width="stretch",
-                                        key="clear_filters"):
+                                        key="clear_filters",
+                                        icon=":material/filter_alt_off:"):
         pending["clear_filters"] = True
 
 
@@ -154,7 +168,8 @@ def selection_bar(ctx) -> None:
             st.markdown(
                 f"<div class='selbar'>{T('selection')} · {len(ctx.tickers)} "
                 f"{T('selection_count')}</div>{chips}", unsafe_allow_html=True)
-        with edit.popover(T("edit_selection"), width="stretch"):
+        with edit.popover(T("edit_selection"), width="stretch",
+                          icon=":material/edit:"):
             options = ctx.universe or list(ctx.ds.prices.columns)
             seed = ({} if S.PICKER_KEY in st.session_state
                     else {"default": [t for t in ctx.tickers if t in options]})
@@ -164,7 +179,8 @@ def selection_bar(ctx) -> None:
         if picked and list(picked) != list(ctx.tickers):
             st.session_state["selection"] = list(picked)
             st.rerun()
-        if clear.button(T("clear_selection"), width="stretch", key="clear_sel"):
+        if clear.button(T("clear_selection"), width="stretch", key="clear_sel",
+                        icon=":material/refresh:"):
             S.set_selection(rp.default_selection(ctx.ds.profile, ctx.universe_prices))
             st.rerun()
 

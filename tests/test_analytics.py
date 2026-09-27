@@ -111,10 +111,18 @@ def test_metrics_table_has_every_column(data):
     assert len(m) == prices.shape[1]
 
 
+def _noisy(idx, drift, vol, seed):
+    """A price path with real volatility: a perfectly smooth series is a cash
+    equivalent and the scorer deliberately refuses to rank those."""
+    rng = np.random.default_rng(seed)
+    steps = rng.normal(drift / 252, vol / np.sqrt(252), len(idx))
+    return pd.Series(100 * np.exp(np.cumsum(steps)), index=idx)
+
+
 def test_composite_score_ranks_the_better_fund_higher():
     idx = pd.bdate_range("2018-01-01", periods=252 * 5)
-    good = pd.Series(100 * (1.15 ** (np.arange(len(idx)) / 252)), index=idx)
-    bad = pd.Series(100 * (1.02 ** (np.arange(len(idx)) / 252)), index=idx)
+    good = _noisy(idx, 0.15, 0.15, 1)
+    bad = _noisy(idx, 0.02, 0.20, 2)
     frame = pd.DataFrame({"GOOD": good, "BAD": bad})
     scored = an.composite_score(an.metrics_table(frame))
     assert scored.index[0] == "GOOD"
@@ -222,3 +230,106 @@ def test_risk_contribution_handles_degenerate_input(data):
     prices, _, _ = data
     assert an.risk_contribution(prices[["SPY"]], {"SPY": 100}).empty
     assert an.risk_contribution(prices[["SPY", "AGG"]], {"SPY": 0, "AGG": 0}).empty
+
+
+def test_coverage_marks_instruments_that_span_the_window(data):
+    prices, profile, _ = data
+    window = prices.loc["2020-01-01":]
+    metrics = an.metrics_table(window, profile=profile)
+    # FUEVFVND starts mid-2020 in the fixture, SPY spans the whole window
+    assert metrics.loc["SPY", "coverage"] > 0.99
+    assert metrics.loc["FUEVFVND", "coverage"] < metrics.loc["SPY", "coverage"]
+    assert (metrics["coverage"] <= 1.0).all()
+
+
+def test_short_history_is_listed_but_not_ranked():
+    """A two-month-old fund must not out-rank a three-year track record."""
+    idx = pd.bdate_range("2021-01-01", periods=252 * 4)
+    seasoned = _noisy(idx, 0.10, 0.15, 3)
+    newcomer = pd.Series(np.nan, index=idx)
+    tail = idx[-40:]
+    newcomer.loc[tail] = _noisy(tail, 0.90, 0.25, 4).values  # 90% annualised
+
+    scored = an.composite_score(
+        an.metrics_table(pd.DataFrame({"OLD": seasoned, "NEW": newcomer})))
+    assert scored.loc["NEW", "cagr"] > scored.loc["OLD", "cagr"]   # raw number flatters it
+    assert pd.isna(scored.loc["NEW", "score"])                     # but it is not ranked
+    assert scored.loc["OLD", "rank"] == 1
+    assert scored.index[0] == "OLD"                                # unranked sorts last
+
+
+def test_comparable_filters_to_the_full_window():
+    frame = pd.DataFrame({"coverage": [1.0, 0.9, 0.2]}, index=["A", "B", "C"])
+    assert list(an.comparable(frame).index) == ["A", "B"]
+    # never returns nothing: if no row qualifies, the caller still gets the data
+    thin = pd.DataFrame({"coverage": [0.1, 0.2]}, index=["A", "B"])
+    assert len(an.comparable(thin)) == 2
+
+
+def test_time_under_water_counts_the_longest_stretch():
+    idx = pd.bdate_range("2024-01-01", periods=6)
+    # peak, fall, recovery on the fifth day
+    prices = pd.Series([100, 90, 80, 95, 101, 102], index=idx)
+    assert an.time_under_water(prices) == (idx[4] - idx[1]).days
+    flat = pd.Series(np.arange(1, 7, dtype=float), index=idx)   # only new highs
+    assert an.time_under_water(flat) == 0
+
+
+def test_tracking_difference_is_the_return_gap(data):
+    prices, _, _ = data
+    gap = an.tracking_difference(prices["QQQ"], prices["SPY"])
+    assert gap == pytest.approx(an.cagr(prices["QQQ"]) - an.cagr(prices["SPY"]), abs=1e-9)
+    assert np.isnan(an.tracking_difference(prices["QQQ"].tail(10), prices["SPY"]))
+
+
+def test_average_daily_value_uses_price_times_volume(data):
+    prices, _, _ = data
+    volume = pd.Series(1000.0, index=prices.index)
+    adv = an.average_daily_value(prices["SPY"], volume)
+    expected = (prices["SPY"] * volume).tail(63).median()
+    assert adv == pytest.approx(expected)
+    assert np.isnan(an.average_daily_value(prices["SPY"], pd.Series(dtype=float)))
+
+
+def test_rolling_excess_return_is_the_difference_of_windows(data):
+    prices, _, _ = data
+    excess = an.rolling_excess_return(prices["QQQ"], prices["SPY"], window_days=252)
+    assert not excess.empty
+    date = excess.index[-1]
+    q, s = prices["QQQ"].ffill(), prices["SPY"].ffill()
+    pos = q.index.get_loc(date)
+    expected = (q.iloc[pos] / q.iloc[pos - 252] - 1) - (s.iloc[pos] / s.iloc[pos - 252] - 1)
+    assert excess.loc[date] == pytest.approx(expected, abs=1e-9)
+    # a series against itself has no excess at all
+    flat = an.rolling_excess_return(prices["SPY"], prices["SPY"])
+    assert flat.abs().max() == pytest.approx(0.0, abs=1e-12)
+
+
+def test_rolling_excess_return_needs_a_full_window(data):
+    prices, _, _ = data
+    assert an.rolling_excess_return(prices["QQQ"].tail(100), prices["SPY"]).empty
+
+
+def test_cash_equivalents_are_listed_but_not_ranked():
+    """A T-bill fund earns a Sharpe of 7 from a near-zero denominator; that is
+    arithmetic, not the best investment on the list."""
+    idx = pd.bdate_range("2022-01-01", periods=252 * 3)
+    steps = np.arange(len(idx)) / 252
+    cash = pd.Series(100 * (1.045 ** steps), index=idx)          # ~0 volatility
+    rng = np.random.default_rng(4)
+    equity = pd.Series(100 * np.exp(np.cumsum(
+        rng.normal(0.10 / 252, 0.16 / np.sqrt(252), len(idx)))), index=idx)
+
+    metrics = an.metrics_table(pd.DataFrame({"CASH": cash, "EQUITY": equity}), rf=0.02)
+    assert metrics.loc["CASH", "sharpe"] > metrics.loc["EQUITY", "sharpe"]
+    scored = an.composite_score(metrics)
+    assert pd.isna(scored.loc["CASH", "score"])
+    assert not pd.isna(scored.loc["EQUITY", "score"])
+    assert "CASH" not in an.comparable(metrics).index
+
+
+def test_zscores_are_clipped_so_one_outlier_cannot_own_the_ranking():
+    values = pd.Series([1.0, 1.1, 1.2, 1.0, 400.0])
+    z = an._zscore(values)
+    assert z.max() <= an.Z_CLIP + 1e-9
+    assert z.min() >= -an.Z_CLIP - 1e-9
