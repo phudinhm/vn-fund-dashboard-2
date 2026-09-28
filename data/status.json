@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-09-27T15:11:39.162948+00:00",
+  "started_utc": "2026-09-28T01:02:23.703877+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -21,26 +21,28 @@
   "warnings": [
     "dropped, too few observations: VBIF"
   ],
-  "finished_utc": "2026-09-27T15:14:45.350641+00:00",
-  "duration_seconds": 186.2,
-  "instruments": 249,
-  "observations": 736097,
+  "finished_utc": "2026-09-28T01:13:12.175750+00:00",
+  "duration_seconds": 648.5,
+  "instruments": 585,
+  "observations": 1729021,
   "first_date": "2004-05-20",
-  "last_date": "2026-09-27",
+  "last_date": "2026-09-28",
   "by_region": {
-    "Americas": 8,
-    "Asia-Pacific": 38,
-    "Emerging": 7,
-    "Europe": 37,
+    "Americas": 14,
+    "Asia-Pacific": 59,
+    "Emerging": 9,
+    "Europe": 68,
     "Global": 21,
-    "US": 50,
+    "US": 326,
     "Vietnam": 88
   },
   "by_kind": {
-    "ETF": 141,
+    "ETF": 477,
     "Index": 43,
     "Mutual Fund": 65
   },
+  "us_etfs_listed": 5736,
+  "us_etfs_tracked": 370,
   "currencies": [
     "AUD",
     "BRL",
@@ -67,7 +69,7 @@
     {
       "ticker": "TBLF",
       "last_date": "2026-09-15",
-      "stale_days": 12
+      "stale_days": 13
     }
   ]
 }
