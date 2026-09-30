@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-09-29T16:32:52.262060+00:00",
+  "started_utc": "2026-09-30T01:25:35.878593+00:00",
   "failed": [
     {
       "ticker": "FUETCV30",
@@ -17,12 +17,12 @@
   "warnings": [
     "dropped, too few observations: SSI-PDF, VBIF"
   ],
-  "finished_utc": "2026-09-29T16:43:04.872452+00:00",
-  "duration_seconds": 612.6,
-  "instruments": 586,
-  "observations": 1732588,
+  "finished_utc": "2026-09-30T01:38:25.083696+00:00",
+  "duration_seconds": 769.2,
+  "instruments": 587,
+  "observations": 1732877,
   "first_date": "2004-05-20",
-  "last_date": "2026-09-29",
+  "last_date": "2026-09-30",
   "by_region": {
     "Americas": 14,
     "Asia-Pacific": 59,
@@ -65,7 +65,7 @@
     {
       "ticker": "TBLF",
       "last_date": "2026-09-15",
-      "stale_days": 14
+      "stale_days": 15
     }
   ]
 }
