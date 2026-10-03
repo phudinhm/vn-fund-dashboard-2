@@ -326,13 +326,13 @@ VCIT,yahoo,VCIT,Vanguard Intermediate-Term Corporate Bond ETF,ETF,Bond,US,United
 TSLL,yahoo,TSLL,Direxion Daily TSLA Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-08-09,2022-08-09,2026-10-02,1042,1
 XOP,yahoo,XOP,State Street SPDR S&P Oil & Gas Exploration & Production ETF,ETF,Commodity,US,United States,USD,State Street,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
 IYR,yahoo,IYR,iShares U.S. Real Estate ETF,ETF,Real Estate,US,United States,USD,BlackRock,,SP500,Real Estate,2010-01-04,2010-01-04,2026-10-02,4213,1
-KORU,yahoo,KORU,Direxion Daily South Korea Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2013-04-10,2013-04-10,2026-10-02,3392,1
 MUB,yahoo,MUB,iShares National Muni Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
-GDXJ,yahoo,GDXJ,VanEck Junior Gold Miners ETF,ETF,Commodity,US,United States,USD,VanEck,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
+KORU,yahoo,KORU,Direxion Daily South Korea Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2013-04-10,2013-04-10,2026-10-02,3392,1
 ETHA,yahoo,ETHA,iShares Ethereum Trust ETF,ETF,Crypto,US,United States,USD,BlackRock,,SP500,Crypto,2024-07-23,2024-07-23,2026-10-02,552,1
+GDXJ,yahoo,GDXJ,VanEck Junior Gold Miners ETF,ETF,Commodity,US,United States,USD,VanEck,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
 SNDQ,yahoo,SNDQ,Tradr 2X Short SNDK Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-04-23,2026-04-23,2026-10-02,113,1
-IWF,yahoo,IWF,iShares Russell 1000 Growth Fund,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 VTEB,yahoo,VTEB,Vanguard Tax-Exempt Bond ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2015-08-25,2015-08-25,2026-10-02,2793,1
+IWF,yahoo,IWF,iShares Russell 1000 Growth Fund,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 VGT,yahoo,VGT,Vanguard Information Tech ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 SPXL,yahoo,SPXL,Direxion Daily S&P 500 Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 NVDL,yahoo,NVDL,GraniteShares 2x Long NVDA Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2022-12-13,2022-12-13,2026-10-02,954,1
@@ -343,14 +343,14 @@ GLDM,yahoo,GLDM,SPDR Gold MiniShares Trust,ETF,Commodity,US,United States,USD,St
 QID,yahoo,QID,ProShares UltraShort QQQ,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 BOXX,yahoo,BOXX,Alpha Architect 1-3 Month Box ETF,ETF,Equity,US,United States,USD,Alpha Architect,,SP500,Broad Market,2022-12-28,2022-12-28,2026-10-02,944,1
 QLD,yahoo,QLD,ProShares Ultra QQQ,ETF,Equity,US,United States,USD,ProShares,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-NVD,yahoo,NVD,GraniteShares 2x Short NVDA Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2023-08-22,2023-08-22,2026-10-02,782,1
 JEPQ,yahoo,JEPQ,JPMorgan Nasdaq Equity Premium Income ETF,ETF,Equity,US,United States,USD,J.P. Morgan,,SP500,Derivative Income,2022-05-04,2022-05-04,2026-10-02,1108,1
+NVD,yahoo,NVD,GraniteShares 2x Short NVDA Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2023-08-22,2023-08-22,2026-10-02,782,1
 XRT,yahoo,XRT,State Street SPDR S&P Retail ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 VCSH,yahoo,VCSH,Vanguard Short-Term Corporate Bond ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 JAAA,yahoo,JAAA,Janus Henderson AAA CLO ETF,ETF,Equity,US,United States,USD,Janus Henderson,,SP500,Broad Market,2020-10-19,2020-10-19,2026-10-02,1496,1
-SPDN,yahoo,SPDN,Direxion Daily S&P 500 Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2016-06-10,2016-06-10,2026-10-02,2593,1
-SPXS,yahoo,SPXS,Direxion Daily S&P 500 Bear 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 JPST,yahoo,JPST,JPMorgan Ultra-Short Income ETF,ETF,Bond,US,United States,USD,J.P. Morgan,,SP500,Bond,2017-05-19,2017-05-19,2026-10-02,2356,1
+SPXS,yahoo,SPXS,Direxion Daily S&P 500 Bear 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
+SPDN,yahoo,SPDN,Direxion Daily S&P 500 Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2016-06-10,2016-06-10,2026-10-02,2593,1
 RWM,yahoo,RWM,ProShares Short Russell2000,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 SPMO,yahoo,SPMO,Invesco S&P 500 Momentum ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Smart Beta,2015-10-12,2015-10-12,2026-10-02,2760,1
 VCLT,yahoo,VCLT,Vanguard Long-Term Corporate Bond ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
@@ -361,35 +361,35 @@ TNA,yahoo,TNA,Direxion Small Cap Bull 3X ETF,ETF,Equity,US,United States,USD,Dir
 SPXU,yahoo,SPXU,ProShares UltraPro Short S&P500,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 SCHG,yahoo,SCHG,Schwab U.S. Large-Cap Growth ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 JEPI,yahoo,JEPI,JPMorgan Equity Premium Income ETF,ETF,Equity,US,United States,USD,J.P. Morgan,,SP500,Derivative Income,2020-05-21,2020-05-21,2026-10-02,1600,1
-SH,yahoo,SH,ProShares Short S&P500,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 SCHX,yahoo,SCHX,Schwab U.S. Large-Cap ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+SH,yahoo,SH,ProShares Short S&P500,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 MAGS,yahoo,MAGS,Roundhill Magnificent Seven ETF,ETF,Equity,US,United States,USD,Roundhill,,SP500,Broad Market,2023-04-11,2023-04-11,2026-10-02,874,1
-QQQI,yahoo,QQQI,NEOS Nasdaq 100 High Income ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2024-01-30,2024-01-30,2026-10-02,672,1
-JNK,yahoo,JNK,State Street SPDR Bloomberg High Yield Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 PSQ,yahoo,PSQ,ProShares Short QQQ,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
-ITOT,yahoo,ITOT,iShares Core S&P Total U.S. Stock Market ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+JNK,yahoo,JNK,State Street SPDR Bloomberg High Yield Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
+QQQI,yahoo,QQQI,NEOS Nasdaq 100 High Income ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2024-01-30,2024-01-30,2026-10-02,672,1
 SPYG,yahoo,SPYG,State Street SPDR Portfolio S&P 500 Growth ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+ITOT,yahoo,ITOT,iShares Core S&P Total U.S. Stock Market ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+COPX,yahoo,COPX,Global X Copper Miners ETF,ETF,Commodity,US,United States,USD,Global X,,SP500,Commodity,2010-04-20,2010-04-20,2026-10-02,4140,1
 SPCH,yahoo,SPCH,Leverage Shares 2X Long SPCX Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-06-15,2026-06-15,2026-10-02,77,1
 VGIT,yahoo,VGIT,Vanguard Intermediate-Term Treasury ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
-COPX,yahoo,COPX,Global X Copper Miners ETF,ETF,Commodity,US,United States,USD,Global X,,SP500,Commodity,2010-04-20,2010-04-20,2026-10-02,4140,1
 SCHF,yahoo,SCHF,Schwab International Equity ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-VEU,yahoo,VEU,Vanguard FTSE All World Ex US ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
 FBTC,yahoo,FBTC,Fidelity Wise Origin Bitcoin Fund,ETF,Crypto,US,United States,USD,Fidelity,,SP500,Crypto,2024-01-11,2024-01-11,2026-10-02,684,1
+VEU,yahoo,VEU,Vanguard FTSE All World Ex US ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
 MSTU,yahoo,MSTU,T-Rex 2X Long MSTR Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-09-18,2024-09-18,2026-10-02,512,1
 VBIL,yahoo,VBIL,Vanguard 0-3 Month Treasury Bill ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2025-02-12,2025-02-12,2026-10-02,412,1
 TSLG,yahoo,TSLG,Leverage Shares 2X Long TSLA Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-12-13,2024-12-13,2026-10-02,451,1
 VGSH,yahoo,VGSH,Vanguard Short-Term Treasury ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
-SSPC,yahoo,SSPC,Leverage Shares 2X Short SPCX Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-06-15,2026-06-15,2026-10-02,77,1
-XME,yahoo,XME,State Street SPDR S&P Metals & Mining ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 XHB,yahoo,XHB,State Street SPDR S&P Homebuilders ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+XME,yahoo,XME,State Street SPDR S&P Metals & Mining ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 MBB,yahoo,MBB,iShares MBS ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+SSPC,yahoo,SSPC,Leverage Shares 2X Short SPCX Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-06-15,2026-06-15,2026-10-02,77,1
 IVW,yahoo,IVW,iShares S&P 500 Growth ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 VO,yahoo,VO,Vanguard Morningstar Mid-Cap ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-SCHB,yahoo,SCHB,Schwab U.S. Broad Market ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-GDXU,yahoo,GDXU,MicroSectors Gold Miners 3X Leveraged ETN,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2020-12-03,2020-12-03,2026-10-02,1464,1
-SSO,yahoo,SSO,ProShares Ultra S&P500,ETF,Equity,US,United States,USD,ProShares,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-SPIB,yahoo,SPIB,State Street SPDR Portfolio Intermediate Term Corporate Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 GOVT,yahoo,GOVT,iShares U.S. Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2012-02-24,2012-02-24,2026-10-02,3673,1
+SCHB,yahoo,SCHB,Schwab U.S. Broad Market ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+SSO,yahoo,SSO,ProShares Ultra S&P500,ETF,Equity,US,United States,USD,ProShares,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+GDXU,yahoo,GDXU,MicroSectors Gold Miners 3X Leveraged ETN,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2020-12-03,2020-12-03,2026-10-02,1464,1
+SPIB,yahoo,SPIB,State Street SPDR Portfolio Intermediate Term Corporate Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 TZA,yahoo,TZA,Direxion Small Cap Bear 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 EFV,yahoo,EFV,iShares MSCI EAFE Value ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
 SNDU,yahoo,SNDU,T-REX 2X Long SNDK Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-03-12,2026-03-12,2026-10-02,142,1
@@ -400,187 +400,187 @@ CGDV,yahoo,CGDV,Capital Group Dividend Value ETF,ETF,Equity,US,United States,USD
 AGQ,yahoo,AGQ,ProShares Ultra Silver,ETF,Commodity,US,United States,USD,ProShares,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
 PLTD,yahoo,PLTD,Direxion Daily PLTR Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2024-12-12,2024-12-12,2026-10-02,452,1
 VGK,yahoo,VGK,Vanguard FTSEEuropean ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
-BSV,yahoo,BSV,Vanguard Short-Term Bond ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 AMDL,yahoo,AMDL,GraniteShares 2x Long AMD Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-03-18,2024-03-18,2026-10-02,639,1
+BSV,yahoo,BSV,Vanguard Short-Term Bond ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 IUSB,yahoo,IUSB,iShares Core Universal USD Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2014-06-12,2014-06-12,2026-10-02,3096,1
-RAM,yahoo,RAM,Roundhill T-REX 2X Long DRAM Daily Target ETF,ETF,Equity,US,United States,USD,Roundhill,,SP500,Leveraged / Inverse,2026-06-24,2026-06-24,2026-10-02,71,1
 ITA,yahoo,ITA,iShares U.S. Aerospace & Defense ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Thematic,2010-01-04,2010-01-04,2026-10-02,4213,1
+RAM,yahoo,RAM,Roundhill T-REX 2X Long DRAM Daily Target ETF,ETF,Equity,US,United States,USD,Roundhill,,SP500,Leveraged / Inverse,2026-06-24,2026-06-24,2026-10-02,71,1
 SPLV,yahoo,SPLV,Invesco S&P 500 Low Volatility ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Smart Beta,2011-05-05,2011-05-05,2026-10-02,3876,1
-AVEM,yahoo,AVEM,Avantis Emerging Markets Equity ETF,ETF,Equity,US,United States,USD,Other,,SP500,Country,2019-09-19,2019-09-19,2026-10-02,1769,1
-IWO,yahoo,IWO,iShares Russell 2000 Growth Fund,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 AVUV,yahoo,AVUV,Avantis U.S. Small Cap Value ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2019-09-26,2019-09-26,2026-10-02,1764,1
 SCHH,yahoo,SCHH,Schwab U.S. REIT ETF,ETF,Real Estate,US,United States,USD,Schwab,,SP500,Real Estate,2011-01-13,2011-01-13,2026-10-02,3953,1
-ARKG,yahoo,ARKG,ARK Genomic Revolution ETF,ETF,Equity,US,United States,USD,ARK Invest,,SP500,Broad Market,2014-10-31,2014-10-31,2026-10-02,2997,1
+AVEM,yahoo,AVEM,Avantis Emerging Markets Equity ETF,ETF,Equity,US,United States,USD,Other,,SP500,Country,2019-09-19,2019-09-19,2026-10-02,1769,1
 CIBR,yahoo,CIBR,First Trust NASDAQ Cybersecurity ETF,ETF,Equity,US,United States,USD,First Trust,,SP500,Thematic,2015-07-07,2015-07-07,2026-10-02,2828,1
 IEI,yahoo,IEI,iShares 3-7 Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
-SOXQ,yahoo,SOXQ,Invesco PHLX Semiconductor ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Thematic,2021-06-11,2021-06-11,2026-10-02,1334,1
-UVXY,yahoo,UVXY,ProShares Ultra VIX Short Term Futures ETF,ETF,Equity,US,United States,USD,ProShares,,SP500,Broad Market,2011-10-04,2011-10-04,2026-10-02,3771,1
+IWO,yahoo,IWO,iShares Russell 2000 Growth Fund,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+ARKG,yahoo,ARKG,ARK Genomic Revolution ETF,ETF,Equity,US,United States,USD,ARK Invest,,SP500,Broad Market,2014-10-31,2014-10-31,2026-10-02,2997,1
+KBWB,yahoo,KBWB,Invesco KBW Bank ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Broad Market,2011-11-01,2011-11-01,2026-10-02,3751,1
 MINT,yahoo,MINT,PIMCO Enhanced Short Maturity Active Exchange-Traded Fund,ETF,Bond,US,United States,USD,PIMCO,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 BKLN,yahoo,BKLN,Invesco Senior Loan ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Broad Market,2011-03-03,2011-03-03,2026-10-02,3920,1
-KBWB,yahoo,KBWB,Invesco KBW Bank ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Broad Market,2011-11-01,2011-11-01,2026-10-02,3751,1
+SOXQ,yahoo,SOXQ,Invesco PHLX Semiconductor ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Thematic,2021-06-11,2021-06-11,2026-10-02,1334,1
+UVXY,yahoo,UVXY,ProShares Ultra VIX Short Term Futures ETF,ETF,Equity,US,United States,USD,ProShares,,SP500,Broad Market,2011-10-04,2011-10-04,2026-10-02,3771,1
 VTWO,yahoo,VTWO,Vanguard Russell 2000 ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-09-22,2010-09-22,2026-10-02,4032,1
 SPYI,yahoo,SPYI,NEOS S&P 500 High Income ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2022-08-30,2022-08-30,2026-10-02,1027,1
 SDS,yahoo,SDS,ProShares UltraShort S&P500,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
-IWR,yahoo,IWR,iShares Russell Mid-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 FBND,yahoo,FBND,Fidelity Total Bond ETF,ETF,Bond,US,United States,USD,Fidelity,,SP500,Bond,2014-10-09,2014-10-09,2026-10-02,3013,1
+IWR,yahoo,IWR,iShares Russell Mid-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 MULL,yahoo,MULL,GraniteShares 2x Long MU Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-11-12,2024-11-12,2026-10-02,473,1
 PSLV,yahoo,PSLV,Sprott Physical Silver Trust ETV,ETF,Commodity,US,United States,USD,Sprott,,SP500,Commodity,2010-10-29,2010-10-29,2026-10-02,4005,1
 IXUS,yahoo,IXUS,iShares Core MSCI Total International Stock ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Country,2012-10-24,2012-10-24,2026-10-02,3504,1
 TMF,yahoo,TMF,Direxion Daily 20-Yr Treasury Bull 3x Shrs,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
-VB,yahoo,VB,Vanguard Morningstar Small-Cap ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 IGSB,yahoo,IGSB,iShares 1-5 Year Investment Grade Corporate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
+VB,yahoo,VB,Vanguard Morningstar Small-Cap ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 IHI,yahoo,IHI,iShares U.S. Medical Devices ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 PULS,yahoo,PULS,PGIM Ultra Short Bond ETF,ETF,Bond,US,United States,USD,Other,,SP500,Bond,2018-04-10,2018-04-10,2026-10-02,2133,1
 METU,yahoo,METU,Direxion Daily META Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2024-06-06,2024-06-06,2026-10-02,583,1
 IVE,yahoo,IVE,iShares S&P 500 Value ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+SPTL,yahoo,SPTL,State Street SPDR Portfolio Long Term Treasury ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
+BITX,yahoo,BITX,2x Bitcoin ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2023-06-27,2023-06-27,2026-10-02,821,1
 IGIB,yahoo,IGIB,iShares 5-10 Year Investment Grade Corporate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 BAI,yahoo,BAI,iShares A.I. Innovation and Tech Active ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Thematic,2024-10-22,2024-10-22,2026-10-02,488,1
 VTIP,yahoo,VTIP,Vanguard Short-Term Inflation-Protected Securities Index Fund ETF Shares,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2012-10-16,2012-10-16,2026-10-02,3510,1
-UGL,yahoo,UGL,ProShares Ultra Gold,ETF,Commodity,US,United States,USD,ProShares,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
 SCHP,yahoo,SCHP,Schwab U.S. TIPS ETF,ETF,Bond,US,United States,USD,Schwab,,SP500,Bond,2010-08-05,2010-08-05,2026-10-02,4065,1
-SPTL,yahoo,SPTL,State Street SPDR Portfolio Long Term Treasury ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
-BITX,yahoo,BITX,2x Bitcoin ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2023-06-27,2023-06-27,2026-10-02,821,1
-DYNF,yahoo,DYNF,iShares U.S. Equity Factor Rotation Active ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2019-03-21,2019-03-21,2026-10-02,1895,1
-URA,yahoo,URA,Global X Uranium ETF,ETF,Commodity,US,United States,USD,Global X,,SP500,Commodity,2010-11-05,2010-11-05,2026-10-02,4000,1
+UGL,yahoo,UGL,ProShares Ultra Gold,ETF,Commodity,US,United States,USD,ProShares,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
 LABD,yahoo,LABD,Direxion Daily S&P Biotech Bear 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2015-05-28,2015-05-28,2026-10-02,2855,1
-MSTZ,yahoo,MSTZ,T-Rex 2X Inverse MSTR Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-09-18,2024-09-18,2026-10-02,512,1
 GGLL,yahoo,GGLL,Direxion Daily GOOGL Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-09-07,2022-09-07,2026-10-02,1022,1
+DYNF,yahoo,DYNF,iShares U.S. Equity Factor Rotation Active ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2019-03-21,2019-03-21,2026-10-02,1895,1
+MSTZ,yahoo,MSTZ,T-Rex 2X Inverse MSTR Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-09-18,2024-09-18,2026-10-02,512,1
+URA,yahoo,URA,Global X Uranium ETF,ETF,Commodity,US,United States,USD,Global X,,SP500,Commodity,2010-11-05,2010-11-05,2026-10-02,4000,1
+SPDW,yahoo,SPDW,State Street SPDR Portfolio Developed World ex-US ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
 MSFU,yahoo,MSFU,Direxion Daily MSFT Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-09-07,2022-09-07,2026-10-02,1022,1
 CGGR,yahoo,CGGR,Capital Group Growth ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2022-02-24,2022-02-24,2026-10-02,1156,1
-SPDW,yahoo,SPDW,State Street SPDR Portfolio Developed World ex-US ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
 UCO,yahoo,UCO,ProShares Ultra Bloomberg Crude Oil,ETF,Commodity,US,United States,USD,ProShares,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
-ETHU,yahoo,ETHU,2x Ether ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-06-04,2024-06-04,2026-10-02,585,1
 IYW,yahoo,IYW,iShares U.S. Technology ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Sector,2010-01-04,2010-01-04,2026-10-02,4213,1
-HDV,yahoo,HDV,iShares Core High Dividend ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Dividend,2011-03-31,2011-03-31,2026-10-02,3900,1
-SPSB,yahoo,SPSB,State Street SPDR Portfolio Short Term Corporate Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
+ETHU,yahoo,ETHU,2x Ether ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-06-04,2024-06-04,2026-10-02,585,1
 UNG,yahoo,UNG,United States Natural Gas Fund LP,ETF,Commodity,US,United States,USD,Other,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
+SPSB,yahoo,SPSB,State Street SPDR Portfolio Short Term Corporate Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 BIV,yahoo,BIV,Vanguard Intermediate-Term Bond ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
+HDV,yahoo,HDV,iShares Core High Dividend ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Dividend,2011-03-31,2011-03-31,2026-10-02,3900,1
 VGLT,yahoo,VGLT,Vanguard Long-Term Treasury ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 AVLV,yahoo,AVLV,Avantis U.S. Large Cap Value ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2021-09-23,2021-09-23,2026-10-02,1262,1
-SCO,yahoo,SCO,ProShares UltraShort Bloomberg Crude Oil,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 IDEV,yahoo,IDEV,iShares Core MSCI International Developed Markets ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Country,2017-03-27,2017-03-27,2026-10-02,2394,1
+SCO,yahoo,SCO,ProShares UltraShort Bloomberg Crude Oil,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 PHYS,yahoo,PHYS,Sprott Physical Gold Trust ETV,ETF,Commodity,US,United States,USD,Sprott,,SP500,Commodity,2010-02-26,2010-02-26,2026-10-02,4176,1
 UDOW,yahoo,UDOW,ProShares UltraPro Dow30,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-02-11,2010-02-11,2026-10-02,4186,1
-TLH,yahoo,TLH,iShares 10-20 Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 TECL,yahoo,TECL,Direxion Daily Technology Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
-FLOT,yahoo,FLOT,iShares Floating Rate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2011-06-17,2011-06-17,2026-10-02,3846,1
-VLUE,yahoo,VLUE,iShares MSCI USA Value Factor ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Smart Beta,2013-04-18,2013-04-18,2026-10-02,3386,1
-VFLO,yahoo,VFLO,VictoryShares Free Cash Flow ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2023-06-22,2023-06-22,2026-10-02,824,1
+TLH,yahoo,TLH,iShares 10-20 Year Treasury Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 VONG,yahoo,VONG,Vanguard Russell 1000 Growth ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-09-22,2010-09-22,2026-10-02,4032,1
+VLUE,yahoo,VLUE,iShares MSCI USA Value Factor ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Smart Beta,2013-04-18,2013-04-18,2026-10-02,3386,1
 ACWX,yahoo,ACWX,iShares MSCI ACWI ex U.S. ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
-SCHE,yahoo,SCHE,Schwab Emerging Markets Equity ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Country,2010-01-14,2010-01-14,2026-10-02,4205,1
+FLOT,yahoo,FLOT,iShares Floating Rate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2011-06-17,2011-06-17,2026-10-02,3846,1
 TSLQ,yahoo,TSLQ,Tradr 2X Short TSLA Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2022-07-14,2022-07-14,2026-10-02,1060,1
+SPHY,yahoo,SPHY,State Street SPDR Portfolio High Yield Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2012-06-19,2012-06-19,2026-10-02,3593,1
+VFLO,yahoo,VFLO,VictoryShares Free Cash Flow ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2023-06-22,2023-06-22,2026-10-02,824,1
+SCHE,yahoo,SCHE,Schwab Emerging Markets Equity ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Country,2010-01-14,2010-01-14,2026-10-02,4205,1
+SCHV,yahoo,SCHV,Schwab U.S. Large-Cap Value ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 INTW,yahoo,INTW,GraniteShares 2x Long INTC Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2025-02-13,2025-02-13,2026-10-02,411,1
 DGRO,yahoo,DGRO,iShares Core Dividend Growth ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Dividend,2014-06-12,2014-06-12,2026-10-02,3096,1
-SCHV,yahoo,SCHV,Schwab U.S. Large-Cap Value ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 MGK,yahoo,MGK,Vanguard Morningstar Mega Cap Growth ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-SPHY,yahoo,SPHY,State Street SPDR Portfolio High Yield Bond ETF,ETF,Bond,US,United States,USD,State Street,,SP500,Bond,2012-06-19,2012-06-19,2026-10-02,3593,1
-MUZ,yahoo,MUZ,Defiance Daily Target 2X Short MU ETF,ETF,Equity,US,United States,USD,Defiance,,SP500,Leveraged / Inverse,2026-06-09,2026-06-09,2026-10-02,81,1
 USIG,yahoo,USIG,iShares Broad USD Investment Grade Corporate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
-SPYV,yahoo,SPYV,State Street SPDR Portfolio S&P 500 Value ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 OIH,yahoo,OIH,VanEck Oil Services ETF,ETF,Commodity,US,United States,USD,VanEck,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
+MUZ,yahoo,MUZ,Defiance Daily Target 2X Short MU ETF,ETF,Equity,US,United States,USD,Defiance,,SP500,Leveraged / Inverse,2026-06-09,2026-06-09,2026-10-02,81,1
 IWN,yahoo,IWN,iShares Russell 2000 Value ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-LABU,yahoo,LABU,Direxion Daily S&P Biotech Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2015-05-28,2015-05-28,2026-10-02,2855,1
-NUGT,yahoo,NUGT,Direxion Daily Gold Miners Index Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-12-08,2010-12-08,2026-10-02,3978,1
+SPYV,yahoo,SPYV,State Street SPDR Portfolio S&P 500 Value ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 SILJ,yahoo,SILJ,Amplify Junior Silver Miners ETF,ETF,Commodity,US,United States,USD,Amplify,,SP500,Commodity,2012-11-29,2012-11-29,2026-10-02,3481,1
 NVDX,yahoo,NVDX,T-Rex 2X Long NVIDIA Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2023-10-19,2023-10-19,2026-10-02,741,1
+NUGT,yahoo,NUGT,Direxion Daily Gold Miners Index Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-12-08,2010-12-08,2026-10-02,3978,1
+LABU,yahoo,LABU,Direxion Daily S&P Biotech Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2015-05-28,2015-05-28,2026-10-02,2855,1
 IAUM,yahoo,IAUM,iShares Gold Trust Micro Shares,ETF,Commodity,US,United States,USD,BlackRock,,SP500,Commodity,2021-07-01,2021-07-01,2026-10-02,1320,1
-FNGU,yahoo,FNGU,MicroSectors FANG+ 3X Leveraged ETNs,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2025-02-20,2025-02-20,2026-10-02,407,1
 AMZD,yahoo,AMZD,Direxion Daily AMZN Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-09-08,2022-09-08,2026-10-02,1021,1
 SPHQ,yahoo,SPHQ,Invesco S&P 500 Quality ETF,ETF,Equity,US,United States,USD,Invesco,,SP500,Smart Beta,2010-01-04,2010-01-04,2026-10-02,4213,1
+FNGU,yahoo,FNGU,MicroSectors FANG+ 3X Leveraged ETNs,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2025-02-20,2025-02-20,2026-10-02,407,1
 PAAA,yahoo,PAAA,PGIM AAA CLO ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2023-07-26,2023-07-26,2026-10-02,801,1
 BOIL,yahoo,BOIL,ProShares Ultra Bloomberg Natural Gas,ETF,Commodity,US,United States,USD,ProShares,,SP500,Commodity,2011-10-06,2011-10-06,2026-10-02,3769,1
 PYLD,yahoo,PYLD,PIMCO Multisector Bond Active Exchange-Traded Fund,ETF,Bond,US,United States,USD,PIMCO,,SP500,Sector,2023-06-22,2023-06-22,2026-10-02,824,1
 CONL,yahoo,CONL,GraniteShares 2x Long COIN Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2022-08-10,2022-08-10,2026-10-02,1041,1
-PDBC,yahoo,PDBC,Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF,ETF,Commodity,US,United States,USD,Invesco,,SP500,Commodity,2014-11-07,2014-11-07,2026-10-02,2992,1
 BNO,yahoo,BNO,"United States Brent Oil Fund, LP ETV",ETF,Commodity,US,United States,USD,Other,,SP500,Commodity,2010-06-02,2010-06-02,2026-10-02,4110,1
+PDBC,yahoo,PDBC,Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF,ETF,Commodity,US,United States,USD,Invesco,,SP500,Commodity,2014-11-07,2014-11-07,2026-10-02,2992,1
 AAOX,yahoo,AAOX,Tradr 2X Long AAOI Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-03-24,2026-03-24,2026-10-02,134,1
 VOOG,yahoo,VOOG,Vanguard S&P 500 Growth ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-09-09,2010-09-09,2026-10-02,4041,1
+IGLB,yahoo,IGLB,iShares 10  Year Investment Grade Corporate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 DFAC,yahoo,DFAC,Dimensional U.S. Core Equity 2 ETF,ETF,Equity,US,United States,USD,Dimensional,,SP500,Broad Market,2021-06-14,2021-06-14,2026-10-02,1333,1
 MSTX,yahoo,MSTX,Defiance Daily Target 2x Long MSTR ETF,ETF,Equity,US,United States,USD,Defiance,,SP500,Leveraged / Inverse,2024-08-15,2024-08-15,2026-10-02,535,1
 JETS,yahoo,JETS,U.S. Global Jets ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2015-04-30,2015-04-30,2026-10-02,2874,1
+SCHA,yahoo,SCHA,Schwab U.S. Small-Cap ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 AVS,yahoo,AVS,Direxion Daily AVGO Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2024-10-10,2024-10-10,2026-10-02,496,1
 SPMD,yahoo,SPMD,State Street SPDR Portfolio S&P 400 Mid Cap ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2013-07-09,2013-07-09,2026-10-02,3330,1
-IGLB,yahoo,IGLB,iShares 10  Year Investment Grade Corporate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 FNDX,yahoo,FNDX,Schwab Fundamental U.S. Large Company ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2013-08-15,2013-08-15,2026-10-02,3303,1
 GBTC,yahoo,GBTC,Grayscale Bitcoin Trust (BTC),ETF,Crypto,US,United States,USD,Grayscale,,SP500,Crypto,2015-05-11,2015-05-11,2026-10-02,2867,1
-SCHA,yahoo,SCHA,Schwab U.S. Small-Cap ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 SIL,yahoo,SIL,Global X Silver Miners ETF,ETF,Commodity,US,United States,USD,Global X,,SP500,Commodity,2010-04-20,2010-04-20,2026-10-02,4140,1
 GRID,yahoo,GRID,First Trust NASDAQ Clean Edge Smart Grid Infrastructure Index Fund,ETF,Equity,US,United States,USD,First Trust,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 IWP,yahoo,IWP,iShares Russell Midcap Growth ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 BWET,yahoo,BWET,Breakwave Tanker Shipping ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2023-05-03,2023-05-03,2026-10-02,858,1
 SGOL,yahoo,SGOL,abrdn Physical Gold Shares ETF,ETF,Commodity,US,United States,USD,abrdn,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
-UVIX,yahoo,UVIX,2x Long VIX Futures ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2022-03-30,2022-03-30,2026-10-02,1132,1
-SKUU,yahoo,SKUU,GraniteShares 2x Long SK Hynix Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-07-14,2026-07-14,2026-10-02,58,1
 PVAL,yahoo,PVAL,Putnam Focused Large Cap Value ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2021-05-26,2021-05-26,2026-10-02,1345,1
-BINC,yahoo,BINC,iShares Flexible Income Active ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2023-05-23,2023-05-23,2026-10-02,844,1
+STIP,yahoo,STIP,iShares 0-5 Year TIPS Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-12-03,2010-12-03,2026-10-02,3981,1
+UVIX,yahoo,UVIX,2x Long VIX Futures ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2022-03-30,2022-03-30,2026-10-02,1132,1
 VUSB,yahoo,VUSB,Vanguard Ultra-Short Bond ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2021-04-07,2021-04-07,2026-10-02,1380,1
+BINC,yahoo,BINC,iShares Flexible Income Active ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2023-05-23,2023-05-23,2026-10-02,844,1
 VDE,yahoo,VDE,Vanguard Energy ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Sector,2010-01-04,2010-01-04,2026-10-02,4213,1
 FNDF,yahoo,FNDF,Schwab Fundamental International Equity ETF,ETF,Equity,US,United States,USD,Schwab,,SP500,Broad Market,2013-08-15,2013-08-15,2026-10-02,3303,1
-STIP,yahoo,STIP,iShares 0-5 Year TIPS Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2010-12-03,2010-12-03,2026-10-02,3981,1
 TBIL,yahoo,TBIL,F/m US Treasury 3 Month Bill Fund,ETF,Bond,US,United States,USD,Other,,SP500,Bond,2022-08-09,2022-08-09,2026-10-02,1042,1
-AAPD,yahoo,AAPD,Direxion Daily AAPL Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-08-10,2022-08-10,2026-10-02,1041,1
+SDOW,yahoo,SDOW,UltraPro Short Dow30,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2010-02-11,2010-02-11,2026-10-02,4186,1
 KBE,yahoo,KBE,State Street SPDR S&P Bank ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 RDVY,yahoo,RDVY,First Trust Rising Dividend Achievers ETF,ETF,Equity,US,United States,USD,First Trust,,SP500,Dividend,2014-01-07,2014-01-07,2026-10-02,3204,1
 VYMI,yahoo,VYMI,Vanguard International High Dividend Yield ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Dividend,2016-03-02,2016-03-02,2026-10-02,2663,1
-SDOW,yahoo,SDOW,UltraPro Short Dow30,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2010-02-11,2010-02-11,2026-10-02,4186,1
+AAPD,yahoo,AAPD,Direxion Daily AAPL Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-08-10,2022-08-10,2026-10-02,1041,1
 JCPB,yahoo,JCPB,JPMorgan Core Plus Bond ETF,ETF,Bond,US,United States,USD,J.P. Morgan,,SP500,Bond,2019-03-12,2019-03-12,2026-10-02,1902,1
 GPIQ,yahoo,GPIQ,Goldman Sachs Nasdaq-100 Premium Income ETF,ETF,Commodity,US,United States,USD,Goldman Sachs,,SP500,Derivative Income,2023-10-27,2023-10-27,2026-10-02,735,1
 NBIL,yahoo,NBIL,GraniteShares 2x Long NBIS Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2025-10-07,2025-10-07,2026-10-02,249,1
 AVDE,yahoo,AVDE,Avantis International Equity ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2019-09-26,2019-09-26,2026-10-02,1764,1
 MVLL,yahoo,MVLL,GraniteShares 2x Long MRVL Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2025-03-07,2025-03-07,2026-10-02,396,1
-MUD,yahoo,MUD,Direxion Daily MU Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2024-10-18,2024-10-18,2026-10-02,490,1
+SKUU,yahoo,SKUU,GraniteShares 2x Long SK Hynix Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-07-14,2026-07-14,2026-10-02,58,1
 LITX,yahoo,LITX,Tradr 2X Long LITE Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-01-27,2026-01-27,2026-10-02,173,1
 IUSG,yahoo,IUSG,iShares Core S&P U.S. Growth ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+MUD,yahoo,MUD,Direxion Daily MU Bear 1X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2024-10-18,2024-10-18,2026-10-02,490,1
 SPSM,yahoo,SPSM,State Street SPDR Portfolio S&P 600 Small Cap ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2013-07-09,2013-07-09,2026-10-02,3330,1
+OEF,yahoo,OEF,iShares S&P 100 Fund,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 EDV,yahoo,EDV,Vanguard Extended Duration Treasury ETF,ETF,Bond,US,United States,USD,Vanguard,,SP500,Bond,2010-01-04,2010-01-04,2026-10-02,4213,1
 PFF,yahoo,PFF,iShares Preferred and Income Securities ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-OEF,yahoo,OEF,iShares S&P 100 Fund,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 IWY,yahoo,IWY,iShares Russell Top 200 Growth ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-SCHO,yahoo,SCHO,Schwab Short-Term U.S. Treasury ETF,ETF,Bond,US,United States,USD,Schwab,,SP500,Bond,2010-08-05,2010-08-05,2026-10-02,4065,1
 BBJP,yahoo,BBJP,JPMorgan BetaBuilders Japan ETF,ETF,Equity,US,United States,USD,J.P. Morgan,,SP500,Country,2018-06-18,2018-06-18,2026-10-02,2085,1
+SCHO,yahoo,SCHO,Schwab Short-Term U.S. Treasury ETF,ETF,Bond,US,United States,USD,Schwab,,SP500,Bond,2010-08-05,2010-08-05,2026-10-02,4065,1
 EFG,yahoo,EFG,iShares MSCI EAFE Growth ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
+AXTX,yahoo,AXTX,Tradr 2X Long AXTI Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-04-24,2026-04-24,2026-10-02,112,1
+SCZ,yahoo,SCZ,iShares MSCI EAFE Small-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
 VXF,yahoo,VXF,Vanguard Extended Market ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-PAVE,yahoo,PAVE,Global X U.S. Infrastructure Development ETF,ETF,Equity,US,United States,USD,Global X,,SP500,Broad Market,2017-03-08,2017-03-08,2026-10-02,2407,1
-TFLO,yahoo,TFLO,iShares Treasury Floating Rate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2014-02-04,2014-02-04,2026-10-02,3185,1
 AIRR,yahoo,AIRR,First Trust RBA American Industrial Renaissance ETF,ETF,Equity,US,United States,USD,First Trust,,SP500,Broad Market,2014-03-11,2014-03-11,2026-10-02,3161,1
 REET,yahoo,REET,iShares Global REIT ETF,ETF,Real Estate,US,United States,USD,BlackRock,,SP500,Real Estate,2014-07-10,2014-07-10,2026-10-02,3077,1
-AVDV,yahoo,AVDV,Avantis International Small Cap Value ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2019-09-26,2019-09-26,2026-10-02,1764,1
-SCZ,yahoo,SCZ,iShares MSCI EAFE Small-Cap ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
-ILF,yahoo,ILF,iShares Latin America 40 ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-AXTX,yahoo,AXTX,Tradr 2X Long AXTI Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-04-24,2026-04-24,2026-10-02,112,1
-IRE,yahoo,IRE,Defiance Daily Target 2X Long IREN ETF,ETF,Equity,US,United States,USD,Defiance,,SP500,Leveraged / Inverse,2025-10-21,2025-10-21,2026-10-02,239,1
+TFLO,yahoo,TFLO,iShares Treasury Floating Rate Bond ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2014-02-04,2014-02-04,2026-10-02,3185,1
+PAVE,yahoo,PAVE,Global X U.S. Infrastructure Development ETF,ETF,Equity,US,United States,USD,Global X,,SP500,Broad Market,2017-03-08,2017-03-08,2026-10-02,2407,1
 ICSH,yahoo,ICSH,iShares Ultra Short Duration Bond Active ETF,ETF,Bond,US,United States,USD,BlackRock,,SP500,Bond,2013-12-16,2013-12-16,2026-10-02,3218,1
 DFAI,yahoo,DFAI,Dimensional International Core Equity Market ETF,ETF,Equity,US,United States,USD,Dimensional,,SP500,Broad Market,2020-11-19,2020-11-19,2026-10-02,1473,1
-KIE,yahoo,KIE,State Street SPDR S&P Insurance ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
-AMZU,yahoo,AMZU,Direxion Daily AMZN Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-09-07,2022-09-07,2026-10-02,1022,1
-DFIC,yahoo,DFIC,Dimensional International Core Equity 2 ETF,ETF,Equity,US,United States,USD,Dimensional,,SP500,Broad Market,2022-03-24,2022-03-24,2026-10-02,1136,1
-AIQ,yahoo,AIQ,Global X Artificial Intelligence & Technology ETF,ETF,Equity,US,United States,USD,Global X,,SP500,Thematic,2018-05-16,2018-05-16,2026-10-02,2107,1
+IRE,yahoo,IRE,Defiance Daily Target 2X Long IREN ETF,ETF,Equity,US,United States,USD,Defiance,,SP500,Leveraged / Inverse,2025-10-21,2025-10-21,2026-10-02,239,1
+ILF,yahoo,ILF,iShares Latin America 40 ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+AVDV,yahoo,AVDV,Avantis International Small Cap Value ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2019-09-26,2019-09-26,2026-10-02,1764,1
 ZSL,yahoo,ZSL,ProShares UltraShort Silver,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
+KIE,yahoo,KIE,State Street SPDR S&P Insurance ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
+AIQ,yahoo,AIQ,Global X Artificial Intelligence & Technology ETF,ETF,Equity,US,United States,USD,Global X,,SP500,Thematic,2018-05-16,2018-05-16,2026-10-02,2107,1
+DFIC,yahoo,DFIC,Dimensional International Core Equity 2 ETF,ETF,Equity,US,United States,USD,Dimensional,,SP500,Broad Market,2022-03-24,2022-03-24,2026-10-02,1136,1
+AMZU,yahoo,AMZU,Direxion Daily AMZN Bull 2X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2022-09-07,2022-09-07,2026-10-02,1022,1
 VV,yahoo,VV,Vanguard Morningstar Large-Cap ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 SPEM,yahoo,SPEM,State Street SPDR Portfolio Emerging Markets ETF,ETF,Equity,US,United States,USD,State Street,,SP500,Country,2010-01-04,2010-01-04,2026-10-02,4213,1
 FTEC,yahoo,FTEC,Fidelity MSCI Information Technology Index ETF,ETF,Equity,US,United States,USD,Fidelity,,SP500,Sector,2013-10-24,2013-10-24,2026-10-02,3254,1
 BMNU,yahoo,BMNU,T-REX 2X Long BMNR Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2025-09-26,2025-09-26,2026-10-02,256,1
-SVXY,yahoo,SVXY,ProShares Short VIX Short Term Futures ETF,ETF,Equity,US,United States,USD,ProShares,,SP500,Broad Market,2011-10-04,2011-10-04,2026-10-02,3771,1
 IQLT,yahoo,IQLT,iShares MSCI Intl Quality Factor ETF,ETF,Equity,US,United States,USD,BlackRock,,SP500,Smart Beta,2015-01-21,2015-01-21,2026-10-02,2943,1
+SVXY,yahoo,SVXY,ProShares Short VIX Short Term Futures ETF,ETF,Equity,US,United States,USD,ProShares,,SP500,Broad Market,2011-10-04,2011-10-04,2026-10-02,3771,1
 DFIV,yahoo,DFIV,Dimensional International Value ETF,ETF,Equity,US,United States,USD,Dimensional,,SP500,Broad Market,2021-09-13,2021-09-13,2026-10-02,1270,1
-BTCZ,yahoo,BTCZ,T-Rex 2X Inverse Bitcoin Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-07-10,2024-07-10,2026-10-02,561,1
 KOLD,yahoo,KOLD,ProShares UltraShort Bloomberg Natural Gas,ETF,Equity,US,United States,USD,ProShares,,SP500,Leveraged / Inverse,2011-10-06,2011-10-06,2026-10-02,3769,1
-VONV,yahoo,VONV,Vanguard Russell 1000 Value ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-09-22,2010-09-22,2026-10-02,4032,1
-QYLD,yahoo,QYLD,Global X NASDAQ 100 Covered Call ETF,ETF,Equity,US,United States,USD,Global X,,SP500,Derivative Income,2013-12-12,2013-12-12,2026-10-02,3220,1
+BTCZ,yahoo,BTCZ,T-Rex 2X Inverse Bitcoin Daily Target ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2024-07-10,2024-07-10,2026-10-02,561,1
 BEX,yahoo,BEX,Tradr 2X Long BE Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2025-11-13,2025-11-13,2026-10-02,222,1
+QYLD,yahoo,QYLD,Global X NASDAQ 100 Covered Call ETF,ETF,Equity,US,United States,USD,Global X,,SP500,Derivative Income,2013-12-12,2013-12-12,2026-10-02,3220,1
 VFH,yahoo,VFH,Vanguard Financials ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Sector,2010-01-04,2010-01-04,2026-10-02,4213,1
+VONV,yahoo,VONV,Vanguard Russell 1000 Value ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-09-22,2010-09-22,2026-10-02,4032,1
 JPIE,yahoo,JPIE,JPMorgan Income ETF,ETF,Equity,US,United States,USD,J.P. Morgan,,SP500,Broad Market,2021-11-02,2021-11-02,2026-10-02,1234,1
 DFAR,yahoo,DFAR,DFA Real Estate Securities Portfolio ETF Class Shares,ETF,Real Estate,US,United States,USD,Other,,SP500,Real Estate,2022-02-24,2022-02-24,2026-10-02,1156,1
 VBK,yahoo,VBK,Vanguard Morningstar Small-Cap Growth ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Broad Market,2010-01-04,2010-01-04,2026-10-02,4213,1
 VHT,yahoo,VHT,Vanguard Health Care ETF,ETF,Equity,US,United States,USD,Vanguard,,SP500,Sector,2010-01-04,2010-01-04,2026-10-02,4213,1
-SKDD,yahoo,SKDD,GraniteShares 2x Short SK Hynix Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-07-14,2026-07-14,2026-10-02,58,1
 TSDD,yahoo,TSDD,GraniteShares 2x Short TSLA Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2023-08-28,2023-08-28,2026-10-02,778,1
 VMBS,yahoo,VMBS,Vanguard Mortgage-Backed Securities ETF,ETF,Real Estate,US,United States,USD,Vanguard,,SP500,Real Estate,2010-01-04,2010-01-04,2026-10-02,4213,1
+FAS,yahoo,FAS,Direxion Financial Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 SRLN,yahoo,SRLN,State Street Blackstone Senior Loan ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2013-04-04,2013-04-04,2026-10-02,3396,1
 JMUB,yahoo,JMUB,JPMorgan Municipal ETF,ETF,Bond,US,United States,USD,J.P. Morgan,,SP500,Bond,2018-11-05,2018-11-05,2026-10-02,1987,1
-FAS,yahoo,FAS,Direxion Financial Bull 3X ETF,ETF,Equity,US,United States,USD,Direxion,,SP500,Leveraged / Inverse,2010-01-04,2010-01-04,2026-10-02,4213,1
 AMLP,yahoo,AMLP,Alerian MLP ETF,ETF,Equity,US,United States,USD,Other,,SP500,Broad Market,2010-08-25,2010-08-25,2026-10-02,4051,1
 SCHR,yahoo,SCHR,Schwab Intermediate-Term U.S. Treasury ETF,ETF,Bond,US,United States,USD,Schwab,,SP500,Bond,2010-08-05,2010-08-05,2026-10-02,4065,1
+SKDD,yahoo,SKDD,GraniteShares 2x Short SK Hynix Daily ETF,ETF,Equity,US,United States,USD,Other,,SP500,Leveraged / Inverse,2026-07-14,2026-07-14,2026-10-02,58,1
 SIVR,yahoo,SIVR,abrdn Physical Silver Shares ETF,ETF,Commodity,US,United States,USD,abrdn,,SP500,Commodity,2010-01-04,2010-01-04,2026-10-02,4213,1
-NOBL,yahoo,NOBL,ProShares S&P 500 Dividend Aristocrats ETF,ETF,Equity,US,United States,USD,ProShares,,SP500,Dividend,2013-10-10,2013-10-10,2026-10-01,3263,2
+COWZ,yahoo,COWZ,Pacer US Cash Cows 100 ETF,ETF,Equity,US,United States,USD,Pacer,,SP500,Broad Market,2016-12-22,2016-12-22,2026-10-02,2457,1
